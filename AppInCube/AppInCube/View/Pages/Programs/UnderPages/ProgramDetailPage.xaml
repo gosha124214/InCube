@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppInCube.View.Pages.Programs.UnderPages.ProgramDetailPage"
+             Title="Детали программы"
+             NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <Grid Padding="10">
+            <!-- Определяем строки для Grid -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок программы -->
+            <Label Text="{Binding NameBird}" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   Grid.Row="0" />
+
+            <!-- Контент программы -->
+            <Label Text="{Binding Content}" 
+                   FontSize="18" 
+                   Grid.Row="1" />
+
+            <!-- Дни до вылупления -->
+            <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" 
+                   FontSize="18" 
+                   Grid.Row="2" />
+
+            <!-- Дата -->
+            <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" 
+                   FontSize="18" 
+                   Grid.Row="3" />
+
+            <!-- Изображение -->
+            <Image Source="{Binding ImageSource}" 
+                   HeightRequest="200" 
+                   Aspect="AspectFit" 
+                   Grid.Row="4" />
+
+            <!-- Кнопка загрузки программы -->
+            <Button Text="Загрузить программу на устройство" 
+                    Clicked="DownloadTheProgram" 
+                    HorizontalOptions="Center" 
+                    VerticalOptions="End" 
+                    BackgroundColor="Green"
+                    TextColor="White" 
+                    Grid.Row="5"
+                    Margin="0,20,0,10"/>
+            <!-- Отступ снизу -->
+
+            <!-- Кнопка перехода к программе -->
+            <Button Text="Перейти к программе" 
+                    Clicked="GoToProgram" 
+                    HorizontalOptions="Center" 
+                    VerticalOptions="End" 
+                    BackgroundColor="Red"
+                    TextColor="White" 
+                    Grid.Row="6"
+                    Margin="0,10,0,0"
+                    IsVisible="False" 
+                    x:Name="GoToProgramButton"/>
+            <!-- Отступ сверху -->
+
+            <!-- Label для сообщения с закругленными углами -->
+            <Frame x:Name="MessageFrame" 
+               IsVisible="False" 
+               BackgroundColor="Green"
+               CornerRadius="5" 
+               Padding="10" 
+               Grid.RowSpan="7" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Center">
+                <Label x:Name="MessageLabel" 
+                   Text="" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center" 
+                   TextColor="White"/>
+            </Frame>
+
+
+        </Grid>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppInCube.View.Pages.Favorites.FavoritesPage"
+             Title="Избранные программы"
+             NavigationPage.HasNavigationBar="False">
+
+    <StackLayout Padding="10">
+        <CollectionView x:Name="ProgramsListView" VerticalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="5">
+                        <StackLayout>
+                            <Label Text="{Binding NameBird}" FontSize="20" FontAttributes="Bold" />
+                            <Label Text="{Binding Content}" FontSize="16" />
+                            <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" FontSize="16" />
+                            <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" FontSize="16" />
+                            <!-- Отображение изображения -->
+                            <Image Source="{Binding ImageSource}" HeightRequest="100" Aspect="AspectFit" />
+                            <!-- Кнопка удаления -->
+                            <Button Text="Удалить" 
+                                    BackgroundColor="Red" 
+                                    TextColor="White" 
+                                    Clicked="OnDeleteButtonClicked" 
+                                    CommandParameter="{Binding .}" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

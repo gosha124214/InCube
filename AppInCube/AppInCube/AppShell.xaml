@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AppInCube.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:AppInCube"
+    xmlns:view="clr-namespace:AppInCube.View"
+    NavigationPage.HasNavigationBar="False">
+    
+
+    <TabBar>
+
+        <ShellContent 
+           Title="Главная"
+           ContentTemplate="{DataTemplate view:Pages.Home.HomePage}"
+           Icon="mane_page.svg" />
+
+        <ShellContent 
+           Title="Программы"
+           ContentTemplate="{DataTemplate view:Pages.Programs.ProgramsPage}"
+            Icon="programm.svg"/>
+        <ShellContent 
+           Title="Избаранное"
+           ContentTemplate="{DataTemplate view:Pages.Favorites.FavoritesPage}"
+           Icon="risies.svg"/>
+        <ShellContent 
+           Title="Покупки"
+           ContentTemplate="{DataTemplate view:Pages.Buy.BuyPage}"
+            Icon="buy.svg"/>
+    
+
+    </TabBar>
+
+</Shell>

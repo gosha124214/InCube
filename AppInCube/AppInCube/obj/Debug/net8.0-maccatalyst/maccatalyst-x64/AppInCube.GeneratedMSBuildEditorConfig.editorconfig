@@ -1,0 +1,85 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0-maccatalyst
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = AppInCube
+build_property.ProjectDir = D:\Diplom InCub\AppInCub\AppInCube\AppInCube\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/View/GeneralUnderPages/WelcomePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.GeneralUnderPages.WelcomePage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\GeneralUnderPages\WelcomePage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\GeneralUnderPages\WelcomePage.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/View/Pages/Buy/BuyPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Buy.BuyPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Buy\BuyPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Buy\BuyPage.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/View/Pages/Favorites/FavoritesPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Favorites.FavoritesPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Favorites\FavoritesPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Favorites\FavoritesPage.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/View/Pages/Home/HomePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Home.HomePage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Home\HomePage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Home\HomePage.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/View/Pages/Programs/ProgramsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Programs.ProgramsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Programs\ProgramsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Programs\ProgramsPage.xaml
+
+[D:/Diplom InCub/AppInCub/AppInCube/AppInCube/View/Pages/Programs/UnderPages/ProgramDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Programs.UnderPages.ProgramDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Programs\UnderPages\ProgramDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Programs\UnderPages\ProgramDetailPage.xaml
