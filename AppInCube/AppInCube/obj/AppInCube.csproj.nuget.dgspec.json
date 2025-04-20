@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Diplom InCub\\AppInCub\\AppInCube\\AppInCube\\AppInCube.csproj": {}
+    "D:\\Diplom InCub\\AppInCub\\GitHubInCube\\AppInCube\\AppInCube\\AppInCube.csproj": {}
   },
   "projects": {
-    "D:\\Diplom InCub\\AppInCub\\AppInCube\\AppInCube\\AppInCube.csproj": {
+    "D:\\Diplom InCub\\AppInCub\\GitHubInCube\\AppInCube\\AppInCube\\AppInCube.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Diplom InCub\\AppInCub\\AppInCube\\AppInCube\\AppInCube.csproj",
+        "projectUniqueName": "D:\\Diplom InCub\\AppInCub\\GitHubInCube\\AppInCube\\AppInCube\\AppInCube.csproj",
         "projectName": "AppInCube",
-        "projectPath": "D:\\Diplom InCub\\AppInCub\\AppInCube\\AppInCube\\AppInCube.csproj",
+        "projectPath": "D:\\Diplom InCub\\AppInCub\\GitHubInCube\\AppInCube\\AppInCube\\AppInCube.csproj",
         "packagesPath": "C:\\Users\\Гашик\\.nuget\\packages\\",
-        "outputPath": "D:\\Diplom InCub\\AppInCub\\AppInCube\\AppInCube\\obj\\",
+        "outputPath": "D:\\Diplom InCub\\AppInCub\\GitHubInCube\\AppInCube\\AppInCube\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [
