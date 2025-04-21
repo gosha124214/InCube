@@ -52,35 +52,16 @@ namespace AppInCube.View.Pages.Programs.UnderPages
                 // Получаем данные из BindingContext
                 var program = BindingContext as TableBird;
 
-                // Получаем изображение в виде массива байтов
-                byte[] imageBytes = null;
-
-                //if (program.ImageSource is FileImageSource fileImageSource)
-                //{
-                //    var filePath = fileImageSource.File;
-                //    imageBytes = await File.ReadAllBytesAsync(filePath);
-                //}
-                //else if (program.ImageSource is StreamImageSource streamImageSource)
-                //{
-                //    using (var stream = await streamImageSource.Stream(CancellationToken.None))
-                //    {
-                //        using (var memoryStream = new MemoryStream())
-                //        {
-                //            await stream.CopyToAsync(memoryStream);
-                //            imageBytes = memoryStream.ToArray();
-                //        }
-                //    }
-                //}
-
                 // Создаем объект SQLliteTableBaseInfo и заполняем его данными из объекта TableBird
                 var programData = new SQLliteTableBaseInfo
                 {
-                    IdProgramInMySQL = program.Id, // Используем Id из TableBird
+                    IdBirdInMySQL = program.Id, // Используем Id из TableBird
+                    IdProgramInMySQL = program.IdProgram,
                     NameBird = program.NameBird,
                     Content = program.Content,
                  //   DaysUntilHatching = program.DaysUntilHatching,
                     DateTimeValue = program.DateTimeValue,
-                    ImageBirdFile = imageBytes // Сохраняем массив байтов изображения
+                    ImageBirdFile = program.ImageBirdFile // Сохраняем массив байтов изображения
                 };
 
                 try

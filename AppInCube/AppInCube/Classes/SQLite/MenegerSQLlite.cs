@@ -30,14 +30,14 @@ namespace AppInCube.Classes.SQLite
         // Получение программы по ProgramId
         public Task<SQLliteTableBaseInfo> GetProgramByIdAsync(uint programId)
         {
-            return _database.Table<SQLliteTableBaseInfo>().FirstOrDefaultAsync(p => p.IdProgramInMySQL == programId);
+            return _database.Table<SQLliteTableBaseInfo>().FirstOrDefaultAsync(p => p.IdBirdInMySQL == programId);
         }
 
         // Удаление программы по ID
         public async Task<int> DeleteProgramAsync(uint id)
         {
             // Получаем программу по ID
-            var program = await _database.Table<SQLliteTableBaseInfo>().FirstOrDefaultAsync(p => p.IdProgramInMySQL == id);
+            var program = await _database.Table<SQLliteTableBaseInfo>().FirstOrDefaultAsync(p => p.IdBirdInMySQL == id);
 
             if (program != null)
             {

@@ -42,7 +42,7 @@ namespace AppInCube.View.Pages.Favorites
                 try
                 {
                     // Удаляем программу из базы данных по ID
-                    int result = await App.Database.DeleteProgramAsync(program.IdProgramInMySQL); // Используем ProgramId
+                    int result = await App.Database.DeleteProgramAsync(program.IdBirdInMySQL); // Используем ProgramId
 
                     if (result > 0)
                     {

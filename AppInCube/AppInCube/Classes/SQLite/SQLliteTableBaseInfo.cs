@@ -7,7 +7,8 @@ namespace AppInCube.Classes.SQLite
 {
     public class SQLliteTableBaseInfo
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey]
+        public uint IdBirdInMySQL { get; set; }
         public uint IdProgramInMySQL { get; set; }
         public string NameBird { get; set; }
         public string Content { get; set; }

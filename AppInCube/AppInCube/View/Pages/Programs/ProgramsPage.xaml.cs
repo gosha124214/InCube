@@ -11,7 +11,6 @@ namespace AppInCube.View.Pages.Programs
 {
     public partial class ProgramsPage : ContentPage, INotifyPropertyChanged
     {
-        private Conect _dbConnection;
         public ObservableCollection<TableBird> Programs { get; set; } // Коллекция для хранения программ
 
         private uint _currentOffset = 1; // Переменная для отслеживания текущего смещения

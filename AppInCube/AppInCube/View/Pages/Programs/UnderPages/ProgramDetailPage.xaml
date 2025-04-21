@@ -17,6 +17,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Заголовок программы -->
@@ -29,22 +31,30 @@
             <Label Text="{Binding Content}" 
                    FontSize="18" 
                    Grid.Row="1" />
-
+            
+            <Label Text="{Binding Id, StringFormat='Id птицы: {0}'}" 
+                   FontSize="20"
+                   Grid.Row="2"/>
+            
+            <Label Text="{Binding IdProgram, StringFormat='Id программы: {0}'}" 
+                   FontSize="20" 
+                   Grid.Row="3"/>
+            
             <!-- Дни до вылупления -->
             <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" 
                    FontSize="18" 
-                   Grid.Row="2" />
+                   Grid.Row="4" />
 
             <!-- Дата -->
             <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" 
                    FontSize="18" 
-                   Grid.Row="3" />
+                   Grid.Row="5" />
 
             <!-- Изображение -->
             <Image Source="{Binding ImageSource}" 
                    HeightRequest="200" 
                    Aspect="AspectFit" 
-                   Grid.Row="4" />
+                   Grid.Row="6" />
 
             <!-- Кнопка загрузки программы -->
             <Button Text="Загрузить программу на устройство" 
@@ -53,7 +63,7 @@
                     VerticalOptions="End" 
                     BackgroundColor="Green"
                     TextColor="White" 
-                    Grid.Row="5"
+                    Grid.Row="7"
                     Margin="0,20,0,10"/>
             <!-- Отступ снизу -->
 
@@ -64,7 +74,7 @@
                     VerticalOptions="End" 
                     BackgroundColor="Red"
                     TextColor="White" 
-                    Grid.Row="6"
+                    Grid.Row="8"
                     Margin="0,10,0,0"
                     IsVisible="False" 
                     x:Name="GoToProgramButton"/>
@@ -76,7 +86,7 @@
                BackgroundColor="Green"
                CornerRadius="5" 
                Padding="10" 
-               Grid.RowSpan="7" 
+               Grid.RowSpan="9" 
                HorizontalOptions="Center" 
                VerticalOptions="Center">
                 <Label x:Name="MessageLabel" 

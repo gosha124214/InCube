@@ -16,6 +16,9 @@ namespace AppInCube
             InitializeComponent();
 
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, "programs.db");
+
+          //  File.Delete(dbPath); // этот метод нужен чтобы удалить файл устаревшего формата
+
             Database = new MenegerSQLlite(dbPath);
 
             bool isFirstRun = Preferences.Get("IsFirstRun", true);

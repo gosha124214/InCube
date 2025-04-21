@@ -13,6 +13,16 @@
                         <StackLayout>
                             <Label Text="{Binding NameBird}" FontSize="20" FontAttributes="Bold" />
                             <Label Text="{Binding Content}" FontSize="16" />
+                            
+
+                            <Label Text="{Binding IdBirdInMySQL, 
+                                   StringFormat='Id птици: {0}'}" 
+                                   FontSize="20" />
+
+                            <Label Text="{Binding IdProgramInMySQL, 
+                                   StringFormat='Id программы: {0}'}" 
+                                   FontSize="20" />
+
                             <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" FontSize="16" />
                             <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" FontSize="16" />
                             <!-- Отображение изображения -->
