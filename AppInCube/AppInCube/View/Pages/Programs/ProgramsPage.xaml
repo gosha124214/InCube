@@ -28,25 +28,26 @@
         <!-- Прокручиваемый контент -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="10">
-                <CollectionView ItemsSource="{Binding Programs}" SelectionMode="Single">
+
+                <CollectionView ItemsSource="{Binding BirdProgram}" SelectionMode="Single">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="5">
                                 <StackLayout>
-                                    <Label Text="{Binding NameBird}" 
+                                    <Label Text="{Binding tableBird.NameBird}" 
                                            FontSize="30" 
                                            FontAttributes="Bold" />
-                                    <Label Text="{Binding Id, StringFormat='Id птицы: {0}'}" 
+                                    <Label Text="{Binding tableBird.Id, StringFormat='Id птицы: {0}'}" 
                                            FontSize="20" />
-                                    <Label Text="{Binding IdProgram, StringFormat='Id программы: {0}'}" 
+                                    <Label Text="{Binding tableBird.IdProgram, StringFormat='Id программы: {0}'}" 
                                            FontSize="20" />
-                                    <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" 
+                                    <Label Text="{Binding tableBird.DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" 
                                            FontSize="20" />
                                     <BoxView HeightRequest="2" 
                                              BackgroundColor="Gray" 
                                              HorizontalOptions="FillAndExpand" 
                                              Margin="0,5" />
-                                    <Image Source="{Binding ImageSource}" 
+                                    <Image Source="{Binding tableBird.ImageSource}" 
                                            HeightRequest="200" 
                                            Aspect="AspectFit" />
                                     <StackLayout.GestureRecognizers>

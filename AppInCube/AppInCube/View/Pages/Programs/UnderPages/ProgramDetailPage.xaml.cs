@@ -12,14 +12,25 @@ namespace AppInCube.View.Pages.Programs.UnderPages
 
         TableBird program = null;
 
-        public ProgramDetailPage(TableBird program)
+
+        public ProgramDetailPage(TableBird bird, List<TableProgram> programs)
         {
-            this.program = program;
-
-            LoadProgramById(program.Id);
             InitializeComponent();
-            BindingContext = program; // Устанавливаем контекст привязки на переданный объект
 
+            // Устанавливаем контекст привязки на новый объект, который содержит как птицу, так и программы
+            BindingContext = new
+            {
+                NameBird = bird.NameBird,
+                Content = bird.Content,
+                Id = bird.Id,
+                IdProgram = bird.IdProgram,
+                DateTimeValue = bird.DateTimeValue,
+                DaysUntilHatching = bird.DaysUntilHatching,
+                ImageSource = ImageSource.FromStream(() => new MemoryStream(bird.ImageBirdFile)),
+                tableProgram = programs // Привязываем программы
+            };
+
+            LoadProgramById(bird.Id);
         }
 
         private async void LoadProgramById(uint programId)
@@ -40,34 +51,55 @@ namespace AppInCube.View.Pages.Programs.UnderPages
         private void DownloadTheProgram(object sender, EventArgs e)
         {
             // Вызов метода для сохранения данных
-            SaveProgramData(program.Id);
+            SaveProgramData(program.Id, program.IdProgram);
 
         }
-        private async void SaveProgramData(uint programId)
+        private async void SaveProgramData(uint programId, uint IdProgram)
         {
             // Проверяем, существует ли программа с указанным ID
             var existingProgram = await App.Database.GetProgramByIdAsync(programId);
+            var existingProgramDop = await App.Database.GetProgramByIdAsyncDop(IdProgram);
             if (existingProgram == null) // Если такой программы нет, то загружаем
             {
                 // Получаем данные из BindingContext
-                var program = BindingContext as TableBird;
+                var programBaseInfo = BindingContext as TableBird;
 
                 // Создаем объект SQLliteTableBaseInfo и заполняем его данными из объекта TableBird
-                var programData = new SQLliteTableBaseInfo
+                var programDataBaseInfo = new SQLliteTableBaseInfo
                 {
-                    IdBirdInMySQL = program.Id, // Используем Id из TableBird
-                    IdProgramInMySQL = program.IdProgram,
-                    NameBird = program.NameBird,
-                    Content = program.Content,
-                 //   DaysUntilHatching = program.DaysUntilHatching,
-                    DateTimeValue = program.DateTimeValue,
-                    ImageBirdFile = program.ImageBirdFile // Сохраняем массив байтов изображения
+                    IdBirdInMySQL = programBaseInfo.Id, // Используем Id из TableBird
+                    IdProgramInMySQL = programBaseInfo.IdProgram,
+                    NameBird = programBaseInfo.NameBird,
+                    Content = programBaseInfo.Content,
+                    DaysUntilHatching = programBaseInfo.DaysUntilHatching,
+                    DateTimeValue = programBaseInfo.DateTimeValue,
+                    ImageBirdFile = programBaseInfo.ImageBirdFile // Сохраняем массив байтов изображения
                 };
+
+                    // Получаем данные из BindingContext
+                    var program = BindingContext as TableProgram;
+
+                    var programData = new SQLliteTableDopInfo
+                    {
+                        IdProgram = program.IdProgram,
+                        Day = program.Day,
+                        MinHumidity = program.MinHumidity,
+                        MaxHumidity = program.MaxHumidity,
+                        MinTemperature = program.MinTemperature,
+                        MaxTemperature = program.MinTemperature,
+                        MinTimeCooling = program.MinTimeCooling,
+                        MaxTimeCooling = program.MaxTimeCooling,
+                        MinАmountTurn = program.MinАmountTurn,
+                        MaxАmountTurn = program.MaxАmountTurn,
+                        АmountCooling = program.АmountCooling
+
+                    };
+                
 
                 try
                 {
                     // Используем метод SaveProgramAsync для сохранения данных в таблицу
-                    await App.Database.SaveProgramAsync(programData); // Убедитесь, что метод принимает SQLliteTableBaseInfo
+                    await App.Database.SaveProgramAsync(programDataBaseInfo); // Убедитесь, что метод принимает SQLliteTableBaseInfo
 
                     GoToProgramButton.IsVisible = true;
                     Console.WriteLine("Данные успешно сохранены!");

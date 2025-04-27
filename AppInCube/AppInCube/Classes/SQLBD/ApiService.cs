@@ -13,14 +13,17 @@ namespace AppInCube.Classes.SQLBD
 
         public ApiService()
         {
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient(new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            });
         }
 
         public async Task<TableBird> GetTableBirdAsync(uint id)
         {
             try
             {
-                var tableBirdResponse = await _httpClient.GetAsync($"http://185.24.53.191:5162/weatherforecast/{id}");
+                var tableBirdResponse = await _httpClient.GetAsync($"https://185.24.53.191:5162/weatherforecast/{id}");
 
                 if (!tableBirdResponse.IsSuccessStatusCode)
                 {
@@ -42,12 +45,38 @@ namespace AppInCube.Classes.SQLBD
                 return null; // Возвращаем null в случае ошибки
             }
         }
+        public async Task<List<TableProgram>> GetTableProgramAsync(uint id)
+        {
+            try
+            {
+                var tableProgramResponse = await _httpClient.GetAsync($"https://185.24.53.191:5162/weatherforecast/dop/{id}");
+
+                if (!tableProgramResponse.IsSuccessStatusCode)
+                {
+                    return null; // Возвращаем null, если запрос не был успешным
+                }
+
+                return await tableProgramResponse.Content.ReadFromJsonAsync<List<TableProgram>>();
+            }
+            catch (HttpRequestException ex)
+            {
+                // Обработка исключения, связанного с HTTP-запросом
+                Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
+                return null; // Возвращаем null в случае ошибки
+            }
+            catch (Exception ex)
+            {
+                // Обработка исключения, связанного с HTTP-запросом
+                Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
+                return null; // Возвращаем null в случае ошибки
+            }
+        }
 
         public async Task<uint?> GetTableBirdCountAllProgram()
         {
             try
             {
-                var response = await _httpClient.GetAsync($"http://185.24.53.191:5162/weatherforecast/countallprogram");
+                var response = await _httpClient.GetAsync($"https://185.24.53.191:5162/weatherforecast/countallprogram");
 
                 // Проверяем, успешен ли запрос
                 if (!response.IsSuccessStatusCode)

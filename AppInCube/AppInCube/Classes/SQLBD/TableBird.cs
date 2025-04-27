@@ -17,13 +17,13 @@ namespace AppInCube.Classes.SQLBD
         public uint IdProgram { get; set; }
         public string NameBird { get; set; }
         public string Content { get; set; }
- //       public byte DaysUntilHatching { get; set; }
+
         public DateTime DateTimeValue { get; set; }
         public byte[] ImageBirdFile { get; set; }
 
         public ImageSource ImageSource { get; set; } // свойство для хранения изображения
 
-
+        public byte DaysUntilHatching { get; set; }
 
 
     }

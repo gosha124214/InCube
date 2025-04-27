@@ -7,11 +7,12 @@ using System.ComponentModel;
 using AppInCube.View.Pages.Programs.UnderPages; // Убедитесь, что это пространство имен правильное
 using Microsoft.Maui.Controls;
 using AppInCube.Classes.SQLBD;
+
 namespace AppInCube.View.Pages.Programs
 {
     public partial class ProgramsPage : ContentPage, INotifyPropertyChanged
     {
-        public ObservableCollection<TableBird> Programs { get; set; } // Коллекция для хранения программ
+        public ObservableCollection<BirdProgram> BirdProgram { get; set; } // Коллекция для хранения программ
 
         private uint _currentOffset = 1; // Переменная для отслеживания текущего смещения
         private const int _pageSize = 2; // Количество загружаемых программ за раз
@@ -25,7 +26,7 @@ namespace AppInCube.View.Pages.Programs
         {
             InitializeComponent();
 
-            Programs = new ObservableCollection<TableBird>(); // Инициализация коллекции
+            BirdProgram = new ObservableCollection<BirdProgram>(); // Инициализация коллекции
             BindingContext = this; // Устанавливаем контекст привязки
 
             // Запускаем асинхронный метод для загрузки данных
@@ -48,7 +49,7 @@ namespace AppInCube.View.Pages.Programs
 
         public uint LoadedProgramsCount
         {
-            get { return (uint)Programs.Count; }
+            get { return (uint)BirdProgram.Count; }
         }
 
         private async void LoadInitialPrograms()
@@ -65,36 +66,43 @@ namespace AppInCube.View.Pages.Programs
         {
             // Блокируем взаимодействие с текущей страницей
             this.IsEnabled = false;
-            
+
             NumberOfAllObjectsInDataBase = await _apiService.GetTableBirdCountAllProgram(); // Получаем общее количество объектов
 
             if (NumberOfAllObjectsInDataBase >= _currentOffset)
             {
                 for (int i = 0; i < count; i++)
                 {
+                    TableBird? newBird = await _apiService.GetTableBirdAsync(_currentOffset);
+                    List<TableProgram>? newProgram = await _apiService.GetTableProgramAsync(newBird.IdProgram);
 
-                    TableBird? newProgram = await _apiService.GetTableBirdAsync(_currentOffset);
-
-                    if ((_currentOffset <= _numberOfAllObjects) && (newProgram.Id != 0) && (newProgram != null)) // Проверяем, что программа была загружена
+                    if ((newBird != null && newBird.Id != 0) && newProgram != null) // Проверяем, что программа была загружена
                     {
                         // Конвертация массива байтов в ImageSource
-                        newProgram.ImageSource = ImageSource.FromStream(() => new MemoryStream(newProgram.ImageBirdFile));
+                        newBird.ImageSource = ImageSource.FromStream(() => new MemoryStream(newBird.ImageBirdFile));
+
+                        //Вычисление количества дней до вылупления
+                        newBird.DaysUntilHatching = (byte)newProgram.Count;
+
+
+                        BirdProgram birdProgram = new BirdProgram
+                        {
+                            tableBird = newBird,
+                            tableProgram = newProgram
+                        };
+
                         // Добавление в коллекцию
-                        Programs.Add(newProgram);
+                        BirdProgram.Add(birdProgram);
+
                         _currentOffset++;
                         OnPropertyChanged(nameof(LoadedProgramsCount));
                     }
-                    else if ((newProgram == null) && (NumberOfAllObjectsInDataBase >= _currentOffset))
+                    else
                     {
-                        ShowMessage("Не удалось загрузить программы.\nПроверьте соединение с интернетом"); // Сообщение исчезнет через 5 секунд
+                        ShowMessage("Не удалось загрузить программы.\nПроверьте соединение с интернетом");
                         break;
                     }
-
                 }
-            }
-            else if (NumberOfAllObjectsInDataBase == null)
-            {
-                ShowMessage("Не удалось загрузить программы.\nПроверьте соединение с интернетом"); // Сообщение исчезнет через 5 секунд
             }
             else
             {
@@ -124,10 +132,10 @@ namespace AppInCube.View.Pages.Programs
             // Блокируем взаимодействие с текущей страницей
             this.IsEnabled = false;
 
-            var tappedItem = (sender as StackLayout).BindingContext as TableBird;
+            var tappedItem = (sender as StackLayout).BindingContext as BirdProgram;
             if (tappedItem != null)
             {
-                await Navigation.PushAsync(new ProgramDetailPage(tappedItem));
+                await Navigation.PushAsync(new ProgramDetailPage(tappedItem.tableBird, tappedItem.tableProgram));
             }
 
 

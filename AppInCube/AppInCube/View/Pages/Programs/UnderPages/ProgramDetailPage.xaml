@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppInCube.View.Pages.Programs.UnderPages.ProgramDetailPage"
@@ -6,97 +5,86 @@
              NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
-        <Grid Padding="10">
-            <!-- Определяем строки для Grid -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <!-- Заголовок программы -->
-            <Label Text="{Binding NameBird}" 
-                   FontSize="24" 
-                   FontAttributes="Bold" 
-                   Grid.Row="0" />
-
-            <!-- Контент программы -->
-            <Label Text="{Binding Content}" 
-                   FontSize="18" 
-                   Grid.Row="1" />
-            
-            <Label Text="{Binding Id, StringFormat='Id птицы: {0}'}" 
-                   FontSize="20"
-                   Grid.Row="2"/>
-            
-            <Label Text="{Binding IdProgram, StringFormat='Id программы: {0}'}" 
-                   FontSize="20" 
-                   Grid.Row="3"/>
-            
-            <!-- Дни до вылупления -->
-            <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" 
-                   FontSize="18" 
-                   Grid.Row="4" />
-
-            <!-- Дата -->
-            <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" 
-                   FontSize="18" 
-                   Grid.Row="5" />
-
-            <!-- Изображение -->
-            <Image Source="{Binding ImageSource}" 
-                   HeightRequest="200" 
-                   Aspect="AspectFit" 
-                   Grid.Row="6" />
-
-            <!-- Кнопка загрузки программы -->
-            <Button Text="Загрузить программу на устройство" 
-                    Clicked="DownloadTheProgram" 
-                    HorizontalOptions="Center" 
-                    VerticalOptions="End" 
-                    BackgroundColor="Green"
-                    TextColor="White" 
-                    Grid.Row="7"
-                    Margin="0,20,0,10"/>
-            <!-- Отступ снизу -->
-
-            <!-- Кнопка перехода к программе -->
-            <Button Text="Перейти к программе" 
-                    Clicked="GoToProgram" 
-                    HorizontalOptions="Center" 
-                    VerticalOptions="End" 
-                    BackgroundColor="Red"
-                    TextColor="White" 
-                    Grid.Row="8"
-                    Margin="0,10,0,0"
-                    IsVisible="False" 
-                    x:Name="GoToProgramButton"/>
-            <!-- Отступ сверху -->
-
-            <!-- Label для сообщения с закругленными углами -->
-            <Frame x:Name="MessageFrame" 
-               IsVisible="False" 
-               BackgroundColor="Green"
-               CornerRadius="5" 
-               Padding="10" 
-               Grid.RowSpan="9" 
-               HorizontalOptions="Center" 
-               VerticalOptions="Center">
-                <Label x:Name="MessageLabel" 
-                   Text="" 
-                   HorizontalOptions="Center" 
-                   VerticalOptions="Center" 
-                   TextColor="White"/>
+        <StackLayout Padding="10">
+            <Label Text="{Binding NameBird}" FontSize="24" FontAttributes="Bold" />
+            <Label Text="{Binding Content}" FontSize="18" />
+            <Label Text="{Binding Id, StringFormat='Id птицы: {0}'}" FontSize="20"/>
+            <Label Text="{Binding IdProgram, StringFormat='Id программы: {0}'}" FontSize="20"/>
+            <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" FontSize="18" />
+            <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" FontSize="18" />
+            <Image Source="{Binding ImageSource}" HeightRequest="200" Aspect="AspectFit" />
+            <Button Text="Загрузить программу на устройство" Clicked="DownloadTheProgram" HorizontalOptions="Center" BackgroundColor="Green" TextColor="White" Margin="0,20,0,10"/>
+            <Button Text="Перейти к программе" Clicked="GoToProgram" HorizontalOptions="Center" BackgroundColor="Red" TextColor="White" IsVisible="False" x:Name="GoToProgramButton"/>
+            <Frame x:Name="MessageFrame" IsVisible="False" BackgroundColor="Green" CornerRadius="5" Padding="10">
+                <Label x:Name="MessageLabel" Text="" TextColor="White"/>
             </Frame>
 
+            <!-- Заголовок таблицы и данные в одной таблице -->
+            <Label Text="Программы:" FontSize="20" FontAttributes="Bold" Margin="0,20,0,10"/>
 
-        </Grid>
+            <!-- Данные -->
+            <CollectionView ItemsSource="{Binding tableProgram}" Margin="0,10,0,0">
+                <CollectionView.Header>
+                    <Grid BackgroundColor="Red" Padding="5" RowSpacing="0" ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="День" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" />
+                        <Label Text="Мин.Т" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" />
+                        <Label Text="Мкс.Т" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="2" />
+                        <Label Text="Мин.Вл" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="3" />
+                        <Label Text="Мкс.Вл" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="4" />
+                        <Label Text="Мин.О" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="5" />
+                        <Label Text="Мкс.О" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="6" />
+                        <Label Text="Охлаж" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="7" />
+                        <Label Text="Мин.В" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="8" />
+                        <Label Text="Мкс.В" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="9" />
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Black" StrokeThickness="1" >
+                            
+                        <Grid Padding="0" RowSpacing="0" ColumnSpacing="0" BackgroundColor="Green">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding Day}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Padding="5" />
+                                <Label Text="{Binding MinTemperature, StringFormat='{0}°C'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" Padding="5" />
+                                <Label Text="{Binding MaxTemperature, StringFormat='{0}°C'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="2" Padding="5" />
+                                <Label Text="{Binding MinHumidity, StringFormat='{0}%'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="3" Padding="5" />
+                                <Label Text="{Binding MaxHumidity, StringFormat='{0}%'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="4" Padding="5" />
+                                <Label Text="{Binding MinАmountTurn, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="5" Padding="5" />
+                                <Label Text="{Binding MaxАmountTurn, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="6" Padding="5" />
+                                <Label Text="{Binding АmountCooling, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="7" Padding="5" />
+                                <Label Text="{Binding MinTimeCooling, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="8" Padding="5" />
+                                <Label Text="{Binding MaxTimeCooling, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="9" Padding="5" />
+                            
+                        </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
     </ScrollView>
 </ContentPage>
