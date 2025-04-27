@@ -8,8 +8,8 @@
         <StackLayout Padding="10">
             <Label Text="{Binding NameBird}" FontSize="24" FontAttributes="Bold" />
             <Label Text="{Binding Content}" FontSize="18" />
-            <Label Text="{Binding Id, StringFormat='Id птицы: {0}'}" FontSize="20"/>
-            <Label Text="{Binding IdProgram, StringFormat='Id программы: {0}'}" FontSize="20"/>
+            <Label Text="{Binding IdBirdInMySQL, StringFormat='Id птицы: {0}'}" FontSize="20"/>
+            <Label Text="{Binding IdProgramInMySQL, StringFormat='Id программы: {0}'}" FontSize="20"/>
             <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" FontSize="18" />
             <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" FontSize="18" />
             <Image Source="{Binding ImageSource}" HeightRequest="200" Aspect="AspectFit" />
@@ -23,7 +23,7 @@
             <Label Text="Программы:" FontSize="20" FontAttributes="Bold" Margin="0,20,0,10"/>
 
             <!-- Данные -->
-            <CollectionView ItemsSource="{Binding tableProgram}" Margin="0,10,0,0">
+            <CollectionView ItemsSource="{Binding tablePrograms}" Margin="0,10,0,0">
                 <CollectionView.Header>
                     <Grid BackgroundColor="Red" Padding="5" RowSpacing="0" ColumnSpacing="0">
                         <Grid.ColumnDefinitions>

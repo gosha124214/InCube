@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using AppInCube.Classes.SQLite;
+using AppInCube.View.Pages.Favorites.UnderPagesInFavorites;
 
 namespace AppInCube.View.Pages.Favorites
 {
@@ -33,6 +34,25 @@ namespace AppInCube.View.Pages.Favorites
                 await Application.Current.MainPage.DisplayAlert("Ошибка", $"Ошибка при загрузке данных: {ex.Message}", "OK");
             }
         }
+
+
+        private async void OnProgramTapped(object sender, EventArgs e)
+        {
+
+            // Блокируем взаимодействие с текущей страницей
+            this.IsEnabled = false;
+
+            var tappedItem = (sender as StackLayout).BindingContext as SQLliteTableBaseInfo;
+            if (tappedItem != null)
+            {
+                await Navigation.PushAsync(new NewPage1(tappedItem));
+            }
+
+
+            this.IsEnabled = true; // Разблокируем взаимодействие с текущей страницей
+        }
+
+
         private async void DeleteProgram(SQLliteTableBaseInfo program)
         {
             // Подтверждение удаления

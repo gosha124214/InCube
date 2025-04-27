@@ -66,6 +66,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Favor
 build_metadata.AdditionalFiles.TargetPath = View\Pages\Favorites\FavoritesPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\Pages\Favorites\FavoritesPage.xaml
 
+[D:/Diplom InCub/AppInCub/GitHubInCube/AppInCube/AppInCube/View/Pages/Favorites/UnderPagesInFavorites/NewPage1.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Favorites.UnderPagesInFavorites.NewPage1.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Favorites\UnderPagesInFavorites\NewPage1.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Favorites\UnderPagesInFavorites\NewPage1.xaml
+
 [D:/Diplom InCub/AppInCub/GitHubInCube/AppInCube/AppInCube/View/Pages/Home/HomePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Home.HomePage.xaml

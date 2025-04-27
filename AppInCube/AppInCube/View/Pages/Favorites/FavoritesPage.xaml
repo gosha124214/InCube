@@ -33,6 +33,9 @@
                                     TextColor="White" 
                                     Clicked="OnDeleteButtonClicked" 
                                     CommandParameter="{Binding .}" />
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnProgramTapped" />
+                            </StackLayout.GestureRecognizers>
                         </StackLayout>
                     </Frame>
                 </DataTemplate>

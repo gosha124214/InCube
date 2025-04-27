@@ -7750,3 +7750,4 @@ D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-andro
 D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\stamp\_GenerateJavaStubs.stamp
 D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\stamp\_GeneratePackageManagerJava.stamp
 D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\stamp\_ResolveLibraryProjectImports.stamp
+D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Newtonsoft.Json.dll

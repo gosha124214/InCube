@@ -3,6 +3,7 @@ using AppInCube.Classes.SQLite;
 using AppInCube.Classes.SQLBD;
 using Microsoft.Maui.Controls;
 using SQLite;
+using System;
 //using static Android.Webkit.ConsoleMessage;
 
 namespace AppInCube.View.Pages.Programs.UnderPages
@@ -10,24 +11,30 @@ namespace AppInCube.View.Pages.Programs.UnderPages
     public partial class ProgramDetailPage : ContentPage
     {
 
-        TableBird program = null;
+        TableBird program = new TableBird();
 
 
         public ProgramDetailPage(TableBird bird, List<TableProgram> programs)
         {
             InitializeComponent();
-
+            program.Id = bird.Id;
             // Устанавливаем контекст привязки на новый объект, который содержит как птицу, так и программы
-            BindingContext = new
+            BindingContext = new SQLliteTableBaseInfo
             {
+
+                IdBirdInMySQL = bird.Id,//
+
                 NameBird = bird.NameBird,
                 Content = bird.Content,
-                Id = bird.Id,
-                IdProgram = bird.IdProgram,
+
+                IdProgramInMySQL = bird.IdProgram, //
+
                 DateTimeValue = bird.DateTimeValue,
                 DaysUntilHatching = bird.DaysUntilHatching,
-                ImageSource = ImageSource.FromStream(() => new MemoryStream(bird.ImageBirdFile)),
-                tableProgram = programs // Привязываем программы
+
+                ImageBirdFile = bird.ImageBirdFile, //
+
+                tablePrograms = programs // Привязываем программы//
             };
 
             LoadProgramById(bird.Id);
@@ -51,51 +58,33 @@ namespace AppInCube.View.Pages.Programs.UnderPages
         private void DownloadTheProgram(object sender, EventArgs e)
         {
             // Вызов метода для сохранения данных
-            SaveProgramData(program.Id, program.IdProgram);
+            SaveProgramData(program.Id);
 
         }
-        private async void SaveProgramData(uint programId, uint IdProgram)
+        private async void SaveProgramData(uint birdId)
         {
             // Проверяем, существует ли программа с указанным ID
-            var existingProgram = await App.Database.GetProgramByIdAsync(programId);
-            var existingProgramDop = await App.Database.GetProgramByIdAsyncDop(IdProgram);
+            var existingProgram = await App.Database.GetProgramByIdAsync(birdId);
             if (existingProgram == null) // Если такой программы нет, то загружаем
             {
                 // Получаем данные из BindingContext
-                var programBaseInfo = BindingContext as TableBird;
+                var programBaseInfo = BindingContext as SQLliteTableBaseInfo;
+
 
                 // Создаем объект SQLliteTableBaseInfo и заполняем его данными из объекта TableBird
                 var programDataBaseInfo = new SQLliteTableBaseInfo
                 {
-                    IdBirdInMySQL = programBaseInfo.Id, // Используем Id из TableBird
-                    IdProgramInMySQL = programBaseInfo.IdProgram,
+                    IdBirdInMySQL = programBaseInfo.IdBirdInMySQL, // Используем Id из TableBird
+                    IdProgramInMySQL = programBaseInfo.IdProgramInMySQL,
                     NameBird = programBaseInfo.NameBird,
                     Content = programBaseInfo.Content,
                     DaysUntilHatching = programBaseInfo.DaysUntilHatching,
                     DateTimeValue = programBaseInfo.DateTimeValue,
-                    ImageBirdFile = programBaseInfo.ImageBirdFile // Сохраняем массив байтов изображения
+                    ImageBirdFile = programBaseInfo.ImageBirdFile, // Сохраняем массив байтов изображения
+                    tablePrograms = programBaseInfo.tablePrograms
                 };
 
-                    // Получаем данные из BindingContext
-                    var program = BindingContext as TableProgram;
-
-                    var programData = new SQLliteTableDopInfo
-                    {
-                        IdProgram = program.IdProgram,
-                        Day = program.Day,
-                        MinHumidity = program.MinHumidity,
-                        MaxHumidity = program.MaxHumidity,
-                        MinTemperature = program.MinTemperature,
-                        MaxTemperature = program.MinTemperature,
-                        MinTimeCooling = program.MinTimeCooling,
-                        MaxTimeCooling = program.MaxTimeCooling,
-                        MinАmountTurn = program.MinАmountTurn,
-                        MaxАmountTurn = program.MaxАmountTurn,
-                        АmountCooling = program.АmountCooling
-
-                    };
-                
-
+                 
                 try
                 {
                     // Используем метод SaveProgramAsync для сохранения данных в таблицу
