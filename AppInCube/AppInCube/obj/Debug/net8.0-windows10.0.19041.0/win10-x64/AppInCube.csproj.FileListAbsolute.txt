@@ -1435,3 +1435,6 @@ D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windo
 D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
 D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\ProjectArchitectures.txt
+D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
+D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll
