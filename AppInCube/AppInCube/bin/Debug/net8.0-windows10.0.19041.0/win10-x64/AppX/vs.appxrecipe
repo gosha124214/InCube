@@ -10,7 +10,7 @@
     <PackageArchitecture>x64</PackageArchitecture>
     <PackageIdentityName>com.companyname.appincube</PackageIdentityName>
     <PackageIdentityPublisher>CN=User Name</PackageIdentityPublisher>
-    <IntermediateOutputPath>D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\</IntermediateOutputPath>
+    <IntermediateOutputPath>D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\</IntermediateOutputPath>
     <RemoteDeploymentType>CopyToDevice</RemoteDeploymentType>
     <PackageRegistrationPath>
     </PackageRegistrationPath>
@@ -18,7 +18,7 @@
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>
     </WindowsSdkPath>
-    <LayoutDir>D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppX</LayoutDir>
+    <LayoutDir>D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppX</LayoutDir>
     <RegisteredManifestChecksum>0B7F0E805ACC5474D0F5A18E6D92DF0D61439851E4103000C1566AAD68D7CB1A</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>com.companyname.appincube_1.0.0.1_x64__9zz4h110yvjzm</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>com.companyname.appincube_9zz4h110yvjzm!App</RegisteredUserModeAppID>
@@ -27,348 +27,348 @@
     <RegisteredVersion>1.0.0.1</RegisteredVersion>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
+    <AppXManifest Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2025-04-27T13:36:58.802</Modified>
+      <Modified>2025-04-30T22:15:50.854</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2025-04-27T13:16:12.389</Modified>
+      <Modified>2025-04-30T22:14:39.890</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.runtimeconfig.json">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.runtimeconfig.json">
       <PackagePath>AppInCube.runtimeconfig.json</PackagePath>
-      <Modified>2025-04-27T13:16:12.310</Modified>
+      <Modified>2025-04-30T18:35:59.087</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.dll">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.dll">
       <PackagePath>AppInCube.dll</PackagePath>
-      <Modified>2025-04-27T13:36:57.774</Modified>
+      <Modified>2025-04-30T22:15:49.869</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>AppInCube.exe</PackagePath>
-      <Modified>2025-04-27T13:36:57.861</Modified>
+      <Modified>2025-04-30T22:15:49.938</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\Resources\Raw\AboutAssets.txt">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
       <Modified>2024-11-17T15:09:38.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-100.png">
       <PackagePath>splashSplashScreen.scale-100.png</PackagePath>
       <Modified>2024-12-09T19:03:04.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-125.png">
       <PackagePath>splashSplashScreen.scale-125.png</PackagePath>
       <Modified>2024-12-09T19:03:04.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-150.png">
       <PackagePath>splashSplashScreen.scale-150.png</PackagePath>
       <Modified>2024-12-09T19:03:04.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-200.png">
       <PackagePath>splashSplashScreen.scale-200.png</PackagePath>
       <Modified>2024-12-09T19:03:04.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\sp\splashSplashScreen.scale-400.png">
       <PackagePath>splashSplashScreen.scale-400.png</PackagePath>
       <Modified>2024-12-09T19:03:04.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\f\OpenSans-Regular.ttf">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\f\OpenSans-Regular.ttf">
       <PackagePath>OpenSans-Regular.ttf</PackagePath>
       <Modified>2024-11-17T15:09:38.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\f\OpenSans-Semibold.ttf">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\f\OpenSans-Semibold.ttf">
       <PackagePath>OpenSans-Semibold.ttf</PackagePath>
       <Modified>2024-11-17T15:09:38.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appicon.ico">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appicon.ico">
       <PackagePath>appicon.ico</PackagePath>
-      <Modified>2025-03-31T00:30:33.736</Modified>
+      <Modified>2025-04-29T16:24:54.616</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-100.png">
       <PackagePath>appiconLargeTile.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-125.png">
       <PackagePath>appiconLargeTile.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.726</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-150.png">
       <PackagePath>appiconLargeTile.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.726</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-200.png">
       <PackagePath>appiconLargeTile.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.726</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLargeTile.scale-400.png">
       <PackagePath>appiconLargeTile.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.726</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-16.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-16.png">
       <PackagePath>appiconLogo.altform-lightunplated_targetsize-16.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.733</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-24.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-24.png">
       <PackagePath>appiconLogo.altform-lightunplated_targetsize-24.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.733</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-256.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-256.png">
       <PackagePath>appiconLogo.altform-lightunplated_targetsize-256.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.732</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-32.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-32.png">
       <PackagePath>appiconLogo.altform-lightunplated_targetsize-32.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.733</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-48.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-lightunplated_targetsize-48.png">
       <PackagePath>appiconLogo.altform-lightunplated_targetsize-48.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.733</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-16.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-16.png">
       <PackagePath>appiconLogo.altform-unplated_targetsize-16.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.734</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-24.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-24.png">
       <PackagePath>appiconLogo.altform-unplated_targetsize-24.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.734</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-256.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-256.png">
       <PackagePath>appiconLogo.altform-unplated_targetsize-256.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.733</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-32.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-32.png">
       <PackagePath>appiconLogo.altform-unplated_targetsize-32.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.734</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-48.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.altform-unplated_targetsize-48.png">
       <PackagePath>appiconLogo.altform-unplated_targetsize-48.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.734</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-100.png">
       <PackagePath>appiconLogo.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.735</Modified>
+      <Modified>2025-04-29T16:24:54.616</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-125.png">
       <PackagePath>appiconLogo.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.735</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-150.png">
       <PackagePath>appiconLogo.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.735</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-200.png">
       <PackagePath>appiconLogo.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.735</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.scale-400.png">
       <PackagePath>appiconLogo.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.735</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-16.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-16.png">
       <PackagePath>appiconLogo.targetsize-16.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.735</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-24.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-24.png">
       <PackagePath>appiconLogo.targetsize-24.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.735</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-256.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-256.png">
       <PackagePath>appiconLogo.targetsize-256.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.734</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-32.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-32.png">
       <PackagePath>appiconLogo.targetsize-32.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.734</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-48.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconLogo.targetsize-48.png">
       <PackagePath>appiconLogo.targetsize-48.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.734</Modified>
+      <Modified>2025-04-29T16:24:54.615</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-100.png">
       <PackagePath>appiconMediumTile.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.728</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-125.png">
       <PackagePath>appiconMediumTile.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.728</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-150.png">
       <PackagePath>appiconMediumTile.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.728</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-200.png">
       <PackagePath>appiconMediumTile.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconMediumTile.scale-400.png">
       <PackagePath>appiconMediumTile.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-100.png">
       <PackagePath>appiconSmallTile.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.730</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-125.png">
       <PackagePath>appiconSmallTile.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.728</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-150.png">
       <PackagePath>appiconSmallTile.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.728</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-200.png">
       <PackagePath>appiconSmallTile.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.728</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconSmallTile.scale-400.png">
       <PackagePath>appiconSmallTile.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.728</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-100.png">
       <PackagePath>appiconStoreLogo.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.731</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-125.png">
       <PackagePath>appiconStoreLogo.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.730</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-150.png">
       <PackagePath>appiconStoreLogo.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.730</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-200.png">
       <PackagePath>appiconStoreLogo.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.730</Modified>
+      <Modified>2025-04-29T16:24:54.614</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconStoreLogo.scale-400.png">
       <PackagePath>appiconStoreLogo.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.730</Modified>
+      <Modified>2025-04-29T16:24:54.613</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-100.png">
       <PackagePath>appiconWideTile.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-125.png">
       <PackagePath>appiconWideTile.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-150.png">
       <PackagePath>appiconWideTile.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-200.png">
       <PackagePath>appiconWideTile.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\appiconWideTile.scale-400.png">
       <PackagePath>appiconWideTile.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.727</Modified>
+      <Modified>2025-04-29T16:24:54.612</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-100.png">
       <PackagePath>buy.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-125.png">
       <PackagePath>buy.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-150.png">
       <PackagePath>buy.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-200.png">
       <PackagePath>buy.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.609</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\buy.scale-400.png">
       <PackagePath>buy.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.609</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-100.png">
       <PackagePath>dotnet_bot.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-125.png">
       <PackagePath>dotnet_bot.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-150.png">
       <PackagePath>dotnet_bot.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.722</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-200.png">
       <PackagePath>dotnet_bot.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.722</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\dotnet_bot.scale-400.png">
       <PackagePath>dotnet_bot.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.722</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-100.png">
       <PackagePath>mane_page.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.724</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-125.png">
       <PackagePath>mane_page.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.724</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-150.png">
       <PackagePath>mane_page.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.724</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-200.png">
       <PackagePath>mane_page.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.724</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\mane_page.scale-400.png">
       <PackagePath>mane_page.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.723</Modified>
+      <Modified>2025-04-29T16:24:54.611</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-100.png">
       <PackagePath>programm.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.725</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-125.png">
       <PackagePath>programm.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.725</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-150.png">
       <PackagePath>programm.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.725</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-200.png">
       <PackagePath>programm.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.724</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\programm.scale-400.png">
       <PackagePath>programm.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.724</Modified>
+      <Modified>2025-04-29T16:24:54.610</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-100.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-100.png">
       <PackagePath>risies.scale-100.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.726</Modified>
+      <Modified>2025-04-29T16:24:54.609</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-125.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-125.png">
       <PackagePath>risies.scale-125.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.726</Modified>
+      <Modified>2025-04-29T16:24:54.609</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-150.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-150.png">
       <PackagePath>risies.scale-150.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.725</Modified>
+      <Modified>2025-04-29T16:24:54.609</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-200.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-200.png">
       <PackagePath>risies.scale-200.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.725</Modified>
+      <Modified>2025-04-29T16:24:54.609</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-400.png">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\risies.scale-400.png">
       <PackagePath>risies.scale-400.png</PackagePath>
-      <Modified>2025-03-31T00:30:33.725</Modified>
+      <Modified>2025-04-29T16:24:54.608</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Diplom InCub\AppInCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.deps.json">
+    <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.deps.json">
       <PackagePath>AppInCube.deps.json</PackagePath>
-      <Modified>2025-04-27T13:16:12.264</Modified>
+      <Modified>2025-04-30T22:14:39.652</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Гашик\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.57\lib\net8.0\Microsoft.Windows.SDK.NET.dll">
       <PackagePath>Microsoft.Windows.SDK.NET.dll</PackagePath>

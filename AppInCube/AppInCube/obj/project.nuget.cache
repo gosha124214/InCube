@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sO+q9bakDp0=",
+  "dgSpecHash": "0V8m/3KJEK0=",
   "success": true,
-  "projectFilePath": "D:\\Diplom InCub\\AppInCub\\GitHubInCube\\AppInCube\\AppInCube\\AppInCube.csproj",
+  "projectFilePath": "D:\\Diplom InCub\\GitHubInCube\\AppInCube\\AppInCube\\AppInCube.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Гашик\\.nuget\\packages\\bouncycastle.cryptography\\2.3.1\\bouncycastle.cryptography.2.3.1.nupkg.sha512",
     "C:\\Users\\Гашик\\.nuget\\packages\\fluentmigrator\\6.2.0\\fluentmigrator.6.2.0.nupkg.sha512",

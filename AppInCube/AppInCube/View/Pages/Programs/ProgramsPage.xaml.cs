@@ -12,7 +12,7 @@ namespace AppInCube.View.Pages.Programs
 {
     public partial class ProgramsPage : ContentPage, INotifyPropertyChanged
     {
-        public ObservableCollection<BirdProgram> BirdProgram { get; set; } // Коллекция для хранения программ
+        public ObservableCollection<TableBird> TableBird { get; set; } // Коллекция для хранения программ
 
         private uint _currentOffset = 1; // Переменная для отслеживания текущего смещения
         private const int _pageSize = 2; // Количество загружаемых программ за раз
@@ -26,7 +26,7 @@ namespace AppInCube.View.Pages.Programs
         {
             InitializeComponent();
 
-            BirdProgram = new ObservableCollection<BirdProgram>(); // Инициализация коллекции
+            TableBird = new ObservableCollection<TableBird>(); // Инициализация коллекции
             BindingContext = this; // Устанавливаем контекст привязки
 
             // Запускаем асинхронный метод для загрузки данных
@@ -49,7 +49,7 @@ namespace AppInCube.View.Pages.Programs
 
         public uint LoadedProgramsCount
         {
-            get { return (uint)BirdProgram.Count; }
+            get { return (uint)TableBird.Count; }
         }
 
         private async void LoadInitialPrograms()
@@ -73,26 +73,22 @@ namespace AppInCube.View.Pages.Programs
             {
                 for (int i = 0; i < count; i++)
                 {
-                    TableBird? newBird = await _apiService.GetTableBirdAsync(_currentOffset);
-                    List<TableProgram>? newProgram = await _apiService.GetTableProgramAsync(newBird.IdProgram);
 
-                    if ((newBird != null && newBird.Id != 0) && newProgram != null) // Проверяем, что программа была загружена
+                    TableBird? newBird = await _apiService.GetTableBirdAsync(_currentOffset);
+
+
+                   
+
+                    if (newBird != null && newBird.Id != 0) // Проверяем, что программа была загружена
                     {
                         // Конвертация массива байтов в ImageSource
                         newBird.ImageSource = ImageSource.FromStream(() => new MemoryStream(newBird.ImageBirdFile));
 
-                        //Вычисление количества дней до вылупления
-                        newBird.DaysUntilHatching = (byte)newProgram.Count;
 
 
-                        BirdProgram birdProgram = new BirdProgram
-                        {
-                            tableBird = newBird,
-                            tableProgram = newProgram
-                        };
 
                         // Добавление в коллекцию
-                        BirdProgram.Add(birdProgram);
+                        TableBird.Add(newBird);
 
                         _currentOffset++;
                         OnPropertyChanged(nameof(LoadedProgramsCount));
@@ -132,10 +128,14 @@ namespace AppInCube.View.Pages.Programs
             // Блокируем взаимодействие с текущей страницей
             this.IsEnabled = false;
 
-            var tappedItem = (sender as StackLayout).BindingContext as BirdProgram;
+            var tappedItem = (sender as StackLayout).BindingContext as TableBird;
+            List<TableProgram>? newProgram = await _apiService.GetTableProgramAsync(tappedItem.IdProgram);
+
+
+
             if (tappedItem != null)
             {
-                await Navigation.PushAsync(new ProgramDetailPage(tappedItem.tableBird, tappedItem.tableProgram));
+                await Navigation.PushAsync(new ProgramDetailPage(tappedItem, newProgram));
             }
 
 
