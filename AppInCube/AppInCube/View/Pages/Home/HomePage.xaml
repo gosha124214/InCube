@@ -2,12 +2,133 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppInCube.View.Pages.Home.HomePage"
-             Title="Главная"
+             Title="Добро пожаловать"
              NavigationPage.HasNavigationBar="False">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+
+            <!-- Заголовок -->
+            <Label x:Name="titleLabel"
+                   Text="Добро пожаловать"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#333333" />
+
+            <!-- Описание -->
+            <Label Text="Вход нужен чтобы вы могли загружать свои программы в интернет для общего пользования"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="#555555" />
+            <Label Text="Остальные функции для вас открыты"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   TextColor="#555555" />
+
+            <!-- Панель выбора входа или регистрации -->
+            <VerticalStackLayout x:Name="choicePanel" Spacing="15" HorizontalOptions="Center">
+
+                <Button Text="Войти"
+                        x:Name="btnLogin"
+                        WidthRequest="200"
+                        HeightRequest="50"
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Clicked="OnLoginChoiceClicked"/>
+
+                <Button Text="Зарегистрироваться"
+                        x:Name="btnRegister"
+                        WidthRequest="200"
+                        HeightRequest="50"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Clicked="OnRegisterChoiceClicked"/>
+            </VerticalStackLayout>
+
+            <!-- Форма ввода email и отправки кода -->
+            <VerticalStackLayout x:Name="emailPanel" IsVisible="False" Spacing="15" HorizontalOptions="Center" WidthRequest="300">
+
+                <Label x:Name="emailPanelTitle"
+                       Text=""
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="#222222" />
+
+                <Frame BackgroundColor="White"
+                       CornerRadius="8"
+                       HasShadow="True">
+                    <Entry x:Name="emailEntry"
+                           Placeholder="Введите электронную почту"
+                           Keyboard="Email"
+                           FontSize="16"
+                           HeightRequest="44"
+                           TextColor="#222222"/>
+                </Frame>
+
+                <Button x:Name="sendCodeButton"
+                        Text="Отправить код"
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        HeightRequest="44"
+                        FontAttributes="Bold"
+                        Clicked="OnSendCodeButtonClicked"/>
+
+                <Button Text="Вернуться назад"
+                        BackgroundColor="Transparent"
+                        TextColor="Blue"
+                        FontAttributes="Italic"
+                        Clicked="OnBackToChoiceClicked"
+                        HorizontalOptions="Center"
+                        />
+            </VerticalStackLayout>
+
+            <!-- Форма ввода кода подтверждения -->
+            <VerticalStackLayout x:Name="codePanel" IsVisible="False" Spacing="15" HorizontalOptions="Center" WidthRequest="300">
+
+                <Label Text="Введите 4-значный код из письма"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="#222222" />
+
+                <Frame BackgroundColor="White"
+                       CornerRadius="8"
+                       HasShadow="True">
+                    <Entry x:Name="codeEntry"
+                           Placeholder="Код подтверждения"
+                           MaxLength="4"
+                           Keyboard="Numeric"
+                           FontSize="16"
+                           TextColor="#222222"
+                           />
+                </Frame>
+
+                <Button x:Name="verifyCodeButton"
+                        Text="Подтвердить код"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        HeightRequest="44"
+                        FontAttributes="Bold"
+                        Clicked="OnVerifyCodeButtonClicked"/>
+
+                <Label x:Name="infoLabel"
+                       TextColor="Red"
+                       HorizontalOptions="Center"
+                       IsVisible="False"/>
+
+                <Button Text="Вернуться назад"
+                        BackgroundColor="Transparent"
+                        TextColor="Blue"
+                        FontAttributes="Italic"
+                        Clicked="OnBackToChoiceClicked"
+                        HorizontalOptions="Center"
+                        />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
