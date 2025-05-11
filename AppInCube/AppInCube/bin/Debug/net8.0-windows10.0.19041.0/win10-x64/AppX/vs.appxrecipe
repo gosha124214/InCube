@@ -30,13 +30,13 @@
     <AppXManifest Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2025-05-05T17:03:13.898</Modified>
+      <Modified>2025-05-11T17:23:37.154</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2025-05-02T23:22:29.663</Modified>
+      <Modified>2025-05-11T17:23:36.984</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.runtimeconfig.json">
       <PackagePath>AppInCube.runtimeconfig.json</PackagePath>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.dll">
       <PackagePath>AppInCube.dll</PackagePath>
-      <Modified>2025-05-05T17:03:12.602</Modified>
+      <Modified>2025-05-11T17:23:35.750</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>AppInCube.exe</PackagePath>
-      <Modified>2025-05-05T17:03:12.703</Modified>
+      <Modified>2025-05-11T17:23:35.823</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
@@ -368,7 +368,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.deps.json">
       <PackagePath>AppInCube.deps.json</PackagePath>
-      <Modified>2025-05-02T23:22:29.322</Modified>
+      <Modified>2025-05-11T17:23:36.768</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Гашик\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.57\lib\net8.0\Microsoft.Windows.SDK.NET.dll">
       <PackagePath>Microsoft.Windows.SDK.NET.dll</PackagePath>

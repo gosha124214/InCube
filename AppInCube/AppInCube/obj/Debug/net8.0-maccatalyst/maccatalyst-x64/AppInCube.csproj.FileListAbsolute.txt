@@ -2406,3 +2406,6 @@ D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-maccatalyst\ma
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\AppInCube.pdb
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\AppInCube.genruntimeconfig.cache
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-maccatalyst\maccatalyst-x64\ref\AppInCube.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.Maui.Controls.HotReload.Forms.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-maccatalyst\maccatalyst-x64\Microsoft.VisualStudio.DesignTools.TapContract.dll

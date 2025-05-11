@@ -55,7 +55,16 @@ namespace AppInCube.View.Pages.Home
 
             currentEmail = email;
 
-            bool sendSuccess = await _apiService.SendCodeAsync(email, isLoginMode);
+            bool sendSuccess;
+            if (isLoginMode)
+            {
+                sendSuccess = await _apiService.LoginAsync(email);
+            }
+            else
+            {
+                sendSuccess = await _apiService.RegisterAsync(email);
+            }
+
             if (!sendSuccess)
             {
                 await DisplayAlert("Ошибка", "Не удалось отправить код. Попробуйте позже.", "ОК");
@@ -83,7 +92,7 @@ namespace AppInCube.View.Pages.Home
                 return;
             }
 
-            bool verifySuccess = await _apiService.VerifyCodeAsync(currentEmail, enteredCode, isLoginMode);
+            bool verifySuccess = await _apiService.VerifyCodeAsync(currentEmail, enteredCode);
             if (verifySuccess)
             {
                 string modeText = isLoginMode ? "Вы успешно вошли" : "Вы успешно зарегистрировались";

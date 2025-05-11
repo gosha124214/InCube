@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\Diplom InCub\\GitHubInCube\\AppInCube\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2138F1C0-B1F2-4092-A5C5-8A3D650281A8}|AppInCube\\AppInCube.csproj|d:\\diplom incub\\githubincube\\appincube\\appincube\\classes\\sqlbd\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2138F1C0-B1F2-4092-A5C5-8A3D650281A8}|AppInCube\\AppInCube.csproj|solutionrelative:appincube\\classes\\sqlbd\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2138F1C0-B1F2-4092-A5C5-8A3D650281A8}|AppInCube\\AppInCube.csproj|d:\\diplom incub\\githubincube\\appincube\\appincube\\view\\pages\\home\\homepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2138F1C0-B1F2-4092-A5C5-8A3D650281A8}|AppInCube\\AppInCube.csproj|solutionrelative:appincube\\view\\pages\\home\\homepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2138F1C0-B1F2-4092-A5C5-8A3D650281A8}|AppInCube\\AppInCube.csproj|d:\\diplom incub\\githubincube\\appincube\\appincube\\classes\\sqlbd\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2138F1C0-B1F2-4092-A5C5-8A3D650281A8}|AppInCube\\AppInCube.csproj|solutionrelative:appincube\\classes\\sqlbd\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2138F1C0-B1F2-4092-A5C5-8A3D650281A8}|AppInCube\\AppInCube.csproj|d:\\diplom incub\\githubincube\\appincube\\appincube\\view\\pages\\home\\homepage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -161,7 +161,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 31,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -175,20 +175,20 @@
               "RelativeDocumentMoniker": "AppInCube\\View\\Pages\\Home\\HomePage.xaml",
               "ToolTip": "D:\\Diplom InCub\\GitHubInCube\\AppInCube\\AppInCube\\View\\Pages\\Home\\HomePage.xaml",
               "RelativeToolTip": "AppInCube\\View\\Pages\\Home\\HomePage.xaml",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAYwIUAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAAE0AAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-05-05T14:17:59.942Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "HomePage.xaml.cs",
               "DocumentMoniker": "D:\\Diplom InCub\\GitHubInCube\\AppInCube\\AppInCube\\View\\Pages\\Home\\HomePage.xaml.cs",
               "RelativeDocumentMoniker": "AppInCube\\View\\Pages\\Home\\HomePage.xaml.cs",
               "ToolTip": "D:\\Diplom InCub\\GitHubInCube\\AppInCube\\AppInCube\\View\\Pages\\Home\\HomePage.xaml.cs",
               "RelativeToolTip": "AppInCube\\View\\Pages\\Home\\HomePage.xaml.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAnwC4AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-05T14:17:49.142Z",
               "EditorCaption": ""
@@ -215,8 +215,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\UnderPagesInFavorites\\NewPage1.xaml",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAADYAAABlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-04-27T12:49:23.515Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-27T12:49:23.515Z"
             },
             {
               "$type": "Document",
@@ -336,8 +335,7 @@
               "RelativeToolTip": "AppInCube\\AppShell.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T08:59:21.185Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T08:59:21.185Z"
             },
             {
               "$type": "Document",
@@ -349,8 +347,7 @@
               "RelativeToolTip": "AppInCube\\MainPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-26T08:59:17.3Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T08:59:17.3Z"
             },
             {
               "$type": "Document",
@@ -362,8 +359,7 @@
               "RelativeToolTip": "AppInCube\\Properties\\launchSettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-26T08:51:39.894Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-26T08:51:39.894Z"
             },
             {
               "$type": "Document",
@@ -399,8 +395,7 @@
               "RelativeToolTip": "AppInCube\\MauiProgram.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T19:11:25.767Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-23T19:11:25.767Z"
             },
             {
               "$type": "Document",
@@ -424,8 +419,7 @@
               "RelativeToolTip": "AppInCube\\App.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T11:25:10.1Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-21T11:25:10.1Z"
             },
             {
               "$type": "Document",
@@ -437,8 +431,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\FavoritesPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-04-21T09:58:12.991Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-21T09:58:12.991Z"
             },
             {
               "$type": "Document",
@@ -450,8 +443,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\FavoritesPage.xaml.cs",
               "ViewState": "AgIAACwAAAAAAAAAAAAIwCwAAABbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T09:58:10.229Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-21T09:58:10.229Z"
             },
             {
               "$type": "Document",
@@ -509,8 +501,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Programs\\ProgramsPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADEAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-30T17:19:23.179Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-30T17:19:23.179Z"
             },
             {
               "$type": "Document",
@@ -538,13 +529,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ApiService.cs",
               "DocumentMoniker": "D:\\Diplom InCub\\GitHubInCube\\AppInCube\\AppInCube\\Classes\\SQLBD\\ApiService.cs",
               "RelativeDocumentMoniker": "AppInCube\\Classes\\SQLBD\\ApiService.cs",
               "ToolTip": "D:\\Diplom InCub\\GitHubInCube\\AppInCube\\AppInCube\\Classes\\SQLBD\\ApiService.cs",
               "RelativeToolTip": "AppInCube\\Classes\\SQLBD\\ApiService.cs",
-              "ViewState": "AgIAADcAAAAAAAAAAAAnwDkAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAwwGYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-30T17:06:13.168Z",
               "EditorCaption": ""
@@ -631,8 +622,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Programs\\ProgramsPage.xaml.cs",
               "ViewState": "AgIAAGsAAAAAAAAAAAAuwIMAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T16:38:35.527Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-24T16:38:35.527Z"
             }
           ]
         }

@@ -8,16 +8,11 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
 
-
-
 namespace AppInCube.Classes.SQLBD
 {
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-
-        private static readonly byte[] AesKey = Encoding.UTF8.GetBytes("0123456789abcdef"); // 16 байт
-        private static readonly byte[] AesIV = Encoding.UTF8.GetBytes("abcdef9876543210");  // 16 байт
 
         public ApiService()
         {
@@ -30,21 +25,20 @@ namespace AppInCube.Classes.SQLBD
             };
         }
 
-        public async Task<bool> SendCodeAsync(string email, bool isLogin)
+        // Метод для регистрации пользователя
+        public async Task<bool> RegisterAsync(string email)
         {
             try
             {
                 var requestBody = new
                 {
-                    Email = email,
-                    IsLogin = isLogin
+                    Email = email
                 };
 
                 var json = JsonSerializer.Serialize(requestBody);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Убедитесь, что URL-адрес правильный
-                var response = await _httpClient.PostAsync($"https://185.24.53.191:5162/weatherforecast/sendcode", content);
+                var response = await _httpClient.PostAsync("weatherforecast/register", content);
 
                 Console.WriteLine($"Response status code: {response.StatusCode}");
 
@@ -52,28 +46,52 @@ namespace AppInCube.Classes.SQLBD
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка при отправке кода: {ex.Message}");
+                Console.WriteLine($"Ошибка при регистрации: {ex.Message}");
                 return false;
             }
         }
 
-        public async Task<bool> VerifyCodeAsync(string email, string code, bool isLogin)
+        // Метод для авторизации пользователя
+        public async Task<bool> LoginAsync(string email)
+        {
+            try
+            {
+                var requestBody = new
+                {
+                    Email = email
+                };
+
+                var json = JsonSerializer.Serialize(requestBody);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("weatherforecast/login", content);
+
+                Console.WriteLine($"Response status code: {response.StatusCode}");
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при авторизации: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Метод для проверки кода
+        public async Task<bool> VerifyCodeAsync(string email, string code)
         {
             try
             {
                 var requestBody = new
                 {
                     Email = email,
-                    Code = code,
-                    IsLogin = isLogin
+                    Code = code
                 };
 
                 var json = JsonSerializer.Serialize(requestBody);
-                var encryptedJson = Encrypt(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var content = new StringContent(encryptedJson, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync("auth/verifycode", content);
+                var response = await _httpClient.PostAsync("weatherforecast/verifycode", content);
 
                 return response.IsSuccessStatusCode;
             }
@@ -84,37 +102,12 @@ namespace AppInCube.Classes.SQLBD
             }
         }
 
-        private string Encrypt(string plainText)
-        {
-            using (var aes = System.Security.Cryptography.Aes.Create())
-            {
-                aes.Key = AesKey;
-                aes.IV = AesIV;
-                aes.Padding = System.Security.Cryptography.PaddingMode.PKCS7;
-
-                var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-                var plainBytes = Encoding.UTF8.GetBytes(plainText);
-
-                byte[] encryptedBytes;
-                using (var ms = new System.IO.MemoryStream())
-                {
-                    using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
-                    {
-                        cs.Write(plainBytes, 0, plainBytes.Length);
-                        cs.FlushFinalBlock();
-                        encryptedBytes = ms.ToArray();
-                    }
-                }
-
-                return Convert.ToBase64String(encryptedBytes);
-            }
-        }
-
+        // Метод для получения информации о TableBird
         public async Task<TableBird> GetTableBirdAsync(uint id)
         {
             try
             {
-                var tableBirdResponse = await _httpClient.GetAsync($"https://185.24.53.191:5162/weatherforecast/{id}");
+                var tableBirdResponse = await _httpClient.GetAsync($"weatherforecast/{id}");
 
                 if (!tableBirdResponse.IsSuccessStatusCode)
                 {
@@ -125,22 +118,22 @@ namespace AppInCube.Classes.SQLBD
             }
             catch (HttpRequestException ex)
             {
-                // Обработка исключения, связанного с HTTP-запросом
                 Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
                 return null; // Возвращаем null в случае ошибки
             }
             catch (Exception ex)
             {
-                // Обработка исключения, связанного с HTTP-запросом
                 Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
                 return null; // Возвращаем null в случае ошибки
             }
         }
+
+        // Метод для получения информации о TableProgram
         public async Task<List<TableProgram>> GetTableProgramAsync(uint id)
         {
             try
             {
-                var tableProgramResponse = await _httpClient.GetAsync($"https://185.24.53.191:5162/weatherforecast/dop/{id}");
+                var tableProgramResponse = await _httpClient.GetAsync($"weatherforecast/dop/{id}");
 
                 if (!tableProgramResponse.IsSuccessStatusCode)
                 {
@@ -151,46 +144,39 @@ namespace AppInCube.Classes.SQLBD
             }
             catch (HttpRequestException ex)
             {
-                // Обработка исключения, связанного с HTTP-запросом
                 Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
                 return null; // Возвращаем null в случае ошибки
             }
             catch (Exception ex)
             {
-                // Обработка исключения, связанного с HTTP-запросом
                 Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
                 return null; // Возвращаем null в случае ошибки
             }
         }
-
+        // Метод для получения общего количества записей в TableBird
         public async Task<uint?> GetTableBirdCountAllProgram()
         {
             try
             {
-                var response = await _httpClient.GetAsync($"https://185.24.53.191:5162/weatherforecast/countallprogram");
+                var response = await _httpClient.GetAsync("weatherforecast/countallprogram");
 
-                // Проверяем, успешен ли запрос
                 if (!response.IsSuccessStatusCode)
                 {
                     return null; // Возвращаем null, если запрос не был успешным
                 }
 
-                // Читаем содержимое ответа и десериализуем его в целое число
                 return await response.Content.ReadFromJsonAsync<uint>();
             }
             catch (HttpRequestException ex)
             {
-                // Обработка исключения, связанного с HTTP-запросом
                 Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
-                return null; // Возвращаем null в случае ошибки
+                return null;
             }
             catch (Exception ex)
             {
-                // Обработка исключения, связанного с HTTP-запросом
                 Console.WriteLine($"Ошибка при выполнении запроса: {ex.Message}");
-                return null; // Возвращаем null в случае ошибки
+                return null;
             }
         }
-
     }
 }
