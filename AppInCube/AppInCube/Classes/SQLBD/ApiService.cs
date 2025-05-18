@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
+using AppInCube.Classes.JWT;
 
 namespace AppInCube.Classes.SQLBD
 {
@@ -24,6 +25,39 @@ namespace AppInCube.Classes.SQLBD
                 BaseAddress = new Uri("https://185.24.53.191:5162/")
             };
         }
+
+        public async Task<AuthResponse> VerifyCodeAsyncReturnToken(string email, string code)
+        {
+            try
+            {
+                var requestBody = new
+                {
+                    Email = email,
+                    Code = code
+                };
+
+                var json = JsonSerializer.Serialize(requestBody);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("weatherforecast/verifycode", content);
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var authResponse = JsonSerializer.Deserialize<AuthResponse>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                return authResponse;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при проверке кода: {ex.Message}");
+                return null;
+            }
+        }
+
+
+
 
         // Метод для регистрации пользователя
         public async Task<bool> RegisterAsync(string email)

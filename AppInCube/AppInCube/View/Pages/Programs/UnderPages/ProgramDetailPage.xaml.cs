@@ -1,9 +1,9 @@
 using AppInCube.Classes; // ”бедитесь, что это пространство имен правильное
-using AppInCube.Classes.SQLite;
 using AppInCube.Classes.SQLBD;
 using Microsoft.Maui.Controls;
 using SQLite;
 using System;
+using AppInCube.Classes.SQLite.Downloaded;
 //using static Android.Webkit.ConsoleMessage;
 
 namespace AppInCube.View.Pages.Programs.UnderPages

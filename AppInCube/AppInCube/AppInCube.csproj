@@ -86,13 +86,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\Pages\Favorites\DownloadedProgramms\DownloadedProgrammsPage.xaml.cs">
+	    <DependentUpon>DownloadedProgrammsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\Pages\Favorites\ProgrammsInProcess\ProgrammsInProcess.xaml.cs">
+	    <DependentUpon>ProgrammsInProcess.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\Pages\Favorites\DownloadedProgramms\UnderPagesInFavorites\ProgramDetailPage.xaml.cs">
+	    <DependentUpon>ProgramDetailPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="View\Pages\Buy\BuyPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Pages\Favorites\FavoritesPage.xaml">
+	  <MauiXaml Update="View\Pages\Favorites\DownloadedProgramms\DownloadedProgrammsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Pages\Favorites\UnderPagesInFavorites\NewPage1.xaml">
+	  <MauiXaml Update="View\Pages\Favorites\ProgrammsInProcess\ProgrammsInProcess.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Pages\Favorites\DownloadedProgramms\UnderPagesInFavorites\ProgramDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Pages\Home\HomePage.xaml">
@@ -107,6 +122,10 @@
 	  <MauiXaml Update="View\Pages\Programs\UnderPages\ProgramDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Classes\SQLite\HistoryPartyes\" />
 	</ItemGroup>
 
 </Project>

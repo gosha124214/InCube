@@ -3,7 +3,7 @@ using AppInCube.View.GeneralUnderPages;
 using SQLite;
 using System.IO;
 using Microsoft.Maui.Controls;
-using AppInCube.Classes.SQLite;
+using AppInCube.Classes.SQLite.Downloaded;
 
 namespace AppInCube
 {

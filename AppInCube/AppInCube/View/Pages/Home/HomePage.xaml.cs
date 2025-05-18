@@ -85,6 +85,7 @@ namespace AppInCube.View.Pages.Home
         private async void OnVerifyCodeButtonClicked(object sender, EventArgs e)
         {
             string enteredCode = codeEntry.Text?.Trim();
+
             if (string.IsNullOrWhiteSpace(enteredCode) || enteredCode.Length != 4)
             {
                 infoLabel.Text = "Пожалуйста, введите 4-значный код.";
@@ -92,15 +93,18 @@ namespace AppInCube.View.Pages.Home
                 return;
             }
 
-            bool verifySuccess = await _apiService.VerifyCodeAsync(currentEmail, enteredCode);
-            if (verifySuccess)
-            {
-                string modeText = isLoginMode ? "Вы успешно вошли" : "Вы успешно зарегистрировались";
-                await DisplayAlert("Успех", $"{modeText} как {currentEmail}", "ОК");
+            var response = await _apiService.VerifyCodeAsyncReturnToken(currentEmail, enteredCode);
 
-                // TODO: переход на следующий экран приложения
+            if (response != null && !string.IsNullOrEmpty(response.Token))
+            {
+                // Сохраняем токен (пример с SecureStorage)
+                await SecureStorage.SetAsync("jwt_token", response.Token);
+
+                await DisplayAlert("Успех", $"Вы успешно вошли как {currentEmail}", "ОК");
 
                 ResetToStart();
+
+                // Здесь переход в основное приложение
             }
             else
             {
@@ -108,6 +112,7 @@ namespace AppInCube.View.Pages.Home
                 infoLabel.IsVisible = true;
             }
         }
+
 
         private void OnBackToChoiceClicked(object sender, EventArgs e)
         {

@@ -19,7 +19,7 @@
     <MauiXaml Update="View\Pages\Buy\BuyPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="View\Pages\Favorites\FavoritesPage.xaml">
+    <MauiXaml Update="View\Pages\Favorites\DownloadedProgramms\DownloadedProgrammsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="View\Pages\Home\HomePage.xaml">
