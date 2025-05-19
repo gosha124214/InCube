@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AppInCube.Classes.SQLite.Downloaded;
 using SQLite;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace AppInCube.Classes.SQLite.Partyes
 {
-    class SQLliteTableDopInfoParty
+    public class SQLliteTableDopInfoParty
     {
         [PrimaryKey]
         public uint IdParty { get; set; }
@@ -21,5 +25,8 @@ namespace AppInCube.Classes.SQLite.Partyes
         public byte? АmountCooling { get; set; }
         public TimeSpan? MinTimeCooling { get; set; }
         public TimeSpan? MaxTimeCooling { get; set; }
+
+
     }
 }
+

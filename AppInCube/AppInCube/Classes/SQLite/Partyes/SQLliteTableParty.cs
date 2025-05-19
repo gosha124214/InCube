@@ -1,20 +1,27 @@
-﻿using System;
+﻿using SQLite;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SQLite;
 
 namespace AppInCube.Classes.SQLite.Partyes
 {
     public class SQLliteTableParty
     {
-        [PrimaryKey]
-        public uint IdParty{ get; set; }
-        public uint? IdProgramInMySQL { get; set; }
-        public uint? IdInsideProgram { get; set; }
-        public uint? IdBirdInMySQL { get; set; }
-        public uint? IdInsideBird { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public uint IdParty { get; set; }
+        public uint IdProgramInMySQL { get; set; }
+        public uint IdBirdInMySQL { get; set; }
         public DateTime DateTimeValue { get; set; }
+
+        // Это свойство будет хранить сериализованный JSON
+        public string TablePartyJson { get; set; }
+
+        // Это свойство будет игнорироваться при работе с базой данных
+        [Ignore]
+        public List<SQLliteTableDopInfoParty> DopInfoParty
+        {
+            get => string.IsNullOrEmpty(TablePartyJson) ? new List<SQLliteTableDopInfoParty>() : JsonConvert.DeserializeObject<List<SQLliteTableDopInfoParty>>(TablePartyJson);
+            set => TablePartyJson = JsonConvert.SerializeObject(value);
+        }
     }
 }

@@ -2,12 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppInCube.View.Pages.Favorites.ProgrammsInProcess.ProgrammsInProcess"
-             Title="Избранные программы"
+             Title="Запущенные программы"
              NavigationPage.HasNavigationBar="False">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <StackLayout Padding="10">
+        <Label Text="Запущенные программы" FontSize="24" FontAttributes="Bold" Margin="0,0,0,10" />
+
+        <CollectionView x:Name="RunningProgramsListView" VerticalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="5">
+                        <StackLayout>
+                            <Label Text="{Binding IdParty, StringFormat='Партия ID: {0}'}" FontSize="20" FontAttributes="Bold" />
+                            <Label Text="{Binding IdProgramInMySQL, StringFormat='Id программы: {0}'}" FontSize="16" />
+                            <Label Text="{Binding IdBirdInMySQL, StringFormat='Id птицы: {0}'}" FontSize="16" />
+                            <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" FontSize="16" />
+
+                            <!-- Кнопка отмены партии -->
+                            <Button Text="Отменить партию" 
+                                    BackgroundColor="Red" 
+                                    TextColor="White" 
+                                    Clicked="OnCancelPartyButtonClicked" 
+                                    CommandParameter="{Binding .}" />
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnProgramTapped" />
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
 </ContentPage>

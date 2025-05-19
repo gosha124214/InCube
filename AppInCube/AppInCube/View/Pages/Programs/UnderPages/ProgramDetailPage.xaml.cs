@@ -42,7 +42,7 @@ namespace AppInCube.View.Pages.Programs.UnderPages
 
         private async void LoadProgramById(uint programId)
         {
-            var idProgram = await App.Database.GetProgramByIdAsync(programId);
+            var idProgram = await App.DatabaseProgram.GetProgramByIdAsync(programId);
             if (idProgram != null)
             {
                 GoToProgramButton.IsVisible = true;
@@ -64,7 +64,7 @@ namespace AppInCube.View.Pages.Programs.UnderPages
         private async void SaveProgramData(uint birdId)
         {
             // Проверяем, существует ли программа с указанным ID
-            var existingProgram = await App.Database.GetProgramByIdAsync(birdId);
+            var existingProgram = await App.DatabaseProgram.GetProgramByIdAsync(birdId);
             if (existingProgram == null) // Если такой программы нет, то загружаем
             {
                 // Получаем данные из BindingContext
@@ -88,7 +88,7 @@ namespace AppInCube.View.Pages.Programs.UnderPages
                 try
                 {
                     // Используем метод SaveProgramAsync для сохранения данных в таблицу
-                    await App.Database.SaveProgramAsync(programDataBaseInfo); // Убедитесь, что метод принимает SQLliteTableBaseInfo
+                    await App.DatabaseProgram.SaveProgramAsync(programDataBaseInfo); // Убедитесь, что метод принимает SQLliteTableBaseInfo
 
                     GoToProgramButton.IsVisible = true;
                     Console.WriteLine("Данные успешно сохранены!");

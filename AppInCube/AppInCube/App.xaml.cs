@@ -4,22 +4,29 @@ using SQLite;
 using System.IO;
 using Microsoft.Maui.Controls;
 using AppInCube.Classes.SQLite.Downloaded;
+using AppInCube.Classes.SQLite.Partyes;
 
 namespace AppInCube
 {
     public partial class App : Application
     {
-        public static MenegerSQLlite Database { get; private set; }
+        public static MenegerSQLlite DatabaseProgram { get; private set; }
+        public static MenegerSQLliteParty DatabaseParty { get; private set; }
 
         public App()
         {
             InitializeComponent();
 
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "programs.db");
+            // Создаем разные пути для каждой базы данных
+            string mainDbPath = Path.Combine(FileSystem.AppDataDirectory, "programs.db");
+            string partyDbPath = Path.Combine(FileSystem.AppDataDirectory, "parties.db");
 
-          //  File.Delete(dbPath); // этот метод нужен чтобы удалить файл устаревшего формата
+              //File.Delete(partyDbPath); // этот метод нужен чтобы удалить файл устаревшего формата
 
-            Database = new MenegerSQLlite(dbPath);
+
+            // Инициализация менеджеров с разными файлами
+            DatabaseProgram = new MenegerSQLlite(mainDbPath);
+            DatabaseParty = new MenegerSQLliteParty(partyDbPath); // Инициализация менеджера для партий
 
             bool isFirstRun = Preferences.Get("IsFirstRun", true);
 
