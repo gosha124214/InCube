@@ -26,7 +26,9 @@ namespace AppInCube.Classes.SQLite.Partyes
         public TimeSpan? MinTimeCooling { get; set; }
         public TimeSpan? MaxTimeCooling { get; set; }
 
-
+        // Новые свойства для отслеживания состояния
+        public bool IsNotCompleted { get; set; } = true; // По умолчанию не выполнено
+        public bool IsCompleted { get; set; } = false; // По умолчанию не выполнено
     }
 }
 
