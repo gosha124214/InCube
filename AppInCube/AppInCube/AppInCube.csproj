@@ -89,6 +89,9 @@
 	  <Compile Update="View\Pages\Favorites\DownloadedProgramms\DownloadedProgrammsPage.xaml.cs">
 	    <DependentUpon>DownloadedProgrammsPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\Pages\Favorites\MakeProgramm\MakeProgramm.xaml.cs">
+	    <DependentUpon>MakeProgramm.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\Pages\Favorites\ProgrammsInProcess\ProgrammsInProcess.xaml.cs">
 	    <DependentUpon>ProgrammsInProcess.xaml</DependentUpon>
 	  </Compile>
@@ -102,6 +105,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Pages\Favorites\DownloadedProgramms\DownloadedProgrammsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Pages\Favorites\MakeProgramm\MakeProgramm.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Pages\Favorites\MakeProgramm\UnderPagesInMakeProgramm\UnderPagesMakeProgramm.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Pages\Favorites\ProgrammsInProcess\ProgrammsInProcess.xaml">

@@ -32,6 +32,10 @@
                Title="Запущенное"
                ContentTemplate="{DataTemplate view:Pages.Favorites.ProgrammsInProcess.ProgrammsInProcess}"
                Icon="buy.svg"/>
+            <ShellContent 
+               Title="Созданное"
+               ContentTemplate="{DataTemplate view:Pages.Favorites.MakeProgramm.MakeProgramm}"
+               Icon="buy.svg"/>
         </Tab>
 
         <ShellContent 

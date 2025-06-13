@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm.UnderPagesMakeProgramm"
+    Title="Конструктор создания программы">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15" x:Name="MainStackLayout">
+
+            <!-- Контейнер для фаз (динамически создаваемых) -->
+            <VerticalStackLayout x:Name="PhasesContainer" Spacing="20" />
+
+            <!-- Кнопки -->
+            <VerticalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
+                <Button x:Name="BtnNextPhase" Text="Следующая фаза" BackgroundColor="Blue" TextColor="White"
+                        VerticalOptions="Center" HorizontalOptions="FillAndExpand" Clicked="OnNextPhaseClicked" />
+                <Button x:Name="BtnCancelPhase" Text="Отменить следующую фазу" BackgroundColor="Gray" TextColor="White"
+                        VerticalOptions="Center" HorizontalOptions="FillAndExpand" Clicked="OnCancelPhaseClicked" IsEnabled="False" />
+                <Button Text="Программа готова" BackgroundColor="Green" TextColor="White"
+                        VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

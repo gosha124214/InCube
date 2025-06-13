@@ -72,6 +72,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Favor
 build_metadata.AdditionalFiles.TargetPath = View\Pages\Favorites\DownloadedProgramms\UnderPagesInFavorites\ProgramDetailPage.xaml
 build_metadata.AdditionalFiles.RelativePath = View\Pages\Favorites\DownloadedProgramms\UnderPagesInFavorites\ProgramDetailPage.xaml
 
+[D:/Diplom InCub/GitHubInCube/AppInCube/AppInCube/View/Pages/Favorites/MakeProgramm/MakeProgramm.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Favorites.MakeProgramm.MakeProgramm.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Favorites\MakeProgramm\MakeProgramm.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Favorites\MakeProgramm\MakeProgramm.xaml
+
+[D:/Diplom InCub/GitHubInCube/AppInCube/AppInCube/View/Pages/Favorites/MakeProgramm/UnderPagesInMakeProgramm/UnderPagesMakeProgramm.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm.UnderPagesMakeProgramm.xaml
+build_metadata.AdditionalFiles.TargetPath = View\Pages\Favorites\MakeProgramm\UnderPagesInMakeProgramm\UnderPagesMakeProgramm.xaml
+build_metadata.AdditionalFiles.RelativePath = View\Pages\Favorites\MakeProgramm\UnderPagesInMakeProgramm\UnderPagesMakeProgramm.xaml
+
 [D:/Diplom InCub/GitHubInCube/AppInCube/AppInCube/View/Pages/Favorites/ProgrammsInProcess/ProgrammsInProcess.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = AppInCube.View.Pages.Favorites.ProgrammsInProcess.ProgrammsInProcess.xaml
