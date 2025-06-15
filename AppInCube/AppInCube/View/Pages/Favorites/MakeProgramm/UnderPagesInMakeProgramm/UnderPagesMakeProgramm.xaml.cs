@@ -1,11 +1,12 @@
 using Microsoft.Maui.Controls;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 {
     public partial class UnderPagesMakeProgramm : ContentPage
     {
-        private static readonly Regex uintRegex = new Regex(@"^\d*$");
+        private bool isUpdating = false;
+        private readonly Dictionary<Entry, string> previousValues = new();
 
         public UnderPagesMakeProgramm()
         {
@@ -16,143 +17,162 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 
         private void AddFirstPhase()
         {
-            var firstPhaseStack = CreatePhase("1", true);
+            var firstPhaseStack = CreatePhase("1");
             PhasesContainer.Children.Add(firstPhaseStack);
         }
 
-        private VerticalStackLayout CreatePhase(string dayFromValue = null, bool isFirstPhase = false)
+        private VerticalStackLayout CreatePhase(string dayToValue = null)
         {
             var phaseStack = new VerticalStackLayout { Spacing = 10 };
 
-            // День
+            // День По:
             var dayStack = new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start };
-            dayStack.Children.Add(new Label { Text = "День ", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            dayStack.Children.Add(new Label { Text = "С:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-
-            var entryDayFrom = new Entry
-            {
-                Keyboard = Keyboard.Numeric,
-                VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                IsReadOnly = isFirstPhase,
-                Text = dayFromValue ?? string.Empty
-            };
-            entryDayFrom.TextChanged += OnDayFromTextChanged_Validated;
-            dayStack.Children.Add(entryDayFrom);
-
-            dayStack.Children.Add(new Label { Text = " По: ", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-
+            dayStack.Children.Add(new Label { Text = "День По:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
             var entryDayTo = new Entry
             {
                 Keyboard = Keyboard.Numeric,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                Text = dayFromValue ?? string.Empty // Инициализируем значением из "С:" той же фазы
+                Text = dayToValue ?? string.Empty
             };
-            entryDayTo.TextChanged += OnDayToTextChanged_Validated;
+            entryDayTo.Focused += Entry_FocusedStoreOldValue;
+            entryDayTo.Unfocused += (s, e) => Entry_UnfocusedValidate(entryDayTo);
             dayStack.Children.Add(entryDayTo);
-
             phaseStack.Children.Add(dayStack);
 
             // Температура
-            var tempStack = new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start };
-            tempStack.Children.Add(new Label { Text = "Температура ", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            tempStack.Children.Add(new Label { Text = "Мин:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            tempStack.Children.Add(new Entry { Placeholder = "float", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand });
-            tempStack.Children.Add(new Label { Text = " Макс:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            tempStack.Children.Add(new Entry { Placeholder = "float", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand });
+            var tempStack = CreateMinMaxStack("Температура", ValidateFloat);
             phaseStack.Children.Add(tempStack);
 
             // Влажность
-            var humidityStack = new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start };
-            humidityStack.Children.Add(new Label { Text = "Влажность ", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            humidityStack.Children.Add(new Label { Text = "Мин:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            humidityStack.Children.Add(new Entry { Placeholder = "int", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand });
-            humidityStack.Children.Add(new Label { Text = " Макс:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            humidityStack.Children.Add(new Entry { Placeholder = "int", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand });
+            var humidityStack = CreateMinMaxStack("Влажность", ValidateInt);
             phaseStack.Children.Add(humidityStack);
 
             // Повороты
-            var turnsStack = new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start };
-            turnsStack.Children.Add(new Label { Text = "Повороты ", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            turnsStack.Children.Add(new Label { Text = "Мин:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            turnsStack.Children.Add(new Entry { Placeholder = "tinyint", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand });
-            turnsStack.Children.Add(new Label { Text = " Макс:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            turnsStack.Children.Add(new Entry { Placeholder = "tinyint", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand });
+            var turnsStack = CreateMinMaxStack("Повороты", ValidateTinyInt);
             phaseStack.Children.Add(turnsStack);
 
             // Охлаждение
             var coolingStack = new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start };
             coolingStack.Children.Add(new Label { Text = "Охлаждение", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
             coolingStack.Children.Add(new Label { Text = "Колл:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            coolingStack.Children.Add(new Entry { Placeholder = "tinyint", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand, WidthRequest = 80 });
+            coolingStack.Children.Add(CreateValidatedEntry("0", ValidateTinyInt));
             coolingStack.Children.Add(new Label { Text = "Мин:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            coolingStack.Children.Add(new Entry { Placeholder = "uint", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand, WidthRequest = 80 });
+            var coolingMinEntry = CreateValidatedEntry("0", ValidateUInt);
+            coolingStack.Children.Add(coolingMinEntry);
             coolingStack.Children.Add(new Label { Text = "Макс:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
-            coolingStack.Children.Add(new Entry { Placeholder = "uint", Keyboard = Keyboard.Numeric, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.FillAndExpand, WidthRequest = 80 });
+            var coolingMaxEntry = CreateValidatedEntry("0", ValidateUInt);
+            coolingStack.Children.Add(coolingMaxEntry);
             phaseStack.Children.Add(coolingStack);
+
+            // Добавляем валидацию для охлаждения
+            coolingMinEntry.Unfocused += (s, e) => ValidateCoolingMinMax(coolingMinEntry, coolingMaxEntry);
+            coolingMaxEntry.Unfocused += (s, e) => ValidateCoolingMinMax(coolingMaxEntry, coolingMinEntry);
 
             return phaseStack;
         }
 
-        private void OnDayFromTextChanged_Validated(object sender, TextChangedEventArgs e)
+        private HorizontalStackLayout CreateMinMaxStack(string title, System.Func<string, bool> validateFunc)
         {
-            if (sender is Entry entryDayFrom)
+            var stack = new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start };
+            stack.Children.Add(new Label { Text = title, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
+            stack.Children.Add(new Label { Text = "Мин:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
+            var minEntry = CreateValidatedEntry("0", validateFunc);
+            stack.Children.Add(minEntry);
+            stack.Children.Add(new Label { Text = "Макс:", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Start, FontSize = 24 });
+            var maxEntry = CreateValidatedEntry("0", validateFunc);
+            stack.Children.Add(maxEntry);
+
+            // Добавляем валидацию для мин и макс
+            minEntry.Unfocused += (s, e) => ValidateMinMax(minEntry, maxEntry);
+            maxEntry.Unfocused += (s, e) => ValidateMaxMin(maxEntry, minEntry);
+
+            return stack;
+        }
+
+        private Entry CreateValidatedEntry(string text, System.Func<string, bool> validateFunc)
+        {
+            var entry = new Entry
             {
-                // Проверка на uint: пустое значение не меняется, недопустимые символы игнорируем
-                if (!IsValidUintInput(e.NewTextValue))
+                Keyboard = Keyboard.Numeric,
+                Text = text,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+            };
+            entry.Focused += Entry_FocusedStoreOldValue;
+            entry.Unfocused += (s, e) => ValidateEntryOnUnfocused(entry, validateFunc);
+            return entry;
+        }
+
+        private void Entry_FocusedStoreOldValue(object sender, FocusEventArgs e)
+        {
+            if (sender is Entry entry)
+                previousValues[entry] = entry.Text;
+        }
+
+        private void Entry_UnfocusedValidate(Entry entry)
+        {
+            if (isUpdating) return;
+
+            isUpdating = true;
+            try
+            {
+                if (!int.TryParse(entry.Text, out int currentValue))
                 {
-                    entryDayFrom.Text = e.OldTextValue;
+                    RestorePreviousValue(entry);
                     return;
                 }
 
-                int phaseIndex = GetPhaseIndexByDayFrom(entryDayFrom);
-                if (phaseIndex > 0)
+                if (!ValidateDayToValue(entry, currentValue))
                 {
-                    var prevPhase = PhasesContainer.Children[phaseIndex - 1] as VerticalStackLayout;
-                    if (prevPhase != null)
-                    {
-                        SetDayToInPhase(prevPhase, entryDayFrom.Text);
-                    }
-                }
-            }
-        }
-
-        private void OnDayToTextChanged_Validated(object sender, TextChangedEventArgs e)
-        {
-            if (sender is Entry entryDayTo)
-            {
-                // Проверка на uint
-                if (!IsValidUintInput(e.NewTextValue))
-                {
-                    entryDayTo.Text = e.OldTextValue;
+                    RestorePreviousValue(entry);
                     return;
                 }
 
-                int phaseIndex = GetPhaseIndexByDayTo(entryDayTo);
-                if (phaseIndex != -1 && phaseIndex < PhasesContainer.Children.Count - 1)
-                {
-                    var nextPhase = PhasesContainer.Children[phaseIndex + 1] as VerticalStackLayout;
-                    if (nextPhase != null)
-                    {
-                        SetDayFromInPhase(nextPhase, entryDayTo.Text);
-                    }
-                }
+                previousValues[entry] = entry.Text;
+            }
+            finally
+            {
+                isUpdating = false;
             }
         }
 
-        private bool IsValidUintInput(string input)
+        private bool ValidateDayToValue(Entry entry, int currentValue)
         {
-            if (string.IsNullOrEmpty(input))
-                return false; // Не пустое значение требуется для сохранения
+            int phaseIndex = GetPhaseIndexByDayTo(entry);
+            if (phaseIndex == -1) return true; // Не нашли - пропускаем
 
-            foreach (char c in input)
+            // Проверка, что значение больше предыдущего, если он есть
+            if (phaseIndex > 0)
             {
-                if (!char.IsDigit(c))
+                var prevPhase = PhasesContainer.Children[phaseIndex - 1] as VerticalStackLayout;
+                int prevVal = GetDayToValueFromPhase(prevPhase);
+                if (currentValue <= prevVal)
+                {
+                    DisplayAlert("Ошибка", $"Значение 'День По:' должно быть больше предыдущей фазы ({prevVal})", "ОК");
                     return false;
+                }
             }
 
-            // Можно добавить проверку диапазона uint, если нужно
+            // Проверка, что значение меньше следующего, если он есть
+            if (phaseIndex < PhasesContainer.Children.Count - 1)
+            {
+                var nextPhase = PhasesContainer.Children[phaseIndex + 1] as VerticalStackLayout;
+                int nextVal = GetDayToValueFromPhase(nextPhase);
+                if (nextVal != 0 && currentValue >= nextVal)
+                {
+                    DisplayAlert("Ошибка", $"Значение 'День По:' должно быть меньше следующей фазы ({nextVal})", "ОК");
+                    return false;
+                }
+            }
+
+            // Значение должно быть >= 1
+            if (currentValue < 1)
+            {
+                DisplayAlert("Ошибка", "Значение 'День По:' должно быть не меньше 1", "ОК");
+                return false;
+            }
+
             return true;
         }
 
@@ -164,13 +184,11 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
                 {
                     foreach (var child in phaseStack.Children)
                     {
-                        if (child is HorizontalStackLayout dayStack)
+                        if (child is HorizontalStackLayout hStack &&
+                            hStack.Children.Count > 1 &&
+                            hStack.Children[1] == entryDayTo)
                         {
-                            if (dayStack.Children.Count >= 5 &&
-                                dayStack.Children[4] == entryDayTo)
-                            {
-                                return i;
-                            }
+                            return i;
                         }
                     }
                 }
@@ -178,94 +196,206 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             return -1;
         }
 
-        private int GetPhaseIndexByDayFrom(Entry entryDayFrom)
+        private int GetDayToValueFromPhase(VerticalStackLayout phase)
         {
-            for (int i = 0; i < PhasesContainer.Children.Count; i++)
+            if (phase == null) return 0;
+            foreach (var child in phase.Children)
             {
-                if (PhasesContainer.Children[i] is VerticalStackLayout phaseStack)
+                if (child is HorizontalStackLayout hStack &&
+                    hStack.Children.Count > 1 &&
+                    hStack.Children[1] is Entry entry &&
+                    int.TryParse(entry.Text, out int val))
                 {
-                    foreach (var child in phaseStack.Children)
-                    {
-                        if (child is HorizontalStackLayout dayStack)
-                        {
-                            if (dayStack.Children.Count >= 5 &&
-                                dayStack.Children[2] == entryDayFrom)
-                            {
-                                return i;
-                            }
-                        }
-                    }
+                    return val;
                 }
             }
-            return -1;
+            return 0;
         }
 
-        private void SetDayFromInPhase(VerticalStackLayout phaseStack, string value)
+        private void RestorePreviousValue(Entry entry)
         {
-            foreach (var child in phaseStack.Children)
+            if (previousValues.TryGetValue(entry, out string oldValue))
             {
-                if (child is HorizontalStackLayout dayStack)
-                {
-                    if (dayStack.Children.Count >= 5 &&
-                        dayStack.Children[2] is Entry entryDayFrom)
-                    {
-                        if (entryDayFrom.Text != value)
-                        {
-                            entryDayFrom.Text = value;
-                        }
-                        break;
-                    }
-                }
+                entry.Text = oldValue;
             }
         }
 
-        private void SetDayToInPhase(VerticalStackLayout phaseStack, string value)
+        private void ValidateEntryOnUnfocused(Entry entry, System.Func<string, bool> validateFunc)
         {
-            foreach (var child in phaseStack.Children)
+            if (isUpdating) return;
+
+            isUpdating = true;
+            try
             {
-                if (child is HorizontalStackLayout dayStack)
+                if (!validateFunc(entry.Text))
                 {
-                    if (dayStack.Children.Count >= 5 &&
-                        dayStack.Children[4] is Entry entryDayTo)
-                    {
-                        if (entryDayTo.Text != value)
-                        {
-                            entryDayTo.Text = value;
-                        }
-                        break;
-                    }
+                    RestorePreviousValue(entry);
+                    Application.Current?.MainPage?.DisplayAlert("Ошибка валидации", "Некорректное значение", "OK");
                 }
+                else
+                {
+                    previousValues[entry] = entry.Text;
+                }
+            }
+            finally
+            {
+                isUpdating = false;
             }
         }
 
-        private void UpdateCancelButtonState()
+        private bool ValidateUInt(string input)
         {
-            BtnCancelPhase.IsEnabled = PhasesContainer.Children.Count > 1;
-            BtnCancelPhase.BackgroundColor = BtnCancelPhase.IsEnabled ? Colors.Red : Colors.Gray;
+            if (string.IsNullOrEmpty(input))
+                return false;
+            return uint.TryParse(input, out _);
         }
 
-        // Добавляем метод для обработки нажатия кнопки "Следующая фаза"
-        private void OnNextPhaseClicked(object sender, EventArgs e)
+        private bool ValidateInt(string input)
         {
-            // Проверка, заполнено ли поле "По:" в последней фазе
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+            return int.TryParse(input, out _);
+        }
+
+        private bool ValidateFloat(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+            return float.TryParse(input, out _);
+        }
+
+        private bool ValidateTinyInt(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return false;
+            return byte.TryParse(input, out _);
+        }
+
+        private void ValidateMinMax(Entry minEntry, Entry maxEntry)
+        {
+            if (isUpdating) return;
+
+            isUpdating = true;
+            try
+            {
+                if (!float.TryParse(minEntry.Text, out float minVal))
+                    minVal = 0;
+                if (!float.TryParse(maxEntry.Text, out float maxVal))
+                    maxVal = 0;
+
+                // Убираем проверку на больше/меньше
+                SavePreviousValue(minEntry);
+                SavePreviousValue(maxEntry);
+            }
+            finally
+            {
+                isUpdating = false;
+            }
+        }
+
+        private void ValidateCoolingMinMax(Entry minEntry, Entry maxEntry)
+        {
+            if (isUpdating) return;
+
+            isUpdating = true;
+            try
+            {
+                if (!uint.TryParse(minEntry.Text, out uint minVal))
+                    minVal = 0;
+                if (!uint.TryParse(maxEntry.Text, out uint maxVal))
+                    maxVal = 0;
+
+                // Убираем проверку на больше/меньше
+                SavePreviousValue(minEntry);
+                SavePreviousValue(maxEntry);
+            }
+            finally
+            {
+                isUpdating = false;
+            }
+        }
+
+        private void ValidateMaxMin(Entry maxEntry, Entry minEntry)
+        {
+            if (isUpdating) return;
+
+            isUpdating = true;
+            try
+            {
+                if (!float.TryParse(maxEntry.Text, out float maxVal))
+                    maxVal = 0;
+                if (!float.TryParse(minEntry.Text, out float minVal))
+                    minVal = 0;
+
+                // Убираем проверку на больше/меньше
+                SavePreviousValue(maxEntry);
+            }
+            finally
+            {
+                isUpdating = false;
+            }
+        }
+
+        private void SavePreviousValue(Entry entry)
+        {
+            if (entry != null)
+            {
+                previousValues[entry] = entry.Text;
+            }
+        }
+
+        private void OnNextPhaseClicked(object sender, System.EventArgs e)
+        {
             if (!IsLastPhaseDayToFilled())
             {
-                DisplayAlert("Ошибка", "Пожалуйста, заполните поле 'По:' в текущей фазе.", "OK");
+                DisplayAlert("Ошибка", "Пожалуйста, заполните поле 'День По:' в текущей фазе.", "ОК");
                 return;
             }
-
-            string lastDayTo = GetLastPhaseDayToValue();
-
-            var newPhase = CreatePhase(lastDayTo);
+            string lastValue = GetLastPhaseDayToValue();
+            if (!int.TryParse(lastValue, out int lastDay))
+                lastDay = 0;
+            lastDay++;
+            var newPhase = CreatePhase(lastDay.ToString());
             PhasesContainer.Children.Add(newPhase);
-
             UpdateCancelButtonState();
         }
 
-        // Добавляем метод для обработки нажатия кнопки "Отменить следующую фазу"
-        private void OnCancelPhaseClicked(object sender, EventArgs e)
+        private bool IsLastPhaseDayToFilled()
         {
-            // Удаляем последнюю фазу, если их больше одной
+            if (PhasesContainer.Children.Count == 0) return true;
+            var lastPhase = PhasesContainer.Children[^1] as VerticalStackLayout;
+            if (lastPhase == null) return true;
+            foreach (var child in lastPhase.Children)
+            {
+                if (child is HorizontalStackLayout hStack &&
+                    hStack.Children.Count > 1 &&
+                    hStack.Children[1] is Entry entry)
+                {
+                    if (string.IsNullOrWhiteSpace(entry.Text)) return false;
+                }
+            }
+            return true;
+        }
+
+        private string GetLastPhaseDayToValue()
+        {
+            if (PhasesContainer.Children.Count == 0) return string.Empty;
+            var lastPhase = PhasesContainer.Children[^1] as VerticalStackLayout;
+            if (lastPhase == null) return string.Empty;
+            foreach (var child in lastPhase.Children)
+            {
+                if (child is HorizontalStackLayout hStack &&
+                    hStack.Children.Count > 1 &&
+                    hStack.Children[1] is Entry entry)
+                {
+                    return entry.Text ?? string.Empty;
+                }
+            }
+            return string.Empty;
+        }
+
+        private void OnCancelPhaseClicked(object sender, System.EventArgs e)
+        {
             if (PhasesContainer.Children.Count > 1)
             {
                 PhasesContainer.Children.RemoveAt(PhasesContainer.Children.Count - 1);
@@ -273,50 +403,10 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             }
         }
 
-        private bool IsLastPhaseDayToFilled()
+        private void UpdateCancelButtonState()
         {
-            if (PhasesContainer.Children.Count == 0)
-                return true;
-
-            var lastPhase = PhasesContainer.Children[PhasesContainer.Children.Count - 1] as VerticalStackLayout;
-            if (lastPhase == null)
-                return true;
-
-            foreach (var child in lastPhase.Children)
-            {
-                if (child is HorizontalStackLayout dayStack)
-                {
-                    if (dayStack.Children.Count >= 5 &&
-                        dayStack.Children[4] is Entry entryDayTo)
-                    {
-                        return !string.IsNullOrWhiteSpace(entryDayTo.Text);
-                    }
-                }
-            }
-            return false;
-        }
-
-        private string GetLastPhaseDayToValue()
-        {
-            if (PhasesContainer.Children.Count == 0)
-                return string.Empty;
-
-            var lastPhase = PhasesContainer.Children[PhasesContainer.Children.Count - 1] as VerticalStackLayout;
-            if (lastPhase == null)
-                return string.Empty;
-
-            foreach (var child in lastPhase.Children)
-            {
-                if (child is HorizontalStackLayout dayStack)
-                {
-                    if (dayStack.Children.Count >= 5 &&
-                        dayStack.Children[4] is Entry entryDayTo)
-                    {
-                        return entryDayTo.Text ?? string.Empty;
-                    }
-                }
-            }
-            return string.Empty;
+            BtnCancelPhase.IsEnabled = PhasesContainer.Children.Count > 1;
+            BtnCancelPhase.BackgroundColor = BtnCancelPhase.IsEnabled ? Colors.Red : Colors.Gray;
         }
     }
 }
