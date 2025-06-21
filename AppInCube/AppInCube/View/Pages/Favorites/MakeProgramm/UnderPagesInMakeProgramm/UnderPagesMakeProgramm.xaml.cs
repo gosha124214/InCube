@@ -1,5 +1,7 @@
 using Microsoft.Maui.Controls;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 {
@@ -7,18 +9,113 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
     {
         private bool isUpdating = false;
         private readonly Dictionary<Entry, string> previousValues = new();
+        public byte[] ImageBirdFile { get; set; } // Массив байтов для хранения изображения
 
         public UnderPagesMakeProgramm()
         {
             InitializeComponent();
+            AddBirdFields();
             AddFirstPhase();
             UpdateCancelButtonState();
         }
 
+        private void AddBirdFields()
+        {
+            // Изначально показываем только idContainer
+            UpdateBirdFieldsState(switchCreateOrSelect.IsToggled);
+            // Устанавливаем начальные значения для ID
+            entryBirdId.Text = "0";
+            entryProgramId.Text = "0";
+
+            // Сохраняем начальные значения
+            previousValues[entryBirdId] = entryBirdId.Text;
+            previousValues[entryProgramId] = entryProgramId.Text;
+
+            // Добавляем обработчики для проверки ID
+            entryBirdId.Unfocused += (s, e) => ValidateEntryOnUnfocused(entryBirdId, ValidateIDToValue);
+            entryProgramId.Unfocused += (s, e) => ValidateEntryOnUnfocused(entryProgramId, ValidateIDToValue);
+        }
+
+        private void OnSelectImageClicked(object sender, System.EventArgs e)
+        {
+            SelectImage();
+        }
+
+        private async Task SelectImage()
+        {
+            try
+            {
+                var result = await FilePicker.PickAsync(new PickOptions
+                {
+                    PickerTitle = "Выберите изображение",
+                    FileTypes = FilePickerFileType.Images
+                });
+
+                if (result != null)
+                {
+                    using (var stream = await result.OpenReadAsync())
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await stream.CopyToAsync(memoryStream);
+                            ImageBirdFile = memoryStream.ToArray(); // Сохраняем изображение в массив байтов
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось выбрать изображение: {ex.Message}", "OK");
+            }
+        }
+
         private void AddFirstPhase()
         {
-            var firstPhaseStack = CreatePhase("1");
-            PhasesContainer.Children.Add(firstPhaseStack);
+            // Создаем первую фазу и добавляем ее в PhasesContainer
+            var firstPhase = CreatePhase("1");
+            PhasesContainer.Children.Add(firstPhase);
+        }
+
+        private void OnNextPhaseClicked(object sender, System.EventArgs e)
+        {
+            // Проверяем, заполнено ли поле "День По:" в последней фазе
+            if (!IsLastPhaseDayToFilled())
+            {
+                DisplayAlert("Ошибка", "Пожалуйста, заполните поле 'День По:' в текущей фазе.", "ОК");
+                return;
+            }
+
+            // Получаем текущее значение "День По:" из последней фазы
+            string lastValue = GetLastPhaseDayToValue();
+            if (!int.TryParse(lastValue, out int lastDay))
+                lastDay = 0; // Если значение не удалось получить, устанавливаем 0
+
+            // Увеличиваем значение на 1
+            lastDay++;
+
+            // Создаем новую фазу с увеличенным значением "День По:"
+            var newPhase = CreatePhase(lastDay.ToString());
+
+            // Добавляем новую фазу в PhasesContainer
+            PhasesContainer.Children.Add(newPhase);
+            UpdateCancelButtonState();
+        }
+
+        private string GetLastPhaseDayToValue()
+        {
+            if (PhasesContainer.Children.Count == 0) return string.Empty;
+            var lastPhase = PhasesContainer.Children[^1] as VerticalStackLayout;
+            if (lastPhase == null) return string.Empty;
+            foreach (var child in lastPhase.Children)
+            {
+                if (child is HorizontalStackLayout hStack &&
+                    hStack.Children.Count > 1 &&
+                    hStack.Children[1] is Entry entry)
+                {
+                    return entry.Text ?? string.Empty;
+                }
+            }
+            return string.Empty;
         }
 
         private VerticalStackLayout CreatePhase(string dayToValue = null)
@@ -33,10 +130,10 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
                 Keyboard = Keyboard.Numeric,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                Text = dayToValue ?? string.Empty
+                Text = dayToValue ?? "0" // Устанавливаем значение "День По:" по умолчанию 0
             };
             entryDayTo.Focused += Entry_FocusedStoreOldValue;
-            entryDayTo.Unfocused += (s, e) => Entry_UnfocusedValidate(entryDayTo);
+            entryDayTo.Unfocused += ValidateDayToEntry_Unfocused; // Используем отдельный метод для проверки "День По:"
             dayStack.Children.Add(entryDayTo);
             phaseStack.Children.Add(dayStack);
 
@@ -110,22 +207,19 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
                 previousValues[entry] = entry.Text;
         }
 
-        private void Entry_UnfocusedValidate(Entry entry)
+        private void Entry_UnfocusedValidate(Entry entry, System.Func<string, bool> validateFunc)
         {
             if (isUpdating) return;
 
             isUpdating = true;
             try
             {
-                if (!int.TryParse(entry.Text, out int currentValue))
+                // Проверяем, является ли значение пустым или не является положительным целым числом
+                if (!uint.TryParse(entry.Text, out uint currentValue))
                 {
+                    // Если значение некорректно, откатываем на предыдущее значение
                     RestorePreviousValue(entry);
-                    return;
-                }
-
-                if (!ValidateDayToValue(entry, currentValue))
-                {
-                    RestorePreviousValue(entry);
+                    DisplayAlert("Ошибка", "ID должен быть положительным целым числом или 0.", "ОК");
                     return;
                 }
 
@@ -134,6 +228,40 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             finally
             {
                 isUpdating = false;
+            }
+        }
+
+        private bool ValidateIDToValue(string input)
+        {
+            if (!int.TryParse(input, out int currentValue))
+            {
+                return false;
+            }
+
+            // Проверка, что значение >= 0
+            if (currentValue < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ValidateDayToEntry_Unfocused(object sender, FocusEventArgs e)
+        {
+            if (sender is Entry entry)
+            {
+                // Попробуем преобразовать текст в целое число
+                if (!int.TryParse(entry.Text, out int currentValue) ||
+                    !ValidateDayToValue(entry, currentValue))
+                {
+                    // Если преобразование не удалось или валидация не прошла, откатываем значение
+                    RestorePreviousValue(entry);
+                }
+                else
+                {
+                    previousValues[entry] = entry.Text; // Сохраняем текущее значение
+                }
             }
         }
 
@@ -230,7 +358,7 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
                 if (!validateFunc(entry.Text))
                 {
                     RestorePreviousValue(entry);
-                    Application.Current?.MainPage?.DisplayAlert("Ошибка валидации", "Некорректное значение", "OK");
+
                 }
                 else
                 {
@@ -344,22 +472,6 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             }
         }
 
-        private void OnNextPhaseClicked(object sender, System.EventArgs e)
-        {
-            if (!IsLastPhaseDayToFilled())
-            {
-                DisplayAlert("Ошибка", "Пожалуйста, заполните поле 'День По:' в текущей фазе.", "ОК");
-                return;
-            }
-            string lastValue = GetLastPhaseDayToValue();
-            if (!int.TryParse(lastValue, out int lastDay))
-                lastDay = 0;
-            lastDay++;
-            var newPhase = CreatePhase(lastDay.ToString());
-            PhasesContainer.Children.Add(newPhase);
-            UpdateCancelButtonState();
-        }
-
         private bool IsLastPhaseDayToFilled()
         {
             if (PhasesContainer.Children.Count == 0) return true;
@@ -377,23 +489,6 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             return true;
         }
 
-        private string GetLastPhaseDayToValue()
-        {
-            if (PhasesContainer.Children.Count == 0) return string.Empty;
-            var lastPhase = PhasesContainer.Children[^1] as VerticalStackLayout;
-            if (lastPhase == null) return string.Empty;
-            foreach (var child in lastPhase.Children)
-            {
-                if (child is HorizontalStackLayout hStack &&
-                    hStack.Children.Count > 1 &&
-                    hStack.Children[1] is Entry entry)
-                {
-                    return entry.Text ?? string.Empty;
-                }
-            }
-            return string.Empty;
-        }
-
         private void OnCancelPhaseClicked(object sender, System.EventArgs e)
         {
             if (PhasesContainer.Children.Count > 1)
@@ -405,8 +500,36 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 
         private void UpdateCancelButtonState()
         {
-            BtnCancelPhase.IsEnabled = PhasesContainer.Children.Count > 1;
-            BtnCancelPhase.BackgroundColor = BtnCancelPhase.IsEnabled ? Colors.Red : Colors.Gray;
+            if (btnCancelPhase != null) // Проверяем, что кнопка инициализирована
+            {
+                btnCancelPhase.IsEnabled = PhasesContainer.Children.Count > 1;
+                btnCancelPhase.BackgroundColor = btnCancelPhase.IsEnabled ? Colors.Red : Colors.Gray;
+            }
+        }
+
+        private void SwitchCreateOrSelect_Toggled(object sender, ToggledEventArgs e)
+        {
+            UpdateBirdFieldsState(e.Value);
+        }
+
+        private void UpdateBirdFieldsState(bool isCreating)
+        {
+            idContainer.IsVisible = !isCreating; // Если "Создать птицу", скрываем ID
+            createContainer.IsVisible = isCreating; // Если "Создать птицу", показываем остальные поля
+        }
+
+        private void SwitchPhaseCreateOrSelect_Toggled(object sender, ToggledEventArgs e)
+        {
+            UpdatePhaseFieldsState(e.Value);
+        }
+
+        private void UpdatePhaseFieldsState(bool isCreating)
+        {
+            PhasesContainer.IsVisible = isCreating; // Если "Создать программу", скрываем фазы
+            programParametersContainer.IsVisible = !isCreating; // Если "Выбрать программу", показываем поле ID программы
+
+            btnNextPhase.IsVisible = isCreating;
+            btnCancelPhase.IsVisible = isCreating;
         }
     }
 }

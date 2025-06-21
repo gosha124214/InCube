@@ -1,24 +1,59 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage 
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm.UnderPagesMakeProgramm"
-    Title="Конструктор создания программы">
+ xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+ x:Class="AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm.UnderPagesMakeProgramm"
+ Title="Конструктор создания программы">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15" x:Name="MainStackLayout">
 
-            <!-- Контейнер для фаз (динамически создаваемых) -->
-            <VerticalStackLayout x:Name="PhasesContainer" Spacing="20" />
+            <!-- Контейнер для информации о птице -->
+            <VerticalStackLayout x:Name="BirdInfoContainer" Spacing="20">
+                <Label Text="Информация о птице" FontSize="24" />
 
-            <!-- Кнопки -->
-            <VerticalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
-                <Button x:Name="BtnNextPhase" Text="Следующая фаза" BackgroundColor="Blue" TextColor="White"
-                        VerticalOptions="Center" HorizontalOptions="FillAndExpand" Clicked="OnNextPhaseClicked" />
-                <Button x:Name="BtnCancelPhase" Text="Отменить следующую фазу" BackgroundColor="Gray" TextColor="White"
-                        VerticalOptions="Center" HorizontalOptions="FillAndExpand" Clicked="OnCancelPhaseClicked" IsEnabled="False" />
-                <Button Text="Программа готова" BackgroundColor="Green" TextColor="White"
-                        VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                <Switch x:Name="switchCreateOrSelect" IsToggled="True" Toggled="SwitchCreateOrSelect_Toggled" />
+                <Label Text="Создать птицу" VerticalOptions="Center" />
+                <Label Text="Выбрать птицу по ID" VerticalOptions="Center" />
+
+                <StackLayout x:Name="idContainer" Spacing="8">
+                    <Label Text="ID птицы:" FontSize="24" />
+                    <Entry x:Name="entryBirdId" Keyboard="Numeric" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                </StackLayout>
+
+                <StackLayout x:Name="createContainer" Spacing="8">
+                    <Label Text="Имя птицы:" FontSize="24" />
+                    <Entry x:Name="entryBirdName" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+
+                    <Label Text="Контент:" FontSize="24" />
+                    <Entry x:Name="entryContent" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+
+                    <Label Text="Картинка:" FontSize="24" />
+                    <Button Text="Выбрать изображение" Clicked="OnSelectImageClicked" />
+                </StackLayout>
+            </VerticalStackLayout>
+            
+            <!-- Переключатель для управления видимостью фаз -->
+            <Switch x:Name="switchPhaseCreateOrSelect" IsToggled="True" Toggled="SwitchPhaseCreateOrSelect_Toggled" />
+            <Label Text="Создать программу" VerticalOptions="Center" />
+            <Label Text="Выбрать программу по ID" VerticalOptions="Center" />
+            
+            <!-- Контейнер для параметров программы -->
+            <VerticalStackLayout x:Name="programParametersContainer" Spacing="10" IsVisible="False">
+                <Label Text="ID программы" FontSize="24" />
+                <Entry x:Name="entryProgramId" Keyboard="Numeric" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+            </VerticalStackLayout>
+
+
+
+            <!-- Контейнер для фаз (динамически создаваемых) -->
+            <VerticalStackLayout x:Name="PhasesContainer" Spacing="20" IsVisible="True" />
+
+            <!-- Контейнер для кнопок -->
+            <VerticalStackLayout x:Name="ButtonContainer" Spacing="20">
+                <Button x:Name="btnNextPhase" Text="Следующая фаза" BackgroundColor="Blue" TextColor="White" Clicked="OnNextPhaseClicked" />
+                <Button x:Name="btnCancelPhase" Text="Отменить следующую фазу" BackgroundColor="Gray" TextColor="White" Clicked="OnCancelPhaseClicked" IsEnabled="False" />
+                <Button Text="Программа готова" BackgroundColor="Green" TextColor="White" />
             </VerticalStackLayout>
 
         </VerticalStackLayout>
