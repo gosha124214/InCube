@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AppInCube")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+c524bceb69bd7f3f881d7f5116be338dedf00edb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+828cf86c84985c5b9a065687f5483c4ac06fd442")]
 [assembly: System.Reflection.AssemblyProductAttribute("AppInCube")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AppInCube")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

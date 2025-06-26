@@ -2,6 +2,8 @@ using Microsoft.Maui.Controls;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using AppInCube.Classes.SQLite.Maked;
+
 
 namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 {
@@ -117,6 +119,157 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             }
             return string.Empty;
         }
+        private async void OnProgramReadyClicked(object sender, EventArgs e)
+        {
+            this.IsEnabled = false;
+
+            try
+            {
+                // 1. Собираем основную информацию
+                var baseInfo = new SQLliteTableBaseInfoMake
+                {
+                    IdBirdInMySQL = null,
+                    NameBird = entryBirdName.Text,
+                    Content = entryContent.Text,
+                    DaysUntilHatching = 0,
+                    DateTimeValue = DateTime.Now,
+                    ImageBirdFile = ImageBirdFile
+                };
+
+                // Сохраняем базовую информацию и получаем ID созданной программы
+                uint programId = await App.DatabaseMakePrograms.SaveBaseInfoAsync(baseInfo);
+
+                // 2. Собираем данные по фазам
+                foreach (var phaseData in GetPhaseDataFromUI(programId))
+                {
+                    await App.DatabaseMakePrograms.SaveDopInfoAsync(phaseData);
+                }
+
+                await DisplayAlert("Успех", "Программа сохранена!", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось сохранить: {ex.Message}", "OK");
+            }
+            finally
+            {
+                this.IsEnabled = true;
+            }
+        }
+
+        private List<SQLliteTableDopInfoMake> GetPhaseDataFromUI(uint programId)
+        {
+            var phasesData = new List<SQLliteTableDopInfoMake>();
+
+            foreach (var child in PhasesContainer.Children)
+            {
+                if (child is VerticalStackLayout phase)
+                {
+                    var controls = GetControlsFromPhase(phase);
+                    int days = GetIntValue(controls.DayEntry); // Получаем количество дней для текущей фазы
+
+                    for (int day = 1; day <= days; day++)
+                    {
+                        phasesData.Add(new SQLliteTableDopInfoMake
+                        {
+                            IdMakeProgram = programId,
+                            Day = (byte)day, // Устанавливаем текущий день
+                            MinTemperature = GetFloatValue(controls.MinTempEntry),
+                            MaxTemperature = GetFloatValue(controls.MaxTempEntry),
+                            MinHumidity = GetIntValue(controls.MinHumidityEntry),
+                            MaxHumidity = GetIntValue(controls.MaxHumidityEntry),
+                            MinАmountTurn = (byte)GetIntValue(controls.MinTurnEntry),
+                            MaxАmountTurn = (byte)GetIntValue(controls.MaxTurnEntry),
+                            АmountCooling = (byte)GetIntValue(controls.CoolingEntry),
+                            MinTimeCooling = GetTimeSpanValue(controls.MinTimeCoolingEntry),
+                            MaxTimeCooling = GetTimeSpanValue(controls.MaxTimeCoolingEntry)
+                        });
+                    }
+                }
+            }
+
+            return phasesData;
+        }
+
+      
+
+        private (Entry DayEntry,
+                 Entry MinTempEntry,
+                 Entry MaxTempEntry,
+                 Entry MinHumidityEntry,
+                 Entry MaxHumidityEntry,
+                 Entry MinTurnEntry,
+                 Entry MaxTurnEntry,
+                 Entry CoolingEntry,
+                 Entry MinTimeCoolingEntry,
+                 Entry MaxTimeCoolingEntry) 
+          GetControlsFromPhase(VerticalStackLayout phase)
+        {
+            Entry dayEntry = null;
+            Entry minTempEntry = null;
+            Entry maxTempEntry = null;
+            Entry minHumidityEntry = null;
+            Entry maxHumidityEntry = null;
+            Entry minTurnEntry = null;
+            Entry maxTurnEntry = null;
+            Entry coolingEntry = null;
+            Entry minTimeCoolingEntry = null;
+            Entry maxTimeCoolingEntry = null;
+
+            foreach (var child in phase.Children)
+            {
+                if (child is HorizontalStackLayout hStack)
+                {
+                    foreach (var element in hStack.Children)
+                    {
+                        if (element is Label lbl)
+                        {
+                            if (lbl.Text == "День По:" && hStack.Children.IndexOf(element) + 1 < hStack.Children.Count)
+                            {
+                                dayEntry = hStack.Children[hStack.Children.IndexOf(element) + 1] as Entry;
+                            }
+                            else if (lbl.Text == "Температура" && hStack.Children.IndexOf(element) + 1 < hStack.Children.Count)
+                            {
+                                minTempEntry = hStack.Children[hStack.Children.IndexOf(element) + 1] as Entry;
+                                maxTempEntry = hStack.Children[hStack.Children.IndexOf(element) + 2] as Entry;
+                            }
+                            else if (lbl.Text == "Влажность" && hStack.Children.IndexOf(element) + 1 < hStack.Children.Count)
+                            {
+                                minHumidityEntry = hStack.Children[hStack.Children.IndexOf(element) + 1] as Entry;
+                                maxHumidityEntry = hStack.Children[hStack.Children.IndexOf(element) + 2] as Entry;
+                            }
+                            else if (lbl.Text == "Повороты" && hStack.Children.IndexOf(element) + 1 < hStack.Children.Count)
+                            {
+                                minTurnEntry = hStack.Children[hStack.Children.IndexOf(element) + 1] as Entry;
+                                maxTurnEntry = hStack.Children[hStack.Children.IndexOf(element) + 2] as Entry;
+                            }
+                            else if (lbl.Text == "Охлаждение" && hStack.Children.IndexOf(element) + 1 < hStack.Children.Count)
+                            {
+                                coolingEntry = hStack.Children[hStack.Children.IndexOf(element) + 1] as Entry;
+                            }
+                            else if (lbl.Text == "Мин:" && hStack.Children.IndexOf(element) + 1 < hStack.Children.Count)
+                            {
+                                minTimeCoolingEntry = hStack.Children[hStack.Children.IndexOf(element) + 1] as Entry;
+                            }
+                            else if (lbl.Text == "Макс:" && hStack.Children.IndexOf(element) + 1 < hStack.Children.Count)
+                            {
+                                maxTimeCoolingEntry = hStack.Children[hStack.Children.IndexOf(element) + 1] as Entry;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return (dayEntry, minTempEntry, maxTempEntry, minHumidityEntry, maxHumidityEntry,
+                    minTurnEntry, maxTurnEntry, coolingEntry, minTimeCoolingEntry, maxTimeCoolingEntry);
+        }
+
+        private int GetIntValue(Entry entry) => entry != null && int.TryParse(entry.Text, out int val) ? val : 0;
+        private float GetFloatValue(Entry entry) => entry != null && float.TryParse(entry.Text, out float val) ? val : 0;
+        private TimeSpan GetTimeSpanValue(Entry entry) => entry != null && TimeSpan.TryParse(entry.Text, out TimeSpan val) ? val : TimeSpan.Zero;
+
+
+
 
         private VerticalStackLayout CreatePhase(string dayToValue = null)
         {

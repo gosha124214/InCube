@@ -2,15 +2,51 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppInCube.View.Pages.Favorites.MakeProgramm.MakeProgramm"
-             Title="Созданные">
+             Title="Созданные программы">
     <Grid RowDefinitions="*, Auto" Padding="20">
-        <!-- Остальной контент (можно добавить позже) -->
-        <VerticalStackLayout Grid.Row="0" />
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout>
+                <CollectionView x:Name="ProgramsListView" VerticalOptions="FillAndExpand" SelectionMode="Single" SelectionChanged="OnProgramSelected">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="10" Margin="5" BorderColor="Gray" CornerRadius="5">
+                                <StackLayout>
+                                    <Label Text="{Binding NameBird}" FontSize="20" FontAttributes="Bold" />
+                                    <Label Text="{Binding Content}" FontSize="16" />
+                                    <Label Text="{Binding IdBirdInMySQL, StringFormat='Id птицы в MySQL: {0}'}" FontSize="20" />
+                                    <Label Text="{Binding IdMakeBird, StringFormat='Id созданной птицы: {0}'}" FontSize="20" />
+                                    <Label Text="{Binding IdProgramInMySQL, StringFormat='Id программы: {0}'}" FontSize="20" />
+                                    <Label Text="{Binding DaysUntilHatching, StringFormat='Дней до вылупления: {0}'}" FontSize="16" />
+                                    <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" FontSize="16" />
+                                    <Image Source="{Binding ImageSource}" HeightRequest="100" Aspect="AspectFit" />
+
+                                    <!-- Кнопка запуска программы -->
+                                    <Button Text="Запустить" 
+                                            BackgroundColor="Green" 
+                                            TextColor="White" 
+                                            Clicked="OnStartButtonClicked" 
+                                            CommandParameter="{Binding .}" 
+                                            Margin="0,0,0,10" />
+
+                                    <!-- Кнопка удаления -->
+                                    <Button Text="Удалить" 
+                                            BackgroundColor="Red" 
+                                            TextColor="White" 
+                                            Clicked="OnDeleteButtonClicked" 
+                                            CommandParameter="{Binding .}"
+                                            Margin="0,10,0,0" />
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
 
         <!-- Кнопка внизу страницы с обработчиком события -->
         <Button Grid.Row="1" Text="Создать программу" 
-            HorizontalOptions="FillAndExpand" 
-            VerticalOptions="End" 
-            Clicked="OnCreateProgramButtonClicked" />
+                HorizontalOptions="FillAndExpand" 
+                VerticalOptions="End" 
+                Clicked="OnCreateProgramButtonClicked" />
     </Grid>
 </ContentPage>

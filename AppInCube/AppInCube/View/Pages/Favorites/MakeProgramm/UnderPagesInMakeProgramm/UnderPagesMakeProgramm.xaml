@@ -11,10 +11,13 @@
             <!-- Контейнер для информации о птице -->
             <VerticalStackLayout x:Name="BirdInfoContainer" Spacing="20">
                 <Label Text="Информация о птице" FontSize="24" />
+                <StackLayout Orientation="Horizontal" VerticalOptions="Center" Spacing="20">
+                    <Label Text="Выбрать птицу по ID" VerticalOptions="Center" />
+                    <Switch x:Name="switchCreateOrSelect" IsToggled="True" Toggled="SwitchCreateOrSelect_Toggled" />
+                    <Label Text="Создать птицу" VerticalOptions="Center" />
+                </StackLayout>
 
-                <Switch x:Name="switchCreateOrSelect" IsToggled="True" Toggled="SwitchCreateOrSelect_Toggled" />
-                <Label Text="Создать птицу" VerticalOptions="Center" />
-                <Label Text="Выбрать птицу по ID" VerticalOptions="Center" />
+
 
                 <StackLayout x:Name="idContainer" Spacing="8">
                     <Label Text="ID птицы:" FontSize="24" />
@@ -34,9 +37,12 @@
             </VerticalStackLayout>
             
             <!-- Переключатель для управления видимостью фаз -->
-            <Switch x:Name="switchPhaseCreateOrSelect" IsToggled="True" Toggled="SwitchPhaseCreateOrSelect_Toggled" />
-            <Label Text="Создать программу" VerticalOptions="Center" />
-            <Label Text="Выбрать программу по ID" VerticalOptions="Center" />
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Spacing="20">
+                <Label Text="Выбрать программу по ID" VerticalOptions="Center" />
+                <Switch x:Name="switchPhaseCreateOrSelect" IsToggled="True" Toggled="SwitchPhaseCreateOrSelect_Toggled" />
+                <Label Text="Создать программу" VerticalOptions="Center" />
+            </StackLayout>
+
             
             <!-- Контейнер для параметров программы -->
             <VerticalStackLayout x:Name="programParametersContainer" Spacing="10" IsVisible="False">
@@ -53,7 +59,7 @@
             <VerticalStackLayout x:Name="ButtonContainer" Spacing="20">
                 <Button x:Name="btnNextPhase" Text="Следующая фаза" BackgroundColor="Blue" TextColor="White" Clicked="OnNextPhaseClicked" />
                 <Button x:Name="btnCancelPhase" Text="Отменить следующую фазу" BackgroundColor="Gray" TextColor="White" Clicked="OnCancelPhaseClicked" IsEnabled="False" />
-                <Button Text="Программа готова" BackgroundColor="Green" TextColor="White" />
+                <Button Text="Программа готова" BackgroundColor="Green" TextColor="White" Clicked="OnProgramReadyClicked" />
             </VerticalStackLayout>
 
         </VerticalStackLayout>

@@ -110,6 +110,9 @@
 	  <MauiXaml Update="View\Pages\Favorites\MakeProgramm\MakeProgramm.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\Pages\Favorites\MakeProgramm\UnderPagesInMakeProgramm\ProgramDetailPageMake.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Pages\Favorites\MakeProgramm\UnderPagesInMakeProgramm\UnderPagesMakeProgramm.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -137,7 +140,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Classes\SQLite\HistoryPartyes\" />
+	  <Folder Include="Classes\SQLite\Partyes\HistoryPartyes\" />
 	</ItemGroup>
 
 </Project>
