@@ -9,7 +9,7 @@ namespace AppInCube.Classes.SQLite.Maked
 {
     public class SQLliteTableDopInfoMake
     {
-        [PrimaryKey]
+        //[PrimaryKey]
         public uint IdMakeProgram { get; set; } // Новое поле
         public uint? IdProgram { get; set; } // Теперь может быть null
         public byte Day { get; set; }

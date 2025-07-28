@@ -17,13 +17,13 @@ namespace AppInCube
         public App()
         {
             InitializeComponent();
-
+            MainPage = new AppShell();
             // Создаем разные пути для каждой базы данных
             string mainDbPath = Path.Combine(FileSystem.AppDataDirectory, "programs.db");
             string partyDbPath = Path.Combine(FileSystem.AppDataDirectory, "parties.db");
             string makeProgramsDbPath = Path.Combine(FileSystem.AppDataDirectory, "makeProgramms.db"); // Путь для новой базы данных
 
-           // File.Delete(makeProgramsDbPath); // этот метод нужен чтобы удалить файл устаревшего формата
+            //File.Delete(makeProgramsDbPath); // этот метод нужен чтобы удалить файл устаревшего формата
 
 
             // Инициализация менеджеров с разными файлами

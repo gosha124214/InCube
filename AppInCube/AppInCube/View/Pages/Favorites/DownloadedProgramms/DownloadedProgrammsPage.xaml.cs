@@ -112,9 +112,6 @@ namespace AppInCube.View.Pages.Favorites.DownloadedProgramms
 
 
 
-
-
-
         private async void OnProgramTapped(object sender, EventArgs e)
         {
             // Ѕлокируем взаимодействие с текущей страницей

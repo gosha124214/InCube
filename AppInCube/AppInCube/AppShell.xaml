@@ -7,9 +7,7 @@
     xmlns:view="clr-namespace:AppInCube.View"
     NavigationPage.HasNavigationBar="False">
 
-
     <TabBar>
-
         <ShellContent 
            Title="Главная"
            ContentTemplate="{DataTemplate view:Pages.Home.HomePage}"
@@ -22,12 +20,10 @@
 
         <Tab Title="Избранное"
              Icon="risies.svg">
-
             <ShellContent 
                Title="Скаченное"
                ContentTemplate="{DataTemplate view:Pages.Favorites.DownloadedProgramms.DownloadedProgrammsPage}"
                Icon="buy.svg"/>
-
             <ShellContent 
                Title="Запущенное"
                ContentTemplate="{DataTemplate view:Pages.Favorites.ProgrammsInProcess.ProgrammsInProcess}"
@@ -42,7 +38,5 @@
            Title="Покупки"
            ContentTemplate="{DataTemplate view:Pages.Buy.BuyPage}"
            Icon="buy.svg"/>
-
     </TabBar>
-
 </Shell>

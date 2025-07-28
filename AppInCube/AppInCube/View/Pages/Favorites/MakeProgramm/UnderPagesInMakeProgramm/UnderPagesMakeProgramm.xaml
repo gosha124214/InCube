@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage 
- xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
- xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
- x:Class="AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm.UnderPagesMakeProgramm"
- Title="Конструктор создания программы">
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm.UnderPagesMakeProgramm"
+    Title="Конструктор создания программы">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15" x:Name="MainStackLayout">
@@ -16,8 +16,6 @@
                     <Switch x:Name="switchCreateOrSelect" IsToggled="True" Toggled="SwitchCreateOrSelect_Toggled" />
                     <Label Text="Создать птицу" VerticalOptions="Center" />
                 </StackLayout>
-
-
 
                 <StackLayout x:Name="idContainer" Spacing="8">
                     <Label Text="ID птицы:" FontSize="24" />
@@ -35,7 +33,7 @@
                     <Button Text="Выбрать изображение" Clicked="OnSelectImageClicked" />
                 </StackLayout>
             </VerticalStackLayout>
-            
+
             <!-- Переключатель для управления видимостью фаз -->
             <StackLayout Orientation="Horizontal" VerticalOptions="Center" Spacing="20">
                 <Label Text="Выбрать программу по ID" VerticalOptions="Center" />
@@ -43,14 +41,62 @@
                 <Label Text="Создать программу" VerticalOptions="Center" />
             </StackLayout>
 
-            
             <!-- Контейнер для параметров программы -->
             <VerticalStackLayout x:Name="programParametersContainer" Spacing="10" IsVisible="False">
                 <Label Text="ID программы" FontSize="24" />
                 <Entry x:Name="entryProgramId" Keyboard="Numeric" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
             </VerticalStackLayout>
 
+            <!-- Шаблон одной фазы (визуальная часть) -->
+            <VerticalStackLayout x:Name="PhaseTemplate" IsVisible="False" Spacing="10">
+                <HorizontalStackLayout Spacing="10">
+                    <Label x:Name="DayToLabel" Text="День По:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="DayToEntry" Keyboard="Numeric" Text="0" 
+               VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
 
+                <HorizontalStackLayout Spacing="10">
+                    <Label x:Name="TempLabel" Text="Температура" FontSize="24" VerticalOptions="Center"/>
+                    <Label x:Name="TempMinLabel" Text="Мин:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="TempMinEntry" Keyboard="Numeric" Text="0" 
+               VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                    <Label x:Name="TempMaxLabel" Text="Макс:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="TempMaxEntry" Keyboard="Numeric" Text="0" 
+               VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="Влажность" FontSize="24" VerticalOptions="Center"/>
+                    <Label Text="Мин:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="HumidityMinEntry" Keyboard="Numeric" Text="0" 
+                           VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Макс:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="HumidityMaxEntry" Keyboard="Numeric" Text="0" 
+                           VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="Повороты" FontSize="24" VerticalOptions="Center"/>
+                    <Label Text="Мин:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="TurnMinEntry" Keyboard="Numeric" Text="0" 
+                           VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Макс:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="TurnMaxEntry" Keyboard="Numeric" Text="0" 
+                           VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="10">
+                    <Label Text="Охлаждение" FontSize="24" VerticalOptions="Center"/>
+                    <Label Text="Колл:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="CoolingAmountEntry" Keyboard="Numeric" Text="0" 
+                           VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Мин:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="CoolingMinEntry" Keyboard="Numeric" Text="0" 
+                           VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Макс:" FontSize="24" VerticalOptions="Center"/>
+                    <Entry x:Name="CoolingMaxEntry" Keyboard="Numeric" Text="0" 
+                           VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
 
             <!-- Контейнер для фаз (динамически создаваемых) -->
             <VerticalStackLayout x:Name="PhasesContainer" Spacing="20" IsVisible="True" />

@@ -14,7 +14,7 @@ namespace AppInCube.Classes.SQLite.Maked
             _database.CreateTableAsync<SQLliteTableBaseInfoMake>().Wait(); // Создаем таблицу, если она не существует
             _database.CreateTableAsync<SQLliteTableDopInfoMake>().Wait(); // Создаем таблицу, если она не существует
         }
-
+ 
         // Получение всех базовых программ
         public Task<List<SQLliteTableBaseInfoMake>> GetBaseInfoAsync()
         {
@@ -28,6 +28,22 @@ namespace AppInCube.Classes.SQLite.Maked
             return baseInfo.IdMakeBird; // Предполагается, что IdMakeBird автоматически генерируется
         }
 
+        // В классе MenegerSQLliteMake добавьте следующие методы:
+
+        public async Task<uint> SaveProgramWithDetailsAsync(SQLliteTableBaseInfoMake program)
+        {
+            // Сохраняем основную информацию
+            await _database.InsertAsync(program);
+
+            // Сохраняем все дни программы
+            foreach (var day in program.tablePrograms)
+            {
+                day.IdMakeProgram = program.IdMakeProgram;
+                await _database.InsertAsync(day);
+            }
+
+            return program.IdMakeProgram;
+        }
 
         // Сохранение дополнительной информации
         public Task<int> SaveDopInfoAsync(SQLliteTableDopInfoMake dopInfo)

@@ -20,7 +20,7 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
         }
         private async Task LoadCreatedPrograms()
         {
-            try
+            try 
             {
                 var createdPrograms = await App.DatabaseMakePrograms.GetProgramsAsync(); // Получаем все созданные программы
                 ProgramsListView.ItemsSource = createdPrograms; // Привязка данных к CollectionView
@@ -46,6 +46,16 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
 
 
         }
+        private async void OnProgramTapped(object sender, EventArgs e)
+        {
+            // Получаем объект программы, на которую нажали
+            var tappedItem = (sender as StackLayout).BindingContext as SQLliteTableBaseInfoMake;
+            if (tappedItem != null)
+            {
+                // Переход на страницу с деталями программы
+                await Navigation.PushAsync(new ProgramDetailPageMake(tappedItem));
+            }
+        }
 
         private async void OnCreateProgramButtonClicked(object sender, EventArgs e)
         {
@@ -65,16 +75,7 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
                 await StartProgram(program);
             }
         }
-        private async void OnProgramTapped(object sender, EventArgs e)
-        {
-            // Получаем объект программы, на которую нажали
-            var tappedItem = (sender as StackLayout).BindingContext as SQLliteTableBaseInfoMake;
-            if (tappedItem != null)
-            {
-                // Переход на страницу с деталями программы
-                await Navigation.PushAsync(new ProgramDetailPageMake(tappedItem));
-            }
-        }
+
 
         private async Task StartProgram(SQLliteTableBaseInfoMake program)
         {
