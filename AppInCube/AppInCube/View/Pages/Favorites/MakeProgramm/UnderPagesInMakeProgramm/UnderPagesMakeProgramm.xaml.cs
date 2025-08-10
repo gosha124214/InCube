@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using AppInCube.Classes.SQLite.Maked;
 using System.Linq;
+using System.Globalization;
 
 namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 {
@@ -12,7 +13,9 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
         private bool isUpdating = false;
         private readonly Dictionary<Entry, string> previousValues = new();
         public byte[] ImageBirdFile { get; set; }
-
+        private const int MaxDays = 100; // Максимальное количество дней
+        //// В классе UnderPagesMakeProgramm добавьте:
+        //private Image selectedImage; // Это должно быть автоматически связано через x:Name в XAML
         // Коллекция для хранения ссылок на элементы управления фазами
         private List<PhaseControls> phaseControlsList = new();
 
@@ -50,7 +53,83 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             entryBirdId.Unfocused += (s, e) => ValidateEntryOnUnfocused(entryBirdId, ValidateIDToValue);
             entryProgramId.Unfocused += (s, e) => ValidateEntryOnUnfocused(entryProgramId, ValidateIDToValue);
         }
+        // Новая валидация температуры
+        private bool ValidateTemperature(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return true; // Разрешаем пустую строку для промежуточного ввода
 
+            // Заменяем запятые на точки
+            string normalized = input.Replace(',', '.');
+
+            // Проверяем количество точек
+            if (normalized.Count(c => c == '.') > 1)
+                return false;
+
+            // Проверяем общий формат числа
+            if (!float.TryParse(normalized, NumberStyles.Any, CultureInfo.InvariantCulture, out float value))
+                return false;
+
+            // Проверяем количество цифр до и после точки
+            string[] parts = normalized.Split('.');
+            if (parts[0].Length > 2) return false;
+            if (parts.Length > 1 && parts[1].Length > 2) return false;
+
+            return true;
+        }
+
+        // Валидация влажности (0-100)
+        private bool ValidateHumidity(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return true;
+
+            if (!int.TryParse(input, out int value))
+                return false;
+
+            return value >= 0 && value <= 100;
+        }
+
+        // Обновленный метод для получения float значения
+        private float GetFloatValue(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return 0;
+
+            string normalized = input.Replace(',', '.');
+            if (float.TryParse(normalized, NumberStyles.Any, CultureInfo.InvariantCulture, out float value))
+                return value;
+
+            return 0;
+        }
+
+        // Обновленная валидация дней
+        private void ValidateDayToEntry_Unfocused(object sender, FocusEventArgs e)
+        {
+            if (sender is Entry entry)
+            {
+                if (!int.TryParse(entry.Text, out int currentValue) || currentValue < 1 || currentValue > MaxDays)
+                {
+                    if (previousValues.TryGetValue(entry, out string oldValue))
+                        entry.Text = oldValue;
+                    DisplayAlert("Ошибка", $"Значение 'День По:' должно быть от 1 до {MaxDays}", "ОК");
+                }
+                else
+                {
+                    previousValues[entry] = entry.Text;
+                }
+            }
+        }
+        private bool ValidateCoolingTime(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return true;
+
+            if (!int.TryParse(input, out int minutes))
+                return false;
+
+            return minutes >= 0 && minutes <= 1440; // 24 часа в минутах
+        }
         private async void OnSelectImageClicked(object sender, System.EventArgs e)
         {
             try
@@ -68,6 +147,10 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
                     {
                         await stream.CopyToAsync(memoryStream);
                         ImageBirdFile = memoryStream.ToArray();
+
+                        // Обновляем изображение и делаем его видимым
+                        selectedImage.Source = ImageSource.FromStream(() => new MemoryStream(ImageBirdFile));
+                        imageFrame.IsVisible = true; // Показываем Frame только после выбора картинки
                     }
                 }
             }
@@ -76,6 +159,26 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
                 await DisplayAlert("Ошибка", $"Не удалось выбрать изображение: {ex.Message}", "OK");
             }
         }
+
+        // Добавьте этот метод в ваш класс
+        private bool ValidateFloatWithAnySeparator(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return false;
+
+            // Заменяем запятые на точки для унификации
+            string normalizedInput = input.Replace(',', '.');
+
+            // Проверяем, что после замены осталась только одна точка
+            int dotCount = normalizedInput.Count(c => c == '.');
+            if (dotCount > 1)
+                return false;
+
+            // Проверяем, что остальная строка - валидное число
+            return float.TryParse(normalizedInput, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+        }
+
+
 
         private void AddFirstPhase()
         {
@@ -107,8 +210,8 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 
             // Температура
             var tempStack = new HorizontalStackLayout { Spacing = 10 };
-            controls.TempMinEntry = CreateValidatedEntry("0", ValidateFloat);
-            controls.TempMaxEntry = CreateValidatedEntry("0", ValidateFloat);
+            controls.TempMinEntry = CreateValidatedEntry("0", ValidateTemperature);
+            controls.TempMaxEntry = CreateValidatedEntry("0", ValidateTemperature);
             tempStack.Children.Add(new Label { Text = "Температура", FontSize = 24 });
             tempStack.Children.Add(new Label { Text = "Мин:", FontSize = 24 });
             tempStack.Children.Add(controls.TempMinEntry);
@@ -118,8 +221,8 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 
             // Влажность
             var humidityStack = new HorizontalStackLayout { Spacing = 10 };
-            controls.HumidityMinEntry = CreateValidatedEntry("0", ValidateInt);
-            controls.HumidityMaxEntry = CreateValidatedEntry("0", ValidateInt);
+            controls.HumidityMinEntry = CreateValidatedEntry("0", ValidateHumidity);
+            controls.HumidityMaxEntry = CreateValidatedEntry("0", ValidateHumidity);
             humidityStack.Children.Add(new Label { Text = "Влажность", FontSize = 24 });
             humidityStack.Children.Add(new Label { Text = "Мин:", FontSize = 24 });
             humidityStack.Children.Add(controls.HumidityMinEntry);
@@ -141,8 +244,8 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             // Охлаждение
             var coolingStack = new HorizontalStackLayout { Spacing = 10 };
             controls.CoolingAmountEntry = CreateValidatedEntry("0", ValidateTinyInt);
-            controls.CoolingMinEntry = CreateValidatedEntry("0", ValidateUInt);
-            controls.CoolingMaxEntry = CreateValidatedEntry("0", ValidateUInt);
+            controls.CoolingMinEntry = CreateValidatedEntry("0", ValidateCoolingTime);
+            controls.CoolingMaxEntry = CreateValidatedEntry("0", ValidateCoolingTime);
             coolingStack.Children.Add(new Label { Text = "Охлаждение", FontSize = 24 });
             coolingStack.Children.Add(new Label { Text = "Колл:", FontSize = 24 });
             coolingStack.Children.Add(controls.CoolingAmountEntry);
@@ -173,6 +276,7 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             return entry;
         }
 
+        // Обновленный метод OnNextPhaseClicked
         private void OnNextPhaseClicked(object sender, System.EventArgs e)
         {
             if (!IsLastPhaseDayToFilled())
@@ -186,6 +290,13 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
                 lastDay = 0;
 
             lastDay++;
+
+            if (lastDay > MaxDays)
+            {
+                DisplayAlert("Ошибка", $"Максимальное количество дней не может превышать {MaxDays}", "ОК");
+                return;
+            }
+
             var newPhase = CreatePhase(lastDay.ToString());
             PhasesContainer.Children.Add(newPhase);
             UpdateCancelButtonState();
@@ -209,67 +320,17 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
 
             try
             {
-                var baseInfo = new SQLliteTableBaseInfoMake
-                {
-                    IdBirdInMySQL = null,
-                    NameBird = entryBirdName.Text,
-                    Content = entryContent.Text,
-                    DaysUntilHatching = 0,
-                    DateTimeValue = DateTime.Now,
-                    ImageBirdFile = ImageBirdFile
-                };
+                // 1. Проверка базовых данных
+                ValidateBaseInfo();
 
-                // Сохраняем базовую информацию
-                uint programId = await App.DatabaseMakePrograms.SaveBaseInfoAsync(baseInfo);
-                var dopInfoList = new List<SQLliteTableDopInfoMake>();
+                // 2. Проверка фаз программы и подготовка данных для сохранения
+                var phasesData = ValidateAndPreparePhasesData();
 
-                int previousEndDay = 0; // Последний день предыдущей фазы
-
-                // Собираем данные по фазам
-                for (int i = 0; i < phaseControlsList.Count; i++)
-                {
-                    var phaseControls = phaseControlsList[i];
-                    int phaseEndDay = GetIntValue(phaseControls.DayToEntry.Text);
-
-                    // Количество дней в текущей фазе
-                    int daysInPhase = phaseEndDay - previousEndDay;
-
-                    if (daysInPhase <= 0)
-                    {
-                        throw new Exception($"Фаза {i + 1}: Конечный день должен быть больше чем {previousEndDay}");
-                    }
-
-                    // Создаем записи для каждого дня фазы
-                    for (int dayInPhase = 1; dayInPhase <= daysInPhase; dayInPhase++)
-                    {
-                        int absoluteDay = previousEndDay + dayInPhase;
-
-                        dopInfoList.Add(new SQLliteTableDopInfoMake
-                        {
-                            IdMakeProgram = programId,
-                            Day = (byte)absoluteDay,
-                            MinTemperature = GetFloatValue(phaseControls.TempMinEntry.Text),
-                            MaxTemperature = GetFloatValue(phaseControls.TempMaxEntry.Text),
-                            MinHumidity = GetIntValue(phaseControls.HumidityMinEntry.Text),
-                            MaxHumidity = GetIntValue(phaseControls.HumidityMaxEntry.Text),
-                            MinАmountTurn = (byte)GetIntValue(phaseControls.TurnMinEntry.Text),
-                            MaxАmountTurn = (byte)GetIntValue(phaseControls.TurnMaxEntry.Text),
-                            АmountCooling = (byte)GetIntValue(phaseControls.CoolingAmountEntry.Text),
-                            MinTimeCooling = GetTimeSpanValue(phaseControls.CoolingMinEntry.Text),
-                            MaxTimeCooling = GetTimeSpanValue(phaseControls.CoolingMaxEntry.Text)
-                        });
-                    }
-
-                    previousEndDay = phaseEndDay; // Запоминаем последний день текущей фазы
-                }
-
-                // Сохраняем все доп. данные
-                foreach (var dopInfo in dopInfoList)
-                {
-                    await App.DatabaseMakePrograms.SaveDopInfoAsync(dopInfo);
-                }
+                // 3. Сохранение данных
+                uint programId = await SaveProgramData(phasesData);
 
                 await DisplayAlert("Успех", "Программа сохранена!", "OK");
+                ClearForm();
             }
             catch (Exception ex)
             {
@@ -279,6 +340,164 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             {
                 this.IsEnabled = true;
             }
+        }
+
+        private void ValidateBaseInfo()
+        {
+            if (string.IsNullOrWhiteSpace(entryBirdName.Text))
+            {
+                throw new Exception("Не указано имя птицы");
+            }
+
+            if (ImageBirdFile == null || ImageBirdFile.Length == 0)
+            {
+                throw new Exception("Не выбрано изображение птицы");
+            }
+        }
+
+        private List<List<SQLliteTableDopInfoMake>> ValidateAndPreparePhasesData()
+        {
+            if (phaseControlsList.Count == 0)
+            {
+                throw new Exception("Должна быть хотя бы одна фаза");
+            }
+
+            var allPhasesData = new List<List<SQLliteTableDopInfoMake>>();
+            int previousEndDay = 0;
+
+            for (int i = 0; i < phaseControlsList.Count; i++)
+            {
+                var phaseControls = phaseControlsList[i];
+                var phaseDaysData = new List<SQLliteTableDopInfoMake>();
+
+                // Проверка дня фазы
+                int phaseEndDay = GetIntValue(phaseControls.DayToEntry.Text);
+                if (phaseEndDay > MaxDays)
+                {
+                    throw new Exception($"Максимальное количество дней не может превышать {MaxDays}");
+                }
+
+                if (phaseEndDay <= previousEndDay)
+                {
+                    throw new Exception($"Фаза {i + 1}: День окончания ({phaseEndDay}) должен быть больше предыдущего ({previousEndDay})");
+                }
+
+                // Проверка температур
+                float tempMin = GetFloatValue(phaseControls.TempMinEntry.Text);
+                float tempMax = GetFloatValue(phaseControls.TempMaxEntry.Text);
+                if (tempMin > tempMax)
+                {
+                    throw new Exception($"Фаза {i + 1}: Минимальная температура ({tempMin}) не может быть больше максимальной ({tempMax})");
+                }
+
+                // Проверка влажности
+                int humidityMin = GetIntValue(phaseControls.HumidityMinEntry.Text);
+                int humidityMax = GetIntValue(phaseControls.HumidityMaxEntry.Text);
+                if (humidityMin > humidityMax)
+                {
+                    throw new Exception($"Фаза {i + 1}: Минимальная влажность ({humidityMin}) не может быть больше максимальной ({humidityMax})");
+                }
+
+                // Проверка поворотов
+                byte? turnMin = (byte?)GetIntValue(phaseControls.TurnMinEntry.Text);
+                byte? turnMax = (byte?)GetIntValue(phaseControls.TurnMaxEntry.Text);
+                if (turnMin > turnMax)
+                {
+                    throw new Exception($"Фаза {i + 1}: Минимальное количество поворотов ({turnMin}) не может быть больше максимального ({turnMax})");
+                }
+
+                // Проверка охлаждения
+                byte? coolingAmount = (byte?)GetIntValue(phaseControls.CoolingAmountEntry.Text);
+                TimeSpan? coolingMin = null;
+                TimeSpan? coolingMax = null;
+
+                if (coolingAmount > 0)
+                {
+                    // Используем GetTimeSpanValue для преобразования
+                    coolingMin = GetTimeSpanValue(phaseControls.CoolingMinEntry.Text);
+                    coolingMax = GetTimeSpanValue(phaseControls.CoolingMaxEntry.Text);
+
+                    if (coolingMin == null || coolingMax == null)
+                    {
+                        throw new Exception($"Фаза {i + 1}: Указано количество охлаждений, но не указано время");
+                    }
+
+                    if (coolingMin > coolingMax)
+                    {
+                        throw new Exception($"Фаза {i + 1}: Минимальное время охлаждения ({coolingMin.Value.TotalMinutes} мин) не может быть больше максимального ({coolingMax.Value.TotalMinutes} мин)");
+                    }
+                }
+
+                // Создаем записи для каждого дня фазы
+                int daysInPhase = phaseEndDay - previousEndDay;
+                for (int dayInPhase = 1; dayInPhase <= daysInPhase; dayInPhase++)
+                {
+                    int absoluteDay = previousEndDay + dayInPhase;
+
+                    phaseDaysData.Add(new SQLliteTableDopInfoMake
+                    {
+                        // IdMakeProgram будет установлен позже
+                        Day = (byte)absoluteDay,
+                        MinTemperature = tempMin,
+                        MaxTemperature = tempMax,
+                        MinHumidity = humidityMin,
+                        MaxHumidity = humidityMax,
+                        MinАmountTurn = turnMin,
+                        MaxАmountTurn = turnMax,
+                        АmountCooling = coolingAmount,
+                        MinTimeCooling = coolingAmount > 0 ? coolingMin : null,
+                        MaxTimeCooling = coolingAmount > 0 ? coolingMax : null
+                    });
+                }
+
+                allPhasesData.Add(phaseDaysData);
+                previousEndDay = phaseEndDay;
+            }
+
+            return allPhasesData;
+        }
+
+        private async Task<uint> SaveProgramData(List<List<SQLliteTableDopInfoMake>> allPhasesData)
+        {
+            var baseInfo = new SQLliteTableBaseInfoMake
+            {
+                IdBirdInMySQL = null,
+                NameBird = entryBirdName.Text,
+                Content = entryContent.Text,
+                DaysUntilHatching = 0,
+                DateTimeValue = DateTime.Now,
+                ImageBirdFile = ImageBirdFile
+            };
+
+            // Сохраняем базовую информацию
+            uint programId = await App.DatabaseMakePrograms.SaveBaseInfoAsync(baseInfo);
+
+            // Сохраняем все доп. данные для всех фаз
+            foreach (var phaseDaysData in allPhasesData)
+            {
+                foreach (var dayData in phaseDaysData)
+                {
+                    dayData.IdMakeProgram = programId;
+                    await App.DatabaseMakePrograms.SaveDopInfoAsync(dayData);
+                }
+            }
+
+            return programId;
+        }
+
+        private void ClearForm()
+        {
+            // Очистка полей птицы
+            entryBirdName.Text = string.Empty;
+            entryContent.Text = string.Empty;
+            ImageBirdFile = null;
+            imageFrame.IsVisible = false;
+            selectedImage.Source = null;
+
+            // Очистка фаз
+            PhasesContainer.Children.Clear();
+            phaseControlsList.Clear();
+            AddFirstPhase();
         }
 
         private void OnCancelPhaseClicked(object sender, System.EventArgs e)
@@ -354,23 +573,6 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
             }
         }
 
-        private void ValidateDayToEntry_Unfocused(object sender, FocusEventArgs e)
-        {
-            if (sender is Entry entry)
-            {
-                if (!int.TryParse(entry.Text, out int currentValue) || currentValue < 1)
-                {
-                    if (previousValues.TryGetValue(entry, out string oldValue))
-                        entry.Text = oldValue;
-                    DisplayAlert("Ошибка", "Значение 'День По:' должно быть не меньше 1", "ОК");
-                }
-                else
-                {
-                    previousValues[entry] = entry.Text;
-                }
-            }
-        }
-
         private void ValidateCoolingMinMax(Entry minEntry, Entry maxEntry)
         {
             if (isUpdating) return;
@@ -407,7 +609,18 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm
         private bool ValidateTinyInt(string input) => byte.TryParse(input, out _);
 
         private int GetIntValue(string input) => int.TryParse(input, out int val) ? val : 0;
-        private float GetFloatValue(string input) => float.TryParse(input, out float val) ? val : 0;
-        private TimeSpan GetTimeSpanValue(string input) => TimeSpan.TryParse(input, out TimeSpan val) ? val : TimeSpan.Zero;
+        private TimeSpan? GetTimeSpanValue(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return null;
+
+            // Преобразуем минуты в TimeSpan
+            if (int.TryParse(input, out int minutes))
+            {
+                return TimeSpan.FromMinutes(minutes);
+            }
+
+            return null;
+        }
     }
 }

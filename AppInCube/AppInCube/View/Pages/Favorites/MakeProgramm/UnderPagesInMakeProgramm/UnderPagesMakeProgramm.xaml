@@ -31,6 +31,22 @@
 
                     <Label Text="Картинка:" FontSize="24" />
                     <Button Text="Выбрать изображение" Clicked="OnSelectImageClicked" />
+                    <!-- Обернем Image во Frame для лучшего визуального отображения -->
+                    <Frame x:Name="imageFrame" 
+                           HorizontalOptions="Center" 
+                           Padding="0"
+                           IsVisible="False"
+                           BackgroundColor="LightGray"
+                           HeightRequest="200"
+                           WidthRequest="200"
+                           CornerRadius="10"
+                           BorderColor="Gray"
+                           HasShadow="True">
+                        <Image x:Name="selectedImage" 
+                               Aspect="AspectFit" 
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Frame>
                 </StackLayout>
             </VerticalStackLayout>
 
