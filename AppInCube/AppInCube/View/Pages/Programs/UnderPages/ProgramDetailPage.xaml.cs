@@ -64,7 +64,10 @@ namespace AppInCube.View.Pages.Programs.UnderPages
         private async void SaveProgramData(uint birdId)
         {
             // Проверяем, существует ли программа с указанным ID
-            var existingProgram = await App.DatabaseProgram.GetProgramByIdAsync(birdId);
+            var existingProgram = await App.DatabaseProgram.GetProgramByIdAsync(birdId); //ДОБАВИТЬ ЕЩЁ ПРОВЕРКУ НА IdProgramm
+
+
+
             if (existingProgram == null) // Если такой программы нет, то загружаем
             {
                 // Получаем данные из BindingContext

@@ -9,8 +9,24 @@ namespace AppInCube.Classes.SQLite.Partyes
     {
         [PrimaryKey, AutoIncrement]
         public uint IdParty { get; set; }
-        public uint IdProgramInMySQL { get; set; }
-        public uint IdBirdInMySQL { get; set; }
+
+        public uint? IdBirdInMySQL { get; set; } //НУЖНО ?
+        public uint? IdProgramInMySQL { get; set; }//НУЖНО ?
+
+        public uint? IdMake { get; set; }//НУЖНО ?
+        public byte[] ImageBirdFile { get; set; } // Массив байтов для хранения изображения
+                                                  // Вычисляемое свойство для получения ImageSource
+        public ImageSource ImageSource => ByteArrayToImageSource(ImageBirdFile);
+        private ImageSource ByteArrayToImageSource(byte[] imageBytes)
+        {
+            if (imageBytes != null && imageBytes.Length > 0)
+            {
+                return ImageSource.FromStream(() => new MemoryStream(imageBytes));
+            }
+            return null;
+        }
+
+
         public DateTime DateTimeValue { get; set; }
 
         // Это свойство будет хранить сериализованный JSON

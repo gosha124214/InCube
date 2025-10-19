@@ -17,7 +17,8 @@
                             <Label Text="{Binding IdProgramInMySQL, StringFormat='Id программы: {0}'}" FontSize="16" />
                             <Label Text="{Binding IdBirdInMySQL, StringFormat='Id птицы: {0}'}" FontSize="16" />
                             <Label Text="{Binding DateTimeValue, StringFormat='Дата: {0:dd.MM.yyyy HH:mm}'}" FontSize="16" />
-
+                            <Image Source="{Binding ImageSource}" HeightRequest="100" Aspect="AspectFit" />
+                            
                             <!-- Кнопка отмены партии -->
                             <Button Text="Отменить партию" 
                                     BackgroundColor="Red" 

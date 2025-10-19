@@ -13,7 +13,7 @@ namespace AppInCube.Classes.SQLite.Partyes
 {
     public class SQLliteTableDopInfoParty
     {
-        [PrimaryKey]
+        //[PrimaryKey]
         public uint IdParty { get; set; }
         public byte Day { get; set; }
         public float MinTemperature { get; set; }

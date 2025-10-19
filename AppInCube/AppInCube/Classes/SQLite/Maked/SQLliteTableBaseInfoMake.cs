@@ -12,10 +12,12 @@ namespace AppInCube.Classes.SQLite.Maked
         [PrimaryKey, AutoIncrement] // Автоматическое инкрементирование
         public uint IdMakeBird { get; set; } // Уникальный идентификатор для птицы
 
-        public uint? IdBirdInMySQL { get; set; } // Теперь может быть null
-
         // Инициализируем IdMakeProgram от IdMakeBird
         public uint IdMakeProgram => IdMakeBird; // Теперь IdMakeProgram равен IdMakeBird
+
+        public uint? IdBirdInMySQL { get; set; } // Теперь может быть null
+        public uint? IdProgramInMySQL { get; set; } // Теперь может быть null
+       
 
         public string NameBird { get; set; }
         public string Content { get; set; }

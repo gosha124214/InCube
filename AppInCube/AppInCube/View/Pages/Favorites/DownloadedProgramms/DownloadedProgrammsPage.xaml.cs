@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using AppInCube.View.Pages.Favorites.DownloadedProgramms.UnderPagesInFavorites;
-using AppInCube.View.Pages.Favorites.ProgrammsInProcess;
 using AppInCube.Classes.SQLite.Downloaded;
 
 using AppInCube.Classes.SQLite.Partyes;
+using AppInCube.View.Pages.Favorites.ProgrammsInProcess;
+
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,7 @@ namespace AppInCube.View.Pages.Favorites.DownloadedProgramms
                 IdProgramInMySQL = program.IdProgramInMySQL,
                 IdBirdInMySQL = program.IdBirdInMySQL,
                 DateTimeValue = DateTime.Now, // Устанавливаем текущее время
+                ImageBirdFile = program.ImageBirdFile,
                 DopInfoParty = new List<SQLliteTableDopInfoParty>() // Инициализируем список
             };
 
