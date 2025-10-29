@@ -20,8 +20,12 @@ namespace AppInCube.Classes.SQLite.Partyes
         public Task<int> SavePartyAsync(SQLliteTableParty party)
         {
             return _database.InsertAsync(party);
+        }   
+        // ДОБАВЛЯЕМ МЕТОД ДЛЯ ОБНОВЛЕНИЯ
+        public Task<int> UpdatePartyAsync(SQLliteTableParty party)
+        {
+            return _database.UpdateAsync(party);
         }
-
         // Получение всех партий
         public Task<List<SQLliteTableParty>> GetPartiesAsync()
         {
