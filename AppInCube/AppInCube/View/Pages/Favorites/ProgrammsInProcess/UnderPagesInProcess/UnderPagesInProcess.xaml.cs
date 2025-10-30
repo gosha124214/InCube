@@ -14,20 +14,23 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
         private DateTime partyEndTime;
         private ObservableCollection<SQLliteTableDopInfoParty> dopInfoList;
         private SQLliteTableDopInfoParty selectedDayForRecording;
+
         public UnderPagesInProcess(SQLliteTableParty party)
         {
             InitializeComponent();
 
-            // Устанавливаем контекст привязки на новый объект, который содержит как птицу, так и программы
             BindingContext = party;
 
             // Инициализация времени
             partyStartTime = party.DateTimeValue;
-            totalDuration = TimeSpan.FromDays(party.DopInfoParty.Count); // Количество дней из списка DopInfoParty
-            partyEndTime = partyStartTime.Add(totalDuration); // Время окончания партии
+            totalDuration = TimeSpan.FromDays(party.DopInfoParty.Count);
+            partyEndTime = partyStartTime.Add(totalDuration);
 
             // Инициализация ObservableCollection
             dopInfoList = new ObservableCollection<SQLliteTableDopInfoParty>(party.DopInfoParty);
+
+            // ОБНОВЛЯЕМ СТАТУСЫ ПРИ ЗАПУСКЕ
+            UpdateAllStatuses();
 
             // Запуск таймеров
             if (partyEndTime >= DateTime.Now)
@@ -38,25 +41,168 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
             {
                 TimeStartProgramm.Text = "Партия завершена!";
             }
-
         }
+
+
+        // ОБНОВЛЕННЫЙ МЕТОД ДЛЯ КНОПКИ
+        private async void OnCompletedButtonClicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var dopInfo = button?.CommandParameter as SQLliteTableDopInfoParty;
+
+            if (dopInfo != null)
+            {
+                // Проверяем доступность кнопки через статус
+                if (DateTime.Now < partyStartTime.AddDays(dopInfo.Day))
+                {
+                    await DisplayAlert("Ошибка", "День еще не наступил!", "OK");
+                    return;
+                }
+
+                selectedDayForRecording = dopInfo;
+                ShowRecordForm(dopInfo);
+            }
+        }
+        
+        // МЕТОД ДЛЯ ОБНОВЛЕНИЯ 
+        private void UpdateAllStatuses()
+        {
+            bool hasChanges = false;
+
+            foreach (var item in dopInfoList)
+            {
+                var oldStatus = item.Status;
+                DateTime dayEndTime = partyStartTime.AddDays(item.Day);
+
+                if ((DateTime.Now > dayEndTime) && (item.Status == DayStatus.Waiting))
+                {
+                    item.Status = DayStatus.NotRecorded;
+                }
+
+                // Проверяем, изменился ли статус
+                if (oldStatus != item.Status)
+                {
+                    hasChanges = true;
+                }
+            }
+
+            // Если были изменения, обновляем UI
+            if (hasChanges)
+            {
+                RefreshCollectionView();
+            }
+        }
+
+        // МЕТОД ДЛЯ ПРИНУДИТЕЛЬНОГО ОБНОВЛЕНИЯ COLLECTIONVIEW
+        private void RefreshCollectionView()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                // Создаем новую коллекцию для принудительного обновления
+                var tempList = new ObservableCollection<SQLliteTableDopInfoParty>(dopInfoList);
+                DopInfoPartyCollectionView.ItemsSource = null;
+                DopInfoPartyCollectionView.ItemsSource = tempList;
+
+                // Альтернативный способ - принудительное обновление через Binding
+                OnPropertyChanged(nameof(DopInfoParty));
+            });
+        }
+
+        // Добавьте это свойство для привязки
+        public ObservableCollection<SQLliteTableDopInfoParty> DopInfoParty => dopInfoList;
+
 
         private void StartTimers()
         {
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
-
                 UpdateStartTimers();
-
                 UpdateTimers();
+                UpdateEndOfDayTimer();
+                UpdateNextPhaseTimer();
 
-                UpdateEndOfDayTimer(); // Обновляем оставшееся время до конца текущего дня
 
-                UpdateNextPhaseTimer(); // Обновляем оставшееся время до следующей фазы
 
-                return true; // Возвращаем true, чтобы таймер продолжал работать
+                return true;
             });
         }
+       
+
+        private async void OnSaveRecordClicked(object sender, EventArgs e)
+        {
+            if (selectedDayForRecording == null)
+                return;
+
+            try
+            {
+                // Находим индекс выбранного дня
+                var dayIndex = dopInfoList.ToList().FindIndex(d => d.Day == selectedDayForRecording.Day);
+                if (dayIndex == -1)
+                {
+                    await DisplayAlert("Ошибка", "Не удалось найти выбранный день в списке", "OK");
+                    return;
+                }
+
+                // Обновляем данные
+                var dayToUpdate = dopInfoList[dayIndex];
+                dayToUpdate.MinTemperature = ParseFloat(MinTempEntry.Text);
+                dayToUpdate.MaxTemperature = ParseFloat(MaxTempEntry.Text);
+                dayToUpdate.MinHumidity = ParseInt(MinHumidityEntry.Text);
+                dayToUpdate.MaxHumidity = ParseInt(MaxHumidityEntry.Text);
+                dayToUpdate.MinАmountTurn = ParseNullableByte(MinTurnEntry.Text);
+                dayToUpdate.MaxАmountTurn = ParseNullableByte(MaxTurnEntry.Text);
+                dayToUpdate.АmountCooling = ParseNullableByte(CoolingAmountEntry.Text);
+                dayToUpdate.MinTimeCooling = ParseTimeSpan(MinCoolingTimeEntry.Text);
+                dayToUpdate.MaxTimeCooling = ParseTimeSpan(MaxCoolingTimeEntry.Text);
+
+                // Обновляем состояние
+                dayToUpdate.IsCompleted = true;
+                dayToUpdate.IsNotCompleted = false;
+                dayToUpdate.Status = DayStatus.Completed; // Устанавливаем статус "Выполнено"
+                RefreshCollectionView();
+
+                // Сохраняем в базу данных
+                await UpdatePartyInDatabase();
+
+                // Скрываем форму
+                AddRecordFrame.IsVisible = false;
+
+
+                // Показываем сообщение об успехе
+                await DisplayAlert("Успех", $"Данные для дня {selectedDayForRecording.Day} обновлены!", "OK");
+
+                selectedDayForRecording = null;
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось обновить данные: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task UpdatePartyInDatabase()
+        {
+            try
+            {
+                var party = BindingContext as SQLliteTableParty;
+                if (party != null)
+                {
+                    party.DopInfoParty = dopInfoList.ToList();
+                    int result = await App.DatabaseParty.UpdatePartyAsync(party);
+
+                    if (result > 0)
+                    {
+                        Console.WriteLine($"Партия {party.IdParty} успешно обновлена в базе данных");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при обновлении в базе данных: {ex.Message}");
+                throw;
+            }
+        }
+
         private void UpdateStartTimers()
         {
             // Обновляем оставшееся время до завершения партии
@@ -107,6 +253,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 NextDayTimeRemainingLabel.Text = " ";
                 partyStartTime = endOfDay; // Устанавливаем новое время начала на следующий день
                 UpdateEndOfDayTimer(); // Обновляем таймер
+                UpdateAllStatuses();
             }
         }
 
@@ -172,28 +319,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                    currentDay.MaxTimeCooling != nextDay.MaxTimeCooling;
         }
 
-        // ОБНОВЛЕННЫЙ МЕТОД ДЛЯ КНОПКИ "ЗАПИСАТЬ"
-        private async void OnCompletedButtonClicked(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            var dopInfo = button?.CommandParameter as SQLliteTableDopInfoParty;
 
-            if (dopInfo != null)
-            {
-                // Проверяем, наступил ли день
-                if (DateTime.Now < partyStartTime.AddDays(dopInfo.Day))
-                {
-                    await DisplayAlert("Ошибка", "День еще не наступил!", "OK");
-                    return;
-                }
-
-                // Сохраняем выбранный день для записи
-                selectedDayForRecording = dopInfo;
-
-                // Показываем форму для ввода данных
-                ShowRecordForm(dopInfo);
-            }
-        }
 
         private void ShowRecordForm(SQLliteTableDopInfoParty dopInfo)
         {
@@ -216,154 +342,34 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
             // Показываем форму
             AddRecordFrame.IsVisible = true;
         }
-        private async void OnSaveRecordClicked(object sender, EventArgs e)
-        {
-            if (selectedDayForRecording == null)
-                return;
+        
 
-            try
-            {
-                // Находим индекс выбранного дня в dopInfoList
-                var dayIndex = dopInfoList.ToList().FindIndex(d => d.Day == selectedDayForRecording.Day);
-                if (dayIndex == -1)
-                {
-                    await DisplayAlert("Ошибка", "Не удалось найти выбранный день в списке", "OK");
-                    return;
-                }
-
-                // Обновляем данные в существующей записи в dopInfoList
-                var dayToUpdate = dopInfoList[dayIndex];
-                dayToUpdate.MinTemperature = ParseFloat(MinTempEntry.Text);
-                dayToUpdate.MaxTemperature = ParseFloat(MaxTempEntry.Text);
-                dayToUpdate.MinHumidity = ParseInt(MinHumidityEntry.Text);
-                dayToUpdate.MaxHumidity = ParseInt(MaxHumidityEntry.Text);
-                dayToUpdate.MinАmountTurn = ParseNullableByte(MinTurnEntry.Text);
-                dayToUpdate.MaxАmountTurn = ParseNullableByte(MaxTurnEntry.Text);
-                dayToUpdate.АmountCooling = ParseNullableByte(CoolingAmountEntry.Text);
-                dayToUpdate.MinTimeCooling = ParseTimeSpan(MinCoolingTimeEntry.Text);
-                dayToUpdate.MaxTimeCooling = ParseTimeSpan(MaxCoolingTimeEntry.Text);
-                dayToUpdate.IsCompleted = true;
-                dayToUpdate.IsNotCompleted = false;
-
-                // Сохраняем изменения в базу данных
-                await UpdatePartyInDatabase();
-
-                // ОБНОВЛЯЕМ BindingContext с обновленными данными
-                await RefreshDataFromDatabase();
-
-                // Показываем сообщение об успехе
-                await DisplayAlert("Успех", $"Данные для дня {selectedDayForRecording.Day} обновлены!", "OK");
-
-                // Скрываем форму
-                AddRecordFrame.IsVisible = false;
-                selectedDayForRecording = null;
-
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Ошибка", $"Не удалось обновить данные: {ex.Message}", "OK");
-            }
-        }
-
-        // Метод для обновления данных из базы
-        private async Task RefreshDataFromDatabase()
-        {
-            try
-            {
-                var party = BindingContext as SQLliteTableParty;
-                if (party != null)
-                {
-                    // Загружаем свежие данные из базы
-                    var freshParty = await App.DatabaseParty.GetPartyByIdAsync(party.IdParty);
-                    if (freshParty != null)
-                    {
-                        // Обновляем BindingContext
-                        BindingContext = freshParty;
-
-                        // Обновляем локальную коллекцию
-                        dopInfoList = new ObservableCollection<SQLliteTableDopInfoParty>(freshParty.DopInfoParty);
-
-                        // Принудительно обновляем CollectionView
-                        RefreshCollectionView();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при обновлении данных: {ex.Message}");
-            }
-        }
-
-        // Метод для принудительного обновления CollectionView
-        private void RefreshCollectionView()
-        {
-            // Обновляем ItemsSource CollectionView
-            var collectionView = this.FindByName<CollectionView>("DopInfoPartyCollectionView");
-            if (collectionView != null)
-            {
-                var currentItems = collectionView.ItemsSource;
-                collectionView.ItemsSource = null;
-                collectionView.ItemsSource = currentItems;
-            }
-        }
-        private async Task UpdatePartyInDatabase()
-        {
-            try
-            {
-                var party = BindingContext as SQLliteTableParty;
-                if (party != null)
-                {
-                    // Полностью заменяем коллекцию DopInfoParty обновленными данными из dopInfoList
-                    party.DopInfoParty = dopInfoList.ToList();
-
-                    // Сохраняем обновленную партию в базу данных
-                    int result = await App.DatabaseParty.UpdatePartyAsync(party);
-
-                    if (result > 0)
-                    {
-                        Console.WriteLine($"Партия {party.IdParty} успешно обновлена в базе данных");
-
-                        // Принудительно обновляем привязку данных
-                        OnPropertyChanged(nameof(party.DopInfoParty));
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Не удалось обновить партию {party.IdParty}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при обновлении в базе данных: {ex.Message}");
-                throw;
-            }
-        }
         private void OnCancelRecordClicked(object sender, EventArgs e)
 
         
-    {
-    // Скрываем форму без сохранения
-    AddRecordFrame.IsVisible = false;
-    selectedDayForRecording = null;
+        {
+            // Скрываем форму без сохранения
+            AddRecordFrame.IsVisible = false;
+            selectedDayForRecording = null;
     
-    // Опционально: очищаем поля формы
-    ClearFormFields();
-}
+            // Опционально: очищаем поля формы
+            ClearFormFields();
+        }
 
-// Опциональный метод для очистки полей формы
-private void ClearFormFields()
-{
-    MinTempEntry.Text = "";
-    MaxTempEntry.Text = "";
-    MinHumidityEntry.Text = "";
-    MaxHumidityEntry.Text = "";
-    MinTurnEntry.Text = "";
-    MaxTurnEntry.Text = "";
-    CoolingAmountEntry.Text = "";
-    MinCoolingTimeEntry.Text = "";
-    MaxCoolingTimeEntry.Text = "";
-    SelectedDayLabel.Text = "";
-}
+    // Опциональный метод для очистки полей формы
+        private void ClearFormFields()
+        {
+            MinTempEntry.Text = "";
+            MaxTempEntry.Text = "";
+            MinHumidityEntry.Text = "";
+            MaxHumidityEntry.Text = "";
+            MinTurnEntry.Text = "";
+            MaxTurnEntry.Text = "";
+            CoolingAmountEntry.Text = "";
+            MinCoolingTimeEntry.Text = "";
+            MaxCoolingTimeEntry.Text = "";
+            SelectedDayLabel.Text = "";
+        }
         // Вспомогательные методы для парсинга разных типов данных
         private float ParseFloat(string text)
         {

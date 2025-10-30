@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using AppInCube.Classes.SQLite.Downloaded;
 using SQLite;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
 namespace AppInCube.Classes.SQLite.Partyes
 {
@@ -29,6 +27,19 @@ namespace AppInCube.Classes.SQLite.Partyes
         // Новые свойства для отслеживания состояния
         public bool IsNotCompleted { get; set; } = true; // По умолчанию не выполнено
         public bool IsCompleted { get; set; } = false; // По умолчанию не выполнено
-    }
-}
 
+        // Свойство для хранения статуса (сохраняется в БД)
+        // Enum для статуса (сохраняется в БД как int)
+        public DayStatus Status { get; set; } = DayStatus.Waiting;
+    }
+
+        // Enum для статусов дня
+        public enum DayStatus
+        {
+            Waiting = 0,      // "В ожидании" - день еще не наступил
+            NotRecorded = 1,  // "Не записано" - день прошел, данные не записаны
+            Completed = 2,    // "Выполнено" - данные записаны
+            Available = 3     // "Не выполнено" - день наступил, можно записывать
+        }
+        
+}

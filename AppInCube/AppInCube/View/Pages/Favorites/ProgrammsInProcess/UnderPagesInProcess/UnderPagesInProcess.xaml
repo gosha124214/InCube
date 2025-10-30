@@ -21,13 +21,14 @@
             <Label x:Name="TotalTimeRemainingLabel" FontSize="18" TextColor="Black" />
             <Label x:Name="NextDayTimeRemainingLabel" FontSize="18" TextColor="Black" />
             <Label x:Name="NextPhaseTimeRemainingLabel" FontSize="18" TextColor="Black" />
-            
 
             <!-- Заголовок таблицы и данные в одной таблице -->
             <Label Text="Программы:" FontSize="20" FontAttributes="Bold" Margin="0,20,0,10"/>
 
             <!-- Данные -->
-            <CollectionView ItemsSource="{Binding DopInfoParty}" Margin="0,10,0,0">
+            <CollectionView x:Name="DopInfoPartyCollectionView"
+                            ItemsSource="{Binding DopInfoParty}" 
+                            Margin="0,10,0,0">
                 <CollectionView.Header>
                     <Grid BackgroundColor="Red" Padding="5" RowSpacing="0" ColumnSpacing="0">
                         <Grid.ColumnDefinitions>
@@ -61,8 +62,7 @@
                 </CollectionView.Header>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Stroke="Black" StrokeThickness="1" >
-
+                        <Border Stroke="Black" StrokeThickness="1">
                             <Grid Padding="0" RowSpacing="0" ColumnSpacing="0" BackgroundColor="Green">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -89,99 +89,142 @@
                                 <Label Text="{Binding АmountCooling, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="7" Padding="5" />
                                 <Label Text="{Binding MinTimeCooling, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="8" Padding="5" />
                                 <Label Text="{Binding MaxTimeCooling, StringFormat='{0}'}" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="9" Padding="5" />
-                                <!-- Кнопка "Выполнено" с изменением цвета -->
+
                                 <Button Text="Записать" 
-                                     TextColor="White" 
-                                     Clicked="OnCompletedButtonClicked" 
-                                     CommandParameter="{Binding .}" 
-                                     FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="10" Padding="5">
+                                    TextColor="White" 
+                                    Clicked="OnCompletedButtonClicked" 
+                                    CommandParameter="{Binding .}" 
+                                    FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="10" Padding="5">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Setter Property="BackgroundColor" Value="Gray" />
-                                            <!-- По умолчанию серая (недоступна) -->
+                                            <Setter Property="IsEnabled" Value="True" />
+                                            <Setter Property="Text" Value="Не доступно" />
+
                                             <Style.Triggers>
-                                                <!-- Если день наступил И еще не выполнено - СИНЯЯ -->
-                                                <DataTrigger TargetType="Button" Binding="{Binding IsDayAvailable}" Value="True">
+                                                <!-- Если статус NotRecorded (1) - САЛАТОВАЯ "Изменить" -->
+                                                <DataTrigger TargetType="Button" Binding="{Binding Status}" Value="1">
                                                     <Setter Property="BackgroundColor" Value="Blue" />
                                                     <Setter Property="IsEnabled" Value="True" />
+                                                    <Setter Property="Text" Value="Записать" />
                                                 </DataTrigger>
 
-                                                <!-- Если выполнено - САЛАТОВАЯ -->
-                                                <DataTrigger TargetType="Button" Binding="{Binding IsCompleted}" Value="True">
+                                                <!-- Если статус Completed (2) - САЛАТОВАЯ "Изменить" -->
+                                                <DataTrigger TargetType="Button" Binding="{Binding Status}" Value="2">
                                                     <Setter Property="BackgroundColor" Value="#7CFC00" />
-                                                    <!-- Салатовый -->
                                                     <Setter Property="IsEnabled" Value="True" />
-                                                </DataTrigger>
-
-                                                <!-- Если день не наступил - СЕРАЯ и неактивная -->
-                                                <DataTrigger TargetType="Button" Binding="{Binding IsDayAvailable}" Value="False">
-                                                    <Setter Property="BackgroundColor" Value="Gray" />
-                                                    <Setter Property="IsEnabled" Value="False" />
+                                                    <Setter Property="Text" Value="Изменить" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Button.Style>
                                 </Button>
-                                <Label Text="-" BackgroundColor="LightPink" TextColor="DarkRed" FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="11" Padding="5" />
+
+                                <!-- Статус с ПРАВИЛЬНЫМИ триггерами на основе Status -->
+                                <!-- Статус с триггерами на основе Status -->
+                                <Label FontSize="9" 
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center" 
+                                   Grid.Column="11" 
+                                   Padding="5">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <!-- Установите значения по умолчанию здесь -->
+                                            <Setter Property="Text" Value="-" />
+                                            <Setter Property="BackgroundColor" Value="LightGray" />
+                                            <Setter Property="TextColor" Value="DarkGray" />
+
+                                            <Style.Triggers>
+                                                <!-- Если статус Waiting (0) -->
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="0">
+                                                    <Setter Property="Text" Value="В ожидании" />
+                                                    <Setter Property="BackgroundColor" Value="LightGray" />
+                                                    <Setter Property="TextColor" Value="DarkGray" />
+                                                </DataTrigger>
+
+                                                <!-- Если статус NotRecorded (1) -->
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="1">
+                                                    <Setter Property="Text" Value="Не записано" />
+                                                    <Setter Property="BackgroundColor" Value="LightPink" />
+                                                    <Setter Property="TextColor" Value="DarkRed" />
+                                                </DataTrigger>
+
+                                                <!-- Если статус Completed (2) -->
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="2">
+                                                    <Setter Property="Text" Value="Выполнено" />
+                                                    <Setter Property="BackgroundColor" Value="LightGreen" />
+                                                    <Setter Property="TextColor" Value="DarkGreen" />
+                                                </DataTrigger>
+
+                                                <!-- Если статус Available (3) -->
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="3">
+                                                    <Setter Property="Text" Value="Не выполнено" />
+                                                    <Setter Property="BackgroundColor" Value="LightBlue" />
+                                                    <Setter Property="TextColor" Value="DarkBlue" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <!-- НОВАЯ СЕКЦИЯ: Форма для добавления записи -->
-                <Frame x:Name="AddRecordFrame" IsVisible="False" BackgroundColor="LightGray" Padding="10" Margin="0,20,0,0">
-                    <StackLayout>
-                        <Label Text="Добавить запись для дня:" FontSize="16" FontAttributes="Bold" />
 
-                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="5">
-                            <!-- День -->
-                            <Label Text="День:" Grid.Row="0" Grid.Column="0" FontSize="12"/>
-                            <Label x:Name="SelectedDayLabel" Text="" Grid.Row="0" Grid.Column="1" FontSize="12" FontAttributes="Bold"/>
+            <!-- Форма для добавления записи -->
+            <Frame x:Name="AddRecordFrame" IsVisible="False" BackgroundColor="LightGray" Padding="10" Margin="0,20,0,0">
+                <StackLayout>
+                    <Label Text="Добавить запись для дня:" FontSize="16" FontAttributes="Bold" />
 
-                            <!-- Мин.Т -->
-                            <Label Text="Мин.Т:" Grid.Row="1" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MinTempEntry" Grid.Row="1" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <!-- День -->
+                        <Label Text="День:" Grid.Row="0" Grid.Column="0" FontSize="12"/>
+                        <Label x:Name="SelectedDayLabel" Text="" Grid.Row="0" Grid.Column="1" FontSize="12" FontAttributes="Bold"/>
 
-                            <!-- Мкс.Т -->
-                            <Label Text="Мкс.Т:" Grid.Row="2" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MaxTempEntry" Grid.Row="2" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                        <!-- Мин.Т -->
+                        <Label Text="Мин.Т:" Grid.Row="1" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MinTempEntry" Grid.Row="1" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                            <!-- Мин.Вл -->
-                            <Label Text="Мин.Вл:" Grid.Row="3" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MinHumidityEntry" Grid.Row="3" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                        <!-- Мкс.Т -->
+                        <Label Text="Мкс.Т:" Grid.Row="2" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MaxTempEntry" Grid.Row="2" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                            <!-- Мкс.Вл -->
-                            <Label Text="Мкс.Вл:" Grid.Row="4" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MaxHumidityEntry" Grid.Row="4" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                        <!-- Мин.Вл -->
+                        <Label Text="Мин.Вл:" Grid.Row="3" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MinHumidityEntry" Grid.Row="3" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                            <!-- Мин.О -->
-                            <Label Text="Мин.О:" Grid.Row="5" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MinTurnEntry" Grid.Row="5" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                        <!-- Мкс.Вл -->
+                        <Label Text="Мкс.Вл:" Grid.Row="4" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MaxHumidityEntry" Grid.Row="4" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                            <!-- Мкс.О -->
-                            <Label Text="Мкс.О:" Grid.Row="6" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MaxTurnEntry" Grid.Row="6" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                        <!-- Мин.О -->
+                        <Label Text="Мин.О:" Grid.Row="5" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MinTurnEntry" Grid.Row="5" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                            <!-- Охлаж -->
-                            <Label Text="Охлаж:" Grid.Row="7" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="CoolingAmountEntry" Grid.Row="7" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                        <!-- Мкс.О -->
+                        <Label Text="Мкс.О:" Grid.Row="6" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MaxTurnEntry" Grid.Row="6" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                            <!-- Мин.В -->
-                            <Label Text="Мин.В:" Grid.Row="8" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MinCoolingTimeEntry" Grid.Row="8" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                        <!-- Охлаж -->
+                        <Label Text="Охлаж:" Grid.Row="7" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="CoolingAmountEntry" Grid.Row="7" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                            <!-- Мкс.В -->
-                            <Label Text="Мкс.В:" Grid.Row="9" Grid.Column="0" FontSize="12"/>
-                            <Entry x:Name="MaxCoolingTimeEntry" Grid.Row="9" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
-                        </Grid>
+                        <!-- Мин.В -->
+                        <Label Text="Мин.В:" Grid.Row="8" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MinCoolingTimeEntry" Grid.Row="8" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0">
-                            <Button Text="Сохранить" Clicked="OnSaveRecordClicked" BackgroundColor="Green" TextColor="White" Margin="0,0,10,0"/>
-                            <Button Text="Отмена" Clicked="OnCancelRecordClicked" BackgroundColor="Red" TextColor="White"/>
-                        </StackLayout>
+                        <!-- Мкс.В -->
+                        <Label Text="Мкс.В:" Grid.Row="9" Grid.Column="0" FontSize="12"/>
+                        <Entry x:Name="MaxCoolingTimeEntry" Grid.Row="9" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
+                    </Grid>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0">
+                        <Button Text="Сохранить" Clicked="OnSaveRecordClicked" BackgroundColor="Green" TextColor="White" Margin="0,0,10,0"/>
+                        <Button Text="Отмена" Clicked="OnCancelRecordClicked" BackgroundColor="Red" TextColor="White"/>
                     </StackLayout>
-                </Frame>
-
+                </StackLayout>
+            </Frame>
         </StackLayout>
     </ScrollView>
 </ContentPage>
