@@ -94,7 +94,7 @@
                                     TextColor="White" 
                                     Clicked="OnCompletedButtonClicked" 
                                     CommandParameter="{Binding .}" 
-                                    FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="10" Padding="5">
+                                    FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="10" Padding="5">      
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Setter Property="BackgroundColor" Value="Gray" />
@@ -102,15 +102,22 @@
                                             <Setter Property="Text" Value="Не доступно" />
 
                                             <Style.Triggers>
-                                                <!-- Если статус NotRecorded (1) - САЛАТОВАЯ "Изменить" -->
+                                                <!-- Если статус NotRecorded (1) -->
                                                 <DataTrigger TargetType="Button" Binding="{Binding Status}" Value="1">
                                                     <Setter Property="BackgroundColor" Value="Blue" />
                                                     <Setter Property="IsEnabled" Value="True" />
                                                     <Setter Property="Text" Value="Записать" />
                                                 </DataTrigger>
 
-                                                <!-- Если статус Completed (2) - САЛАТОВАЯ "Изменить" -->
+                                                <!-- Если статус 2 -->
                                                 <DataTrigger TargetType="Button" Binding="{Binding Status}" Value="2">
+                                                    <Setter Property="BackgroundColor" Value="#7CFC00" />
+                                                    <Setter Property="IsEnabled" Value="True" />
+                                                    <Setter Property="Text" Value="Изменить" />
+                                                </DataTrigger>
+
+                                                <!-- Если статус 3 -->
+                                                <DataTrigger TargetType="Button" Binding="{Binding Status}" Value="3">
                                                     <Setter Property="BackgroundColor" Value="#7CFC00" />
                                                     <Setter Property="IsEnabled" Value="True" />
                                                     <Setter Property="Text" Value="Изменить" />

@@ -70,7 +70,13 @@ namespace AppInCube.Classes.SQLite.Maked
             return _database.Table<SQLliteTableDopInfoMake>().Where(d => d.IdMakeProgram == programId).ToListAsync();
         }
 
-
+        // Получение конкретного дня программы по ID программы и номеру дня
+        public Task<SQLliteTableDopInfoMake> GetDopInfoByProgramIdAndDayAsync(uint programId, byte day)
+        {
+            return _database.Table<SQLliteTableDopInfoMake>()
+                .Where(d => d.IdMakeProgram == programId && d.Day == day)
+                .FirstOrDefaultAsync();
+        }
         // Удаление программы по ID
         public async Task<int> DeleteProgramAsync(uint id)
         {

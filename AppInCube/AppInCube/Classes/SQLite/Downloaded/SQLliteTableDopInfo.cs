@@ -10,7 +10,7 @@ namespace AppInCube.Classes.SQLite.Downloaded
 {
     public class SQLliteTableDopInfo
     {
-        [PrimaryKey]
+        //[PrimaryKey]
         public uint IdProgram { get; set; }
         public byte Day { get; set; }
         public float MinTemperature { get; set; }

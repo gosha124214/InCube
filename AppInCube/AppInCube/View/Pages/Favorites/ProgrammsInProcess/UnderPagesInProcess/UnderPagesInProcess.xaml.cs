@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using AppInCube.Classes.SQLite.Partyes;
+using SQLite;
 
 namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 {
@@ -20,6 +21,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
             InitializeComponent();
 
             BindingContext = party;
+
 
             // Инициализация времени
             partyStartTime = party.DateTimeValue;
@@ -98,13 +100,9 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                // Создаем новую коллекцию для принудительного обновления
-                var tempList = new ObservableCollection<SQLliteTableDopInfoParty>(dopInfoList);
+                // Просто обновляем ItemsSource
                 DopInfoPartyCollectionView.ItemsSource = null;
-                DopInfoPartyCollectionView.ItemsSource = tempList;
-
-                // Альтернативный способ - принудительное обновление через Binding
-                OnPropertyChanged(nameof(DopInfoParty));
+                DopInfoPartyCollectionView.ItemsSource = dopInfoList;
             });
         }
 
@@ -126,7 +124,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 return true;
             });
         }
-       
+
 
         private async void OnSaveRecordClicked(object sender, EventArgs e)
         {
@@ -135,6 +133,12 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
             try
             {
+                // ВАЛИДАЦИЯ ДАННЫХ ПЕРЕД СОХРАНЕНИЕМ
+                if (!ValidateInputData())
+                {
+                    return; // Если валидация не пройдена, выходим из метода
+                }
+
                 // Находим индекс выбранного дня
                 var dayIndex = dopInfoList.ToList().FindIndex(d => d.Day == selectedDayForRecording.Day);
                 if (dayIndex == -1)
@@ -143,7 +147,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                     return;
                 }
 
-                // Обновляем данные
+                // Получаем новые данные из формы
                 var dayToUpdate = dopInfoList[dayIndex];
                 dayToUpdate.MinTemperature = ParseFloat(MinTempEntry.Text);
                 dayToUpdate.MaxTemperature = ParseFloat(MaxTempEntry.Text);
@@ -155,10 +159,24 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 dayToUpdate.MinTimeCooling = ParseTimeSpan(MinCoolingTimeEntry.Text);
                 dayToUpdate.MaxTimeCooling = ParseTimeSpan(MaxCoolingTimeEntry.Text);
 
+                // СРАВНИВАЕМ данные с программой (скачанной или созданной) - с учетом диапазонов
+                bool dataMatches = await CompareWithProgramData(dayToUpdate);
+
                 // Обновляем состояние
                 dayToUpdate.IsCompleted = true;
                 dayToUpdate.IsNotCompleted = false;
-                dayToUpdate.Status = DayStatus.Completed; // Устанавливаем статус "Выполнено"
+
+                // Устанавливаем статус в зависимости от соответствия программе
+                if (dataMatches)
+                {
+                    dayToUpdate.Status = DayStatus.Completed; // "Выполнено" - данные соответствуют программе
+                }
+                else
+                {
+                    dayToUpdate.Status = DayStatus.Available; // "Не выполнено" - данные отклоняются от программы
+                }
+
+                // Обновляем UI
                 RefreshCollectionView();
 
                 // Сохраняем в базу данных
@@ -167,9 +185,12 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 // Скрываем форму
                 AddRecordFrame.IsVisible = false;
 
-
                 // Показываем сообщение об успехе
-                await DisplayAlert("Успех", $"Данные для дня {selectedDayForRecording.Day} обновлены!", "OK");
+                string message = dataMatches
+                    ? $"Данные для дня {selectedDayForRecording.Day} сохранены (соответствуют программе)!"
+                    : $"Данные для дня {selectedDayForRecording.Day} сохранены (с отклонениями от программы)!";
+
+                await DisplayAlert("Успех", message, "OK");
 
                 selectedDayForRecording = null;
 
@@ -178,6 +199,238 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
             {
                 await DisplayAlert("Ошибка", $"Не удалось обновить данные: {ex.Message}", "OK");
             }
+        }
+
+        // МЕТОД ВАЛИДАЦИИ ВВОДНЫХ ДАННЫХ
+        private bool ValidateInputData()
+        {
+            // Проверка температур
+            float minTemp = ParseFloat(MinTempEntry.Text);
+            float maxTemp = ParseFloat(MaxTempEntry.Text);
+
+            if (minTemp > maxTemp)
+            {
+                DisplayAlert("Ошибка", "Минимальная температура не может быть выше максимальной", "OK");
+                return false;
+            }
+
+            if (minTemp < 0 || maxTemp < 0)
+            {
+                DisplayAlert("Ошибка", "Температура должна быть положительной", "OK");
+                return false;
+            }
+
+            // Проверка влажности
+            int minHumidity = ParseInt(MinHumidityEntry.Text);
+            int maxHumidity = ParseInt(MaxHumidityEntry.Text);
+
+            if (minHumidity > maxHumidity)
+            {
+                DisplayAlert("Ошибка", "Минимальная влажность не может быть выше максимальной", "OK");
+                return false;
+            }
+
+            if (minHumidity < 0 || maxHumidity < 0 || minHumidity > 100 || maxHumidity > 100)
+            {
+                DisplayAlert("Ошибка", "Влажность должна быть в диапазоне от 0 до 100%", "OK");
+                return false;
+            }
+
+            // Проверка поворотов
+            byte? minTurn = ParseNullableByte(MinTurnEntry.Text);
+            byte? maxTurn = ParseNullableByte(MaxTurnEntry.Text);
+
+            if (minTurn.HasValue && maxTurn.HasValue && minTurn > maxTurn)
+            {
+                DisplayAlert("Ошибка", "Минимальное количество поворотов не может быть больше максимального", "OK");
+                return false;
+            }
+
+            // Проверка времени охлаждения
+            TimeSpan? minCoolingTime = ParseTimeSpan(MinCoolingTimeEntry.Text);
+            TimeSpan? maxCoolingTime = ParseTimeSpan(MaxCoolingTimeEntry.Text);
+
+            if (minCoolingTime.HasValue && maxCoolingTime.HasValue && minCoolingTime > maxCoolingTime)
+            {
+                DisplayAlert("Ошибка", "Минимальное время охлаждения не может быть больше максимального", "OK");
+                return false;
+            }
+
+            // Проверка на отрицательное время
+            if (minCoolingTime.HasValue && minCoolingTime.Value.TotalMinutes < 0)
+            {
+                DisplayAlert("Ошибка", "Время охлаждения не может быть отрицательным", "OK");
+                return false;
+            }
+
+            return true;
+        }
+
+        // ОБНОВЛЕННЫЙ МЕТОД ДЛЯ СРАВНЕНИЯ ДАННЫХ С ПРОГРАММОЙ С УЧЕТОМ ДИАПАЗОНОВ
+        private async Task<bool> CompareWithProgramData(SQLliteTableDopInfoParty dayData)
+        {
+            var party = BindingContext as SQLliteTableParty;
+            if (party == null)
+                return false;
+
+            // Определяем тип программы по заполненным ID
+            if (party.IdMake.HasValue)
+            {
+                // Программа создана - используем IdMake
+                return await CompareWithMakedProgram(party.IdMake.Value, dayData);
+            }
+            else if (party.IdProgramInMySQL.HasValue)
+            {
+                // Программа скачана - используем IdProgramInMySQL
+                return await CompareWithDownloadedProgram(party.IdProgramInMySQL.Value, dayData);
+            }
+
+            // Если ни одно ID не заполнено - не можем сравнить
+            Console.WriteLine("Не удалось определить тип программы: IdMake и IdProgramInMySQL не заполнены");
+            return false;
+        }
+
+        // СУПЕР-ОПТИМИЗИРОВАННОЕ СРАВНЕНИЕ С СОЗДАННОЙ ПРОГРАММОЙ
+        private async Task<bool> CompareWithMakedProgram(uint idMake, SQLliteTableDopInfoParty dayData)
+        {
+            try
+            {
+                // Используем оптимизированный метод для получения одного дня
+                var specificDay = await App.DatabaseMakePrograms.GetDopInfoByProgramIdAndDayAsync(idMake, dayData.Day);
+
+                if (specificDay == null)
+                {
+                    Console.WriteLine($"Не найден день {dayData.Day} в созданной программе с IdMakeProgram = {idMake}");
+                    return false;
+                }
+
+                // Сравниваем с учетом допустимых диапазонов
+                bool temperatureMatches = IsInTemperatureRange(specificDay, dayData);
+                bool humidityMatches = IsInHumidityRange(specificDay, dayData);
+                bool turnsMatch = IsInTurnsRange(specificDay, dayData);
+                bool coolingMatches = specificDay.АmountCooling == dayData.АmountCooling;
+                bool timeMatches = IsInTimeRange(specificDay, dayData);
+
+                bool allMatches = temperatureMatches && humidityMatches && turnsMatch && coolingMatches && timeMatches;
+
+                Console.WriteLine($"Сравнение с созданной программой (День {dayData.Day}): {allMatches}");
+
+                return allMatches;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при сравнении с созданной программой: {ex.Message}");
+                return false;
+            }
+        }
+
+        // СУПЕР-ОПТИМИЗИРОВАННОЕ СРАВНЕНИЕ СО СКАЧАННОЙ ПРОГРАММОЙ
+        private async Task<bool> CompareWithDownloadedProgram(uint idProgram, SQLliteTableDopInfoParty dayData)
+        {
+            try
+            {
+                // Используем оптимизированный метод для получения одного дня
+                var specificDay = await App.DatabaseProgram.GetDopInfoByProgramIdAndDayAsync(idProgram, dayData.Day);
+
+                if (specificDay == null)
+                {
+                    Console.WriteLine($"Не найден день {dayData.Day} в скачанной программе с IdProgram = {idProgram}");
+                    return false;
+                }
+
+                // Сравниваем с учетом допустимых диапазонов
+                bool temperatureMatches = IsInTemperatureRange(specificDay, dayData);
+                bool humidityMatches = IsInHumidityRange(specificDay, dayData);
+                bool turnsMatch = IsInTurnsRange(specificDay, dayData);
+                bool coolingMatches = specificDay.АmountCooling == dayData.АmountCooling;
+                bool timeMatches = IsInTimeRange(specificDay, dayData);
+
+                bool allMatches = temperatureMatches && humidityMatches && turnsMatch && coolingMatches && timeMatches;
+
+                Console.WriteLine($"Сравнение со скачанной программой (День {dayData.Day}): {allMatches}");
+
+                return allMatches;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при сравнении со скачанной программой: {ex.Message}");
+                return false;
+            }
+        }
+
+        // МЕТОДЫ ДЛЯ ПРОВЕРКИ ДИАПАЗОНОВ
+
+        // Проверка температуры: факт должен быть в диапазоне мин-макс программы
+        private bool IsInTemperatureRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
+        {
+            return actualDay.MinTemperature >= programDay.MinTemperature &&
+                   actualDay.MaxTemperature <= programDay.MaxTemperature;
+        }
+
+        // Проверка влажности: факт должен быть в диапазоне мин-макс программы
+        private bool IsInHumidityRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
+        {
+            return actualDay.MinHumidity >= programDay.MinHumidity &&
+                   actualDay.MaxHumidity <= programDay.MaxHumidity;
+        }
+
+        // Проверка поворотов: факт должен быть в диапазоне мин-макс программы
+        private bool IsInTurnsRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
+        {
+            // Получаем значения как nullable
+            byte? programMinTurn = programDay.MinАmountTurn;
+            byte? programMaxTurn = programDay.MaxАmountTurn;
+
+            // Если в программе не указаны повороты, считаем что любые значения подходят
+            if (!programMinTurn.HasValue && !programMaxTurn.HasValue)
+                return true;
+
+            // Если указан только минимальный поворот
+            if (programMinTurn.HasValue && !programMaxTurn.HasValue)
+                return (actualDay.MinАmountTurn ?? 0) >= programMinTurn.Value &&
+                       (actualDay.MaxАmountTurn ?? 0) >= programMinTurn.Value;
+
+            // Если указан только максимальный поворот
+            if (!programMinTurn.HasValue && programMaxTurn.HasValue)
+                return (actualDay.MinАmountTurn ?? 0) <= programMaxTurn.Value &&
+                       (actualDay.MaxАmountTurn ?? 0) <= programMaxTurn.Value;
+
+            // Если указаны оба предела
+            return (actualDay.MinАmountTurn ?? 0) >= programMinTurn.Value &&
+                   (actualDay.MaxАmountTurn ?? 0) <= programMaxTurn.Value;
+        }
+
+        // Проверка времени охлаждения: факт должен быть в диапазоне мин-макс программы
+        private bool IsInTimeRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
+        {
+            // Получаем значения как nullable
+            TimeSpan? programMinTime = programDay.MinTimeCooling;
+            TimeSpan? programMaxTime = programDay.MaxTimeCooling;
+
+            // Если в программе не указано время охлаждения, считаем что любые значения подходят
+            if (!programMinTime.HasValue && !programMaxTime.HasValue)
+                return true;
+
+            // Если указано только минимальное время
+            if (programMinTime.HasValue && !programMaxTime.HasValue)
+                return (actualDay.MinTimeCooling ?? TimeSpan.Zero) >= programMinTime.Value &&
+                       (actualDay.MaxTimeCooling ?? TimeSpan.Zero) >= programMinTime.Value;
+
+            // Если указано только максимальное время
+            if (!programMinTime.HasValue && programMaxTime.HasValue)
+                return (actualDay.MinTimeCooling ?? TimeSpan.Zero) <= programMaxTime.Value &&
+                       (actualDay.MaxTimeCooling ?? TimeSpan.Zero) <= programMaxTime.Value;
+
+            // Если указаны оба предела
+            return (actualDay.MinTimeCooling ?? TimeSpan.Zero) >= programMinTime.Value &&
+                   (actualDay.MaxTimeCooling ?? TimeSpan.Zero) <= programMaxTime.Value;
+        }
+
+
+        // Вспомогательный метод для сравнения float с допуском (оставлен для других случаев)
+        private bool CompareFloatsWithTolerance(float expected, float actual, float tolerance = 0.01f)
+        {
+            return Math.Abs(expected - actual) <= tolerance;
         }
 
         private async Task UpdatePartyInDatabase()

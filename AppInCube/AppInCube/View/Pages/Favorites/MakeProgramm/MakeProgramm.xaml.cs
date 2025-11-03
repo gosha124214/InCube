@@ -84,6 +84,7 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
             {
                 IdProgramInMySQL = program.IdProgramInMySQL,
                 IdBirdInMySQL = program.IdBirdInMySQL,
+                IdMake = program.IdMakeProgram,
                 DateTimeValue = DateTime.Now, // Устанавливаем текущее время
                 ImageBirdFile = program.ImageBirdFile,
                 DopInfoParty = new List<SQLliteTableDopInfoParty>() // Инициализируем список

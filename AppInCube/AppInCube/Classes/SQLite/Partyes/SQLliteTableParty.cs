@@ -10,10 +10,10 @@ namespace AppInCube.Classes.SQLite.Partyes
         [PrimaryKey, AutoIncrement]
         public uint IdParty { get; set; }
 
-        public uint? IdBirdInMySQL { get; set; } //НУЖНО ?
-        public uint? IdProgramInMySQL { get; set; }//НУЖНО ?
+        public uint? IdBirdInMySQL { get; set; } 
+        public uint? IdProgramInMySQL { get; set; }
 
-        public uint? IdMake { get; set; }//НУЖНО ?
+        public uint? IdMake { get; set; }
         public byte[] ImageBirdFile { get; set; } // Массив байтов для хранения изображения
                                                   // Вычисляемое свойство для получения ImageSource
         public ImageSource ImageSource => ByteArrayToImageSource(ImageBirdFile);
