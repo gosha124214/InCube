@@ -128,7 +128,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
         private async void OnSaveRecordClicked(object sender, EventArgs e)
         {
-            if (selectedDayForRecording == null)
+             if (selectedDayForRecording == null)
                 return;
 
             try
@@ -308,7 +308,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 bool temperatureMatches = IsInTemperatureRange(specificDay, dayData);
                 bool humidityMatches = IsInHumidityRange(specificDay, dayData);
                 bool turnsMatch = IsInTurnsRange(specificDay, dayData);
-                bool coolingMatches = specificDay.АmountCooling == dayData.АmountCooling;
+                bool coolingMatches = (specificDay.АmountCooling ?? 0) == dayData.АmountCooling || specificDay.АmountCooling == dayData.АmountCooling;
                 bool timeMatches = IsInTimeRange(specificDay, dayData);
 
                 bool allMatches = temperatureMatches && humidityMatches && turnsMatch && coolingMatches && timeMatches;
@@ -342,7 +342,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 bool temperatureMatches = IsInTemperatureRange(specificDay, dayData);
                 bool humidityMatches = IsInHumidityRange(specificDay, dayData);
                 bool turnsMatch = IsInTurnsRange(specificDay, dayData);
-                bool coolingMatches = specificDay.АmountCooling == dayData.АmountCooling;
+                bool coolingMatches = (specificDay.АmountCooling ?? 0) == dayData.АmountCooling|| specificDay.АmountCooling == dayData.АmountCooling;
                 bool timeMatches = IsInTimeRange(specificDay, dayData);
 
                 bool allMatches = temperatureMatches && humidityMatches && turnsMatch && coolingMatches && timeMatches;
@@ -381,9 +381,9 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
             byte? programMinTurn = programDay.MinАmountTurn;
             byte? programMaxTurn = programDay.MaxАmountTurn;
 
-            // Если в программе не указаны повороты, считаем что любые значения подходят
+            // Если в программе не указаны повороты
             if (!programMinTurn.HasValue && !programMaxTurn.HasValue)
-                return true;
+                return (actualDay.MinАmountTurn ?? 0) == 0 && (actualDay.MaxАmountTurn ?? 0) == 0;
 
             // Если указан только минимальный поворот
             if (programMinTurn.HasValue && !programMaxTurn.HasValue)
@@ -409,7 +409,8 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
             // Если в программе не указано время охлаждения, считаем что любые значения подходят
             if (!programMinTime.HasValue && !programMaxTime.HasValue)
-                return true;
+                return (actualDay.MinTimeCooling ?? TimeSpan.Zero) == TimeSpan.Zero &&
+                       (actualDay.MaxTimeCooling ?? TimeSpan.Zero) == TimeSpan.Zero;
 
             // Если указано только минимальное время
             if (programMinTime.HasValue && !programMaxTime.HasValue)
