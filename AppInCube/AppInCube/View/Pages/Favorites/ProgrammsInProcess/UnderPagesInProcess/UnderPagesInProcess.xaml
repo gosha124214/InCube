@@ -16,6 +16,7 @@
             <Frame x:Name="MessageFrame" IsVisible="False" BackgroundColor="Green" CornerRadius="5" Padding="10">
                 <Label x:Name="MessageLabel" Text="" TextColor="White"/>
             </Frame>
+
             <!-- Таймеры -->
             <Label x:Name="TimeStartProgramm" FontSize="18" TextColor="Black" />
             <Label x:Name="TotalTimeRemainingLabel" FontSize="18" TextColor="Black" />
@@ -93,7 +94,7 @@
                                     TextColor="White" 
                                     Clicked="OnCompletedButtonClicked" 
                                     CommandParameter="{Binding .}" 
-                                    FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="10" Padding="5">      
+                                    FontSize="9" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="10" Padding="5">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Setter Property="BackgroundColor" Value="Gray" />
@@ -127,7 +128,6 @@
                                 </Button>
 
                                 <!-- Статус с ПРАВИЛЬНЫМИ триггерами на основе Status -->
-                                <!-- Статус с триггерами на основе Status -->
                                 <Label FontSize="9" 
                                    HorizontalOptions="Center" 
                                    VerticalOptions="Center" 
@@ -135,7 +135,6 @@
                                    Padding="5">
                                     <Label.Style>
                                         <Style TargetType="Label">
-                                            <!-- Установите значения по умолчанию здесь -->
                                             <Setter Property="Text" Value="-" />
                                             <Setter Property="BackgroundColor" Value="LightGray" />
                                             <Setter Property="TextColor" Value="DarkGray" />
@@ -178,49 +177,68 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <!-- Форма для добавления записи -->
+            <!-- Форма для добавления записи (ОБНОВЛЕНА) -->
             <Frame x:Name="AddRecordFrame" IsVisible="False" BackgroundColor="LightGray" Padding="10" Margin="0,20,0,0">
                 <StackLayout>
-                    <Label Text="Добавить запись для дня:" FontSize="16" FontAttributes="Bold" />
+                    <Label Text="Добавить запись:" FontSize="16" FontAttributes="Bold" />
 
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="5">
-                        <!-- День -->
+                    <!-- Выбор периода дней -->
+                    <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,Auto" RowDefinitions="Auto" ColumnSpacing="10" RowSpacing="5" VerticalOptions="Center">
+                        <Label Text="Период:" Grid.Column="0" FontSize="12" VerticalOptions="Center"/>
+
+                        <Label x:Name="SelectedDayFromLabel" Text="1" 
+           Grid.Column="1" FontSize="12" FontAttributes="Bold"
+           HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                        <Label Text="до" Grid.Column="2" FontSize="12" VerticalOptions="Center"/>
+
+                        <Label x:Name="SelectedDayToLabel" Text="1" 
+           Grid.Column="3" FontSize="12" FontAttributes="Bold"
+           HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                        <!-- Кнопка для изменения конечного дня -->
+                        <Button Text="..." Grid.Column="4" FontSize="10" Padding="5,0"
+            Clicked="OnChangeEndDayClicked" WidthRequest="30"
+            ToolTipProperties.Text="Изменить конечный день"/>
+
+                        <!-- НОВАЯ КНОПКА: Автопериод -->
+                        <Button Text="Автопериод" Grid.Column="5" FontSize="10" Padding="5,0"
+            Clicked="OnAutoPeriodClicked" WidthRequest="70"/>
+                    </Grid>
+
+                    <Label Text="Автопериод найдет дни с одинаковыми параметрами в исходной программе" 
+                           FontSize="10" TextColor="Gray" Margin="0,5,0,0"/>
+
+                    <!-- Основная форма ввода -->
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" 
+                          ColumnSpacing="10" RowSpacing="5" Margin="0,10,0,0">
                         <Label Text="День:" Grid.Row="0" Grid.Column="0" FontSize="12"/>
                         <Label x:Name="SelectedDayLabel" Text="" Grid.Row="0" Grid.Column="1" FontSize="12" FontAttributes="Bold"/>
 
-                        <!-- Мин.Т -->
                         <Label Text="Мин.Т:" Grid.Row="1" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MinTempEntry" Grid.Row="1" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Мкс.Т -->
                         <Label Text="Мкс.Т:" Grid.Row="2" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MaxTempEntry" Grid.Row="2" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Мин.Вл -->
                         <Label Text="Мин.Вл:" Grid.Row="3" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MinHumidityEntry" Grid.Row="3" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Мкс.Вл -->
                         <Label Text="Мкс.Вл:" Grid.Row="4" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MaxHumidityEntry" Grid.Row="4" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Мин.О -->
                         <Label Text="Мин.О:" Grid.Row="5" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MinTurnEntry" Grid.Row="5" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Мкс.О -->
                         <Label Text="Мкс.О:" Grid.Row="6" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MaxTurnEntry" Grid.Row="6" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Охлаж -->
                         <Label Text="Охлаж:" Grid.Row="7" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="CoolingAmountEntry" Grid.Row="7" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Мин.В -->
                         <Label Text="Мин.В:" Grid.Row="8" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MinCoolingTimeEntry" Grid.Row="8" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
 
-                        <!-- Мкс.В -->
                         <Label Text="Мкс.В:" Grid.Row="9" Grid.Column="0" FontSize="12"/>
                         <Entry x:Name="MaxCoolingTimeEntry" Grid.Row="9" Grid.Column="1" FontSize="12" Keyboard="Numeric"/>
                     </Grid>

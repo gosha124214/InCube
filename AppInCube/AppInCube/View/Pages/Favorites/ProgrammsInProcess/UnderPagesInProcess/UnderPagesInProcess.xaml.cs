@@ -15,13 +15,14 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
         private DateTime partyEndTime;
         private ObservableCollection<SQLliteTableDopInfoParty> dopInfoList;
         private SQLliteTableDopInfoParty selectedDayForRecording;
+        private int selectedDayFrom = 1;
+        private int selectedDayTo = 1;
 
         public UnderPagesInProcess(SQLliteTableParty party)
         {
             InitializeComponent();
 
             BindingContext = party;
-
 
             // Инициализация времени
             partyStartTime = party.DateTimeValue;
@@ -44,8 +45,101 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 TimeStartProgramm.Text = "Партия завершена!";
             }
         }
+        // ОБНОВЛЕННЫЙ МЕТОД ДЛЯ ПОКАЗА ФОРМЫ
+        private async void ShowRecordForm(SQLliteTableDopInfoParty dopInfo)
+        {
+            // Устанавливаем выбранный день
+            SelectedDayLabel.Text = dopInfo.Day.ToString();
 
+            // Заполняем поля значениями по умолчанию
+            MinTempEntry.Text = dopInfo.MinTemperature.ToString();
+            MaxTempEntry.Text = dopInfo.MaxTemperature.ToString();
+            MinHumidityEntry.Text = dopInfo.MinHumidity.ToString();
+            MaxHumidityEntry.Text = dopInfo.MaxHumidity.ToString();
+            MinTurnEntry.Text = dopInfo.MinАmountTurn?.ToString() ?? "";
+            MaxTurnEntry.Text = dopInfo.MaxАmountTurn?.ToString() ?? "";
+            CoolingAmountEntry.Text = dopInfo.АmountCooling?.ToString() ?? "";
+            MinCoolingTimeEntry.Text = dopInfo.MinTimeCooling?.TotalMinutes.ToString("F0") ?? "";
+            MaxCoolingTimeEntry.Text = dopInfo.MaxTimeCooling?.TotalMinutes.ToString("F0") ?? "";
 
+            // Устанавливаем начальный день
+            selectedDayForRecording = dopInfo;
+            selectedDayFrom = dopInfo.Day;
+            selectedDayTo = dopInfo.Day; // Начально конечный день равен начальному
+
+            // Обновляем лейблы
+            SelectedDayFromLabel.Text = selectedDayFrom.ToString();
+            SelectedDayToLabel.Text = selectedDayTo.ToString();
+            SelectedDayLabel.Text = $"День {selectedDayFrom}";
+
+            // Показываем форму
+            AddRecordFrame.IsVisible = true;
+
+            // Автоматически пытаемся определить период
+            //await TryAutoDetectPeriod();
+        }
+        
+        // НОВЫЙ МЕТОД: Попытка автоматического определения периода
+        private async Task OnChangePeriodClicked()
+        {
+            try
+            {
+                int autoDayTo = await FindLastDayWithSameProgramParameters(selectedDayFrom);
+
+                if (autoDayTo > selectedDayFrom)
+                {
+                    // Спрашиваем пользователя, хочет ли он использовать автопериод
+                    bool useAutoPeriod = await DisplayAlert(
+                        "Автопериод",
+                        $"Найдены дни с одинаковыми параметрами в программе: {selectedDayFrom}-{autoDayTo}.\n" +
+                        $"Использовать этот период ({autoDayTo - selectedDayFrom + 1} дней)?",
+                        "Да", "Нет");
+
+                    if (useAutoPeriod)
+                    {
+                        selectedDayTo = autoDayTo;
+                        SelectedDayToLabel.Text = autoDayTo.ToString();
+                        SelectedDayLabel.Text = $"Дни {selectedDayFrom}-{selectedDayTo}";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Игнорируем ошибки при автоопределении
+                Console.WriteLine($"Ошибка при автоопределении периода: {ex.Message}");
+            }
+        }
+        // НОВЫЙ МЕТОД: Кнопка "Автопериод"
+        private async void OnAutoPeriodClicked(object sender, EventArgs e)
+        {
+            if (selectedDayForRecording == null)
+                return;
+
+            try
+            {
+                // Ищем последний день с такими же параметрами в исходной программе
+                int lastSimilarDay = await FindLastDayWithSameProgramParameters(selectedDayFrom);
+
+                if (lastSimilarDay > selectedDayFrom)
+                {
+
+                        selectedDayTo = lastSimilarDay;
+                        SelectedDayToLabel.Text = lastSimilarDay.ToString();
+                        SelectedDayLabel.Text = $"Дни {selectedDayFrom}-{selectedDayTo}";
+
+                }
+                else
+                {
+                    await DisplayAlert("Автопериод",
+                        "Это последний день фазы. Автопериод не нужен.",
+                        "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось определить автопериод: {ex.Message}", "OK");
+            }
+        }
         // ОБНОВЛЕННЫЙ МЕТОД ДЛЯ КНОПКИ
         private async void OnCompletedButtonClicked(object sender, EventArgs e)
         {
@@ -65,7 +159,277 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 ShowRecordForm(dopInfo);
             }
         }
-        
+        // НОВЫЙ МЕТОД: Изменение только конечного дня
+        private async void OnChangeEndDayClicked(object sender, EventArgs e)
+        {
+            if (selectedDayForRecording == null)
+                return;
+
+            try
+            {
+                // Запрашиваем у пользователя только конечный день
+                string result = await DisplayPromptAsync(
+                    "Изменить конечный день",
+                    $"Введите конечный день (сейчас: {selectedDayTo}):\n" +
+                    $"Начальный день: {selectedDayFrom}",
+                    "OK",
+                    "Отмена",
+                    selectedDayTo.ToString(),
+                    3,
+                    Keyboard.Numeric);
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    // Парсим ввод пользователя
+                    if (int.TryParse(result, out int newEndDay))
+                    {
+                        // Проверяем валидность ввода
+                        if (newEndDay >= selectedDayFrom && newEndDay <= dopInfoList.Count)
+                        {
+                            selectedDayTo = newEndDay;
+                            SelectedDayToLabel.Text = newEndDay.ToString();
+
+                            // Обновляем текст в зависимости от того, один день или диапазон
+                            if (selectedDayFrom == selectedDayTo)
+                            {
+                                SelectedDayLabel.Text = $"День {selectedDayFrom}";
+                            }
+                            else
+                            {
+                                SelectedDayLabel.Text = $"Дни {selectedDayFrom}-{selectedDayTo}";
+                            }
+
+                        }
+                        else
+                        {
+                            await DisplayAlert("Ошибка",
+                                $"Конечный день должен быть от {selectedDayFrom} до {dopInfoList.Count}",
+                                "OK");
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Ошибка", "Неверный формат числа", "OK");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось изменить день: {ex.Message}", "OK");
+            }
+        }
+
+
+       
+
+        // НОВЫЙ МЕТОД: Поиск последнего дня с такими же параметрами в исходной программе
+        private async Task<int> FindLastDayWithSameProgramParameters(int startDay)
+        {
+            var party = BindingContext as SQLliteTableParty;
+            if (party == null || dopInfoList == null || startDay < 1 || startDay > dopInfoList.Count)
+                return startDay;
+
+            // Получаем параметры стартового дня из программы
+            var startDayProgramData = await GetProgramDayData(startDay);
+            if (startDayProgramData == null)
+                return startDay;
+
+            int lastSimilarDay = startDay;
+
+            // Проверяем последующие дни
+            for (int day = startDay + 1; day <= dopInfoList.Count; day++)
+            {
+                var nextDayProgramData = await GetProgramDayData(day);
+                if (nextDayProgramData == null)
+                    break;
+
+                // Сравниваем параметры дней в программе
+                if (!ProgramDaysAreEqual(startDayProgramData, nextDayProgramData))
+                {
+                    // Нашли день с отличающимися параметрами в программе
+                    break;
+                }
+
+                lastSimilarDay = day;
+            }
+
+            return lastSimilarDay;
+        }
+
+        // НОВЫЙ МЕТОД: Получение данных дня из программы (созданной или скачанной)
+        private async Task<dynamic> GetProgramDayData(int day)
+        {
+            var party = BindingContext as SQLliteTableParty;
+            if (party == null)
+                return null;
+
+            try
+            {
+                // Преобразуем int в byte для метода
+                byte dayByte = (byte)day;
+
+                if (party.IdMake.HasValue)
+                {
+                    // Программа создана - используем IdMake
+                    return await App.DatabaseMakePrograms.GetDopInfoByProgramIdAndDayAsync(party.IdMake.Value, dayByte);
+                }
+                else if (party.IdProgramInMySQL.HasValue)
+                {
+                    // Программа скачана - используем IdProgramInMySQL
+                    return await App.DatabaseProgram.GetDopInfoByProgramIdAndDayAsync(party.IdProgramInMySQL.Value, dayByte);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при получении данных дня {day} из программы: {ex.Message}");
+            }
+
+            return null;
+        }
+
+        // НОВЫЙ МЕТОД: Сравнение двух дней из программы
+        private bool ProgramDaysAreEqual(dynamic day1, dynamic day2)
+        {
+            if (day1 == null || day2 == null)
+                return false;
+
+            // Сравниваем все параметры программы
+            return day1.MinTemperature == day2.MinTemperature &&
+                   day1.MaxTemperature == day2.MaxTemperature &&
+                   day1.MinHumidity == day2.MinHumidity &&
+                   day1.MaxHumidity == day2.MaxHumidity &&
+                   day1.MinАmountTurn == day2.MinАmountTurn &&
+                   day1.MaxАmountTurn == day2.MaxАmountTurn &&
+                   day1.АmountCooling == day2.АmountCooling &&
+                   day1.MinTimeCooling == day2.MinTimeCooling &&
+                   day1.MaxTimeCooling == day2.MaxTimeCooling;
+        }
+
+
+
+        private async void OnSaveRecordClicked(object sender, EventArgs e)
+        {
+            if (selectedDayForRecording == null)
+                return;
+
+            try
+            {
+                // ВАЛИДАЦИЯ ДАННЫХ ПЕРЕД СОХРАНЕНИЕМ
+                if (!ValidateInputData())
+                {
+                    return; // Если валидация не пройдена, выходим из метода
+                }
+
+                // Спрашиваем подтверждение для периода
+                if (selectedDayFrom != selectedDayTo)
+                {
+                    bool confirm = await DisplayAlert(
+                        "Подтверждение",
+                        $"Вы собираетесь изменить данные для {selectedDayTo - selectedDayFrom + 1} дней " +
+                        $"(с {selectedDayFrom} по {selectedDayTo}). Продолжить?",
+                        "Да", "Нет");
+
+                    if (!confirm) return;
+                }
+                else
+                {
+                    bool confirm = await DisplayAlert(
+                        "Подтверждение",
+                        $"Вы собираетесь изменить данные для дня {selectedDayFrom}. Продолжить?",
+                        "Да", "Нет");
+
+                    if (!confirm) return;
+                }
+
+                // Получаем данные из формы
+                float minTemp = ParseFloat(MinTempEntry.Text);
+                float maxTemp = ParseFloat(MaxTempEntry.Text);
+                int minHumidity = ParseInt(MinHumidityEntry.Text);
+                int maxHumidity = ParseInt(MaxHumidityEntry.Text);
+                byte? minTurn = ParseNullableByte(MinTurnEntry.Text);
+                byte? maxTurn = ParseNullableByte(MaxTurnEntry.Text);
+                byte? coolingAmount = ParseNullableByte(CoolingAmountEntry.Text);
+                TimeSpan? minCoolingTime = ParseTimeSpan(MinCoolingTimeEntry.Text);
+                TimeSpan? maxCoolingTime = ParseTimeSpan(MaxCoolingTimeEntry.Text);
+
+                // Обновляем данные для выбранного диапазона
+                for (int day = selectedDayFrom; day <= selectedDayTo; day++)
+                {
+                    var dayToUpdate = dopInfoList.FirstOrDefault(d => d.Day == day);
+                    if (dayToUpdate != null)
+                    {
+                        // Применяем данные из формы
+                        dayToUpdate.MinTemperature = minTemp;
+                        dayToUpdate.MaxTemperature = maxTemp;
+                        dayToUpdate.MinHumidity = minHumidity;
+                        dayToUpdate.MaxHumidity = maxHumidity;
+                        dayToUpdate.MinАmountTurn = minTurn;
+                        dayToUpdate.MaxАmountTurn = maxTurn;
+                        dayToUpdate.АmountCooling = coolingAmount;
+                        dayToUpdate.MinTimeCooling = minCoolingTime;
+                        dayToUpdate.MaxTimeCooling = maxCoolingTime;
+
+                        // Обновляем статусы
+                        dayToUpdate.IsCompleted = true;
+                        dayToUpdate.IsNotCompleted = false;
+
+                        // Сравниваем с программой
+                        bool dataMatches = await CompareWithProgramData(dayToUpdate);
+                        dayToUpdate.Status = dataMatches ? DayStatus.Completed : DayStatus.Available;
+                    }
+                }
+
+                // Обновляем UI
+                RefreshCollectionView();
+
+                // Сохраняем в базу данных
+                await UpdatePartyInDatabase();
+
+                // Скрываем форму
+                AddRecordFrame.IsVisible = false;
+
+                // Показываем сообщение об успехе
+                string message = selectedDayFrom == selectedDayTo
+                    ? $"Данные для дня {selectedDayFrom} сохранены!"
+                    : $"Данные для дней с {selectedDayFrom} по {selectedDayTo} ({selectedDayTo - selectedDayFrom + 1} дней) сохранены!";
+
+                await DisplayAlert("Успех", message, "OK");
+
+                selectedDayForRecording = null;
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось обновить данные: {ex.Message}", "OK");
+            }
+        }
+
+        private void OnCancelRecordClicked(object sender, EventArgs e)
+        {
+            // Скрываем форму без сохранения
+            AddRecordFrame.IsVisible = false;
+            selectedDayForRecording = null;
+
+            // Очищаем поля формы
+            ClearFormFields();
+        }
+
+        private void ClearFormFields()
+        {
+            MinTempEntry.Text = "";
+            MaxTempEntry.Text = "";
+            MinHumidityEntry.Text = "";
+            MaxHumidityEntry.Text = "";
+            MinTurnEntry.Text = "";
+            MaxTurnEntry.Text = "";
+            CoolingAmountEntry.Text = "";
+            MinCoolingTimeEntry.Text = "";
+            MaxCoolingTimeEntry.Text = "";
+            SelectedDayLabel.Text = "";
+            SelectedDayFromLabel.Text = "1";
+            SelectedDayToLabel.Text = "1";
+        }
+
         // МЕТОД ДЛЯ ОБНОВЛЕНИЯ 
         private void UpdateAllStatuses()
         {
@@ -109,7 +473,6 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
         // Добавьте это свойство для привязки
         public ObservableCollection<SQLliteTableDopInfoParty> DopInfoParty => dopInfoList;
 
-
         private void StartTimers()
         {
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
@@ -119,86 +482,8 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 UpdateEndOfDayTimer();
                 UpdateNextPhaseTimer();
 
-
-
                 return true;
             });
-        }
-
-
-        private async void OnSaveRecordClicked(object sender, EventArgs e)
-        {
-             if (selectedDayForRecording == null)
-                return;
-
-            try
-            {
-                // ВАЛИДАЦИЯ ДАННЫХ ПЕРЕД СОХРАНЕНИЕМ
-                if (!ValidateInputData())
-                {
-                    return; // Если валидация не пройдена, выходим из метода
-                }
-
-                // Находим индекс выбранного дня
-                var dayIndex = dopInfoList.ToList().FindIndex(d => d.Day == selectedDayForRecording.Day);
-                if (dayIndex == -1)
-                {
-                    await DisplayAlert("Ошибка", "Не удалось найти выбранный день в списке", "OK");
-                    return;
-                }
-
-                // Получаем новые данные из формы
-                var dayToUpdate = dopInfoList[dayIndex];
-                dayToUpdate.MinTemperature = ParseFloat(MinTempEntry.Text);
-                dayToUpdate.MaxTemperature = ParseFloat(MaxTempEntry.Text);
-                dayToUpdate.MinHumidity = ParseInt(MinHumidityEntry.Text);
-                dayToUpdate.MaxHumidity = ParseInt(MaxHumidityEntry.Text);
-                dayToUpdate.MinАmountTurn = ParseNullableByte(MinTurnEntry.Text);
-                dayToUpdate.MaxАmountTurn = ParseNullableByte(MaxTurnEntry.Text);
-                dayToUpdate.АmountCooling = ParseNullableByte(CoolingAmountEntry.Text);
-                dayToUpdate.MinTimeCooling = ParseTimeSpan(MinCoolingTimeEntry.Text);
-                dayToUpdate.MaxTimeCooling = ParseTimeSpan(MaxCoolingTimeEntry.Text);
-
-                // СРАВНИВАЕМ данные с программой (скачанной или созданной) - с учетом диапазонов
-                bool dataMatches = await CompareWithProgramData(dayToUpdate);
-
-                // Обновляем состояние
-                dayToUpdate.IsCompleted = true;
-                dayToUpdate.IsNotCompleted = false;
-
-                // Устанавливаем статус в зависимости от соответствия программе
-                if (dataMatches)
-                {
-                    dayToUpdate.Status = DayStatus.Completed; // "Выполнено" - данные соответствуют программе
-                }
-                else
-                {
-                    dayToUpdate.Status = DayStatus.Available; // "Не выполнено" - данные отклоняются от программы
-                }
-
-                // Обновляем UI
-                RefreshCollectionView();
-
-                // Сохраняем в базу данных
-                await UpdatePartyInDatabase();
-
-                // Скрываем форму
-                AddRecordFrame.IsVisible = false;
-
-                // Показываем сообщение об успехе
-                string message = dataMatches
-                    ? $"Данные для дня {selectedDayForRecording.Day} сохранены (соответствуют программе)!"
-                    : $"Данные для дня {selectedDayForRecording.Day} сохранены (с отклонениями от программы)!";
-
-                await DisplayAlert("Успех", message, "OK");
-
-                selectedDayForRecording = null;
-
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Ошибка", $"Не удалось обновить данные: {ex.Message}", "OK");
-            }
         }
 
         // МЕТОД ВАЛИДАЦИИ ВВОДНЫХ ДАННЫХ
@@ -342,7 +627,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 bool temperatureMatches = IsInTemperatureRange(specificDay, dayData);
                 bool humidityMatches = IsInHumidityRange(specificDay, dayData);
                 bool turnsMatch = IsInTurnsRange(specificDay, dayData);
-                bool coolingMatches = (specificDay.АmountCooling ?? 0) == dayData.АmountCooling|| specificDay.АmountCooling == dayData.АmountCooling;
+                bool coolingMatches = (specificDay.АmountCooling ?? 0) == dayData.АmountCooling || specificDay.АmountCooling == dayData.АmountCooling;
                 bool timeMatches = IsInTimeRange(specificDay, dayData);
 
                 bool allMatches = temperatureMatches && humidityMatches && turnsMatch && coolingMatches && timeMatches;
@@ -427,8 +712,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                    (actualDay.MaxTimeCooling ?? TimeSpan.Zero) <= programMaxTime.Value;
         }
 
-
-        // Вспомогательный метод для сравнения float с допуском (оставлен для других случаев)
+        // Вспомогательный метод для сравнения float с допуском
         private bool CompareFloatsWithTolerance(float expected, float actual, float tolerance = 0.01f)
         {
             return Math.Abs(expected - actual) <= tolerance;
@@ -471,9 +755,8 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 TimeStartProgramm.Text = "";
                 return; // Выходим из метода, так как партия завершена
             }
-
-
         }
+
         private void UpdateTimers()
         {
             // Обновляем оставшееся время до завершения партии
@@ -488,8 +771,6 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 TotalTimeRemainingLabel.Text = " ";
                 return; // Выходим из метода, так как партия завершена
             }
-
-
         }
 
         private void UpdateEndOfDayTimer()
@@ -573,57 +854,6 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                    currentDay.MaxTimeCooling != nextDay.MaxTimeCooling;
         }
 
-
-
-        private void ShowRecordForm(SQLliteTableDopInfoParty dopInfo)
-        {
-            // Устанавливаем выбранный день
-            SelectedDayLabel.Text = dopInfo.Day.ToString();
-
-            // Заполняем поля значениями по умолчанию
-            MinTempEntry.Text = dopInfo.MinTemperature.ToString();
-            MaxTempEntry.Text = dopInfo.MaxTemperature.ToString();
-            MinHumidityEntry.Text = dopInfo.MinHumidity.ToString();
-            MaxHumidityEntry.Text = dopInfo.MaxHumidity.ToString();
-            MinTurnEntry.Text = dopInfo.MinАmountTurn?.ToString() ?? "";
-            MaxTurnEntry.Text = dopInfo.MaxАmountTurn?.ToString() ?? "";
-            CoolingAmountEntry.Text = dopInfo.АmountCooling?.ToString() ?? "";
-
-            // Для TimeSpan преобразуем в минуты для удобства ввода
-            MinCoolingTimeEntry.Text = dopInfo.MinTimeCooling?.TotalMinutes.ToString("F0") ?? "";
-            MaxCoolingTimeEntry.Text = dopInfo.MaxTimeCooling?.TotalMinutes.ToString("F0") ?? "";
-
-            // Показываем форму
-            AddRecordFrame.IsVisible = true;
-        }
-        
-
-        private void OnCancelRecordClicked(object sender, EventArgs e)
-
-        
-        {
-            // Скрываем форму без сохранения
-            AddRecordFrame.IsVisible = false;
-            selectedDayForRecording = null;
-    
-            // Опционально: очищаем поля формы
-            ClearFormFields();
-        }
-
-    // Опциональный метод для очистки полей формы
-        private void ClearFormFields()
-        {
-            MinTempEntry.Text = "";
-            MaxTempEntry.Text = "";
-            MinHumidityEntry.Text = "";
-            MaxHumidityEntry.Text = "";
-            MinTurnEntry.Text = "";
-            MaxTurnEntry.Text = "";
-            CoolingAmountEntry.Text = "";
-            MinCoolingTimeEntry.Text = "";
-            MaxCoolingTimeEntry.Text = "";
-            SelectedDayLabel.Text = "";
-        }
         // Вспомогательные методы для парсинга разных типов данных
         private float ParseFloat(string text)
         {
@@ -643,7 +873,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
         {
             if (byte.TryParse(text, out byte result))
                 return result;
-            return null; // Возвращаем null если не удалось распарсить
+            return null;
         }
 
         private TimeSpan? ParseTimeSpan(string text)
@@ -660,7 +890,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 return timeSpan;
             }
 
-            return null; // Возвращаем null если не удалось распарсить
+            return null;
         }
     }
 }

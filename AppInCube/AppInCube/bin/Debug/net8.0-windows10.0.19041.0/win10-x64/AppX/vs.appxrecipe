@@ -30,7 +30,7 @@
     <AppXManifest Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2025-11-09T16:26:10.198</Modified>
+      <Modified>2025-12-03T00:55:58.440</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppInCube.dll">
       <PackagePath>AppInCube.dll</PackagePath>
-      <Modified>2025-11-09T16:26:09.516</Modified>
+      <Modified>2025-12-03T00:55:57.830</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>AppInCube.exe</PackagePath>
-      <Modified>2025-11-09T16:26:09.609</Modified>
+      <Modified>2025-12-03T00:55:57.862</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
