@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" IgnorableNamespaces="uap rescap">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10" IgnorableNamespaces="uap rescap">
   <Identity Name="com.companyname.appincube" Publisher="CN=User Name" Version="1.0.0.1" />
   <mp:PhoneIdentity PhoneProductId="9BFF06DB-E9C2-4B3E-AE47-31D7EA33FFF3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -16,8 +16,9 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$">
-      <uap:VisualElements DisplayName="AppInCube" Description="AppInCube" Square150x150Logo="appiconMediumTile.png" Square44x44Logo="appiconLogo.png" BackgroundColor="transparent">
-        <uap:DefaultTile Square71x71Logo="appiconSmallTile.png" Wide310x150Logo="appiconWideTile.png" Square310x310Logo="appiconLargeTile.png" ShortName="AppInCube">
+      <!-- Пустые логотипы, но все обязательные атрибуты -->
+      <uap:VisualElements DisplayName="AppInCube" Description="Test Application" Square150x150Logo="appiconMediumTile.png" Square44x44Logo="appiconLogo.png" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="appiconWideTile.png" Square71x71Logo="appiconSmallTile.png" Square310x310Logo="appiconLargeTile.png" ShortName="AppInCube">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo" />
             <uap:ShowOn Tile="wide310x150Logo" />
@@ -25,6 +26,22 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="splashSplashScreen.png" />
       </uap:VisualElements>
+      <!-- ВАЖНО: ДОБАВЬТЕ COM сервер ПЕРЕД активатором -->
+      <Extensions>
+        <!-- 1. Сначала COM сервер -->
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer Executable="AppInCube.exe" Arguments="-ToastActivated" DisplayName="Toast activator">
+              <!-- ВАЖНО: Тот же самый GUID! -->
+              <com:Class Id="4747d1be-4c37-4f64-b521-04879ae333b4" DisplayName="ToastNotificationActivator" />
+            </com:ExeServer>
+          </com:ComServer>
+        </com:Extension>
+        <!-- 2. Потом активатор уведомлений -->
+        <desktop:Extension Category="windows.toastNotificationActivation">
+          <desktop:ToastNotificationActivation ToastActivatorCLSID="4747d1be-4c37-4f64-b521-04879ae333b4" />
+        </desktop:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
