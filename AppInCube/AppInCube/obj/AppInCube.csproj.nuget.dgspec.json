@@ -107,6 +107,10 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
+            "Plugin.LocalNotification": {
+              "target": "Package",
+              "version": "[10.1.8, )"
+            },
             "System.Net.Http": {
               "target": "Package",
               "version": "[4.3.4, )"
@@ -200,6 +204,10 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
+            "Plugin.LocalNotification": {
+              "target": "Package",
+              "version": "[10.1.8, )"
+            },
             "System.Net.Http": {
               "target": "Package",
               "version": "[4.3.4, )"
@@ -281,6 +289,10 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
+            "Plugin.LocalNotification": {
+              "target": "Package",
+              "version": "[10.1.8, )"
+            },
             "System.Net.Http": {
               "target": "Package",
               "version": "[4.3.4, )"
@@ -356,6 +368,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "Plugin.LocalNotification": {
+              "target": "Package",
+              "version": "[10.1.8, )"
             },
             "System.Net.Http": {
               "target": "Package",

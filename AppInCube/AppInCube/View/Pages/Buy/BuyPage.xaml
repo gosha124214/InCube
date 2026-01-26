@@ -1,13 +1,248 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:services="clr-namespace:AppInCube.Services"
              x:Class="AppInCube.View.Pages.Buy.BuyPage"
-             Title="Покупки"
+             Title="Управление уведомлениями"
              NavigationPage.HasNavigationBar="False">
-    <VerticalStackLayout>
-        <Button
-    Text="Click me" 
-    Grid.Row="1"
-    Grid.Column="1"/>
-    </VerticalStackLayout>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*" 
+              RowSpacing="15" 
+              Padding="20">
+
+            <!-- Заголовок -->
+            <Label Grid.Row="0" 
+                   Text="📅 Создание уведомления" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" 
+                   Margin="0,0,0,10"/>
+
+            <!-- Индикатор загрузки разрешений -->
+            <Frame Grid.Row="1"
+                   IsVisible="False"
+                   x:Name="LoadingIndicator"
+                   BackgroundColor="#E3F2FD"
+                   Padding="10"
+                   HorizontalOptions="Fill"
+                   Margin="0,0,0,10">
+                <HorizontalStackLayout Spacing="10">
+                    <ActivityIndicator IsRunning="True" Color="#2196F3"/>
+                    <Label Text="Проверка разрешений..." 
+                           FontSize="14"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Frame>
+
+            <!-- Ввод названия -->
+            <VerticalStackLayout Grid.Row="2" Spacing="5">
+                <Label Text="Название:" FontSize="16"/>
+                <Entry x:Name="TitleEntry" 
+                       Placeholder="Например: Купить молоко"
+                       Text=""
+                       FontSize="16"
+                       HeightRequest="45"/>
+            </VerticalStackLayout>
+
+            <!-- Ввод сообщения -->
+            <VerticalStackLayout Grid.Row="3" Spacing="5">
+                <Label Text="Сообщение:" FontSize="16"/>
+                <Entry x:Name="MessageEntry" 
+                       Placeholder="Текст уведомления"
+                       Text=""
+                       FontSize="16"
+                       HeightRequest="45"/>
+            </VerticalStackLayout>
+
+            <!-- Выбор даты и времени -->
+            <Grid Grid.Row="4" 
+                  ColumnDefinitions="*,*" 
+                  ColumnSpacing="10">
+
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Дата:" FontSize="16"/>
+                    <DatePicker x:Name="DatePicker" 
+                                Date="{x:Static sys:DateTime.Today}"
+                                Format="dd.MM.yyyy"
+                                FontSize="16"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                    <Label Text="Время:" FontSize="16"/>
+                    <TimePicker x:Name="TimePicker" 
+                                Time="09:00"
+                                Format="HH:mm"
+                                FontSize="16"/>
+                </VerticalStackLayout>
+
+            </Grid>
+
+            <!-- Кнопки управления -->
+            <Grid Grid.Row="5" 
+                  ColumnDefinitions="*,*,*,*"  
+                ColumnSpacing="10">
+
+                <Button x:Name="AddButton"
+                        Grid.Column="0" 
+                        Text="✅ Добавить" 
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Clicked="OnAddNotificationClicked"/>
+
+                <Button Grid.Column="1" 
+                        Text="🗑️ Очистить все" 
+                        BackgroundColor="#F44336"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Clicked="OnClearAllClicked"/>
+
+                <Button Grid.Column="2" 
+                        Text="⚡ Тест" 
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Clicked="OnTestNotificationClicked"/>
+
+                <Button Grid.Column="3" 
+                        Text="🔧 Разрешения" 
+                        BackgroundColor="#FF9800"
+                        TextColor="White"
+                        FontSize="12"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Clicked="OnCheckPermissionsClicked"/>
+
+            </Grid>
+
+            <!-- Индикатор добавления уведомления -->
+            <ActivityIndicator Grid.Row="5"
+                               x:Name="AddingIndicator"
+                               IsRunning="False"
+                               IsVisible="False"
+                               Color="#4CAF50"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+
+            <!-- Список уведомлений -->
+            <VerticalStackLayout Grid.Row="6" Spacing="10">
+                <Label Text="📋 Запланированные уведомления:" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       Margin="0,20,0,10"/>
+
+                <!-- Таблица уведомлений -->
+                <CollectionView x:Name="NotificationsListView"
+                                VerticalOptions="Start"
+                                HeightRequest="300">
+
+                    <CollectionView.Header>
+                        <!-- Заголовок таблицы -->
+                        <Grid ColumnDefinitions="3*,4*,2*,2*" 
+                              BackgroundColor="#E3F2FD"
+                              Padding="10"
+                              HeightRequest="40">
+                            <Label Grid.Column="0" Text="Название" FontAttributes="Bold" FontSize="14"/>
+                            <Label Grid.Column="1" Text="Сообщение" FontAttributes="Bold" FontSize="14"/>
+                            <Label Grid.Column="2" Text="Время" FontAttributes="Bold" FontSize="14"/>
+                            <Label Grid.Column="3" Text="Статус" FontAttributes="Bold" FontSize="14"/>
+                        </Grid>
+                    </CollectionView.Header>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="services:MessageModel">
+                            <Grid ColumnDefinitions="3*,4*,2*,2*" 
+                                  Padding="10"
+                                  BackgroundColor="#FAFAFA"
+                                  Margin="0,0,0,1"
+                                  HeightRequest="50">
+
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Title}" 
+                                       FontSize="14"
+                                       LineBreakMode="TailTruncation"/>
+
+                                <Label Grid.Column="1" 
+                                       Text="{Binding Message}" 
+                                       FontSize="14"
+                                       TextColor="#666"
+                                       LineBreakMode="TailTruncation"/>
+
+                                <Label Grid.Column="2" 
+                                       Text="{Binding ScheduleTime, StringFormat='{0:HH:mm}'}"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="#2196F3"/>
+
+                                <Grid Grid.Column="3"
+                                      ColumnDefinitions="*,Auto">
+                                    <Label 
+                                       Text="{Binding TimeLeft}"
+                                       FontSize="12"
+                                       TextColor="#666"
+                                       VerticalOptions="Center"/>
+
+                                    <Button Grid.Column="1"
+                                            Text="❌" 
+                                            BackgroundColor="Transparent"
+                                            TextColor="#F44336"
+                                            FontSize="12"
+                                            WidthRequest="30"
+                                            HeightRequest="30"
+                                            Clicked="OnDeleteNotificationClicked"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout HorizontalOptions="Center" 
+                                             VerticalOptions="Center"
+                                             Spacing="20"
+                                             Padding="40">
+                            <Label Text="📭" 
+                                   FontSize="48"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Нет запланированных уведомлений" 
+                                   FontSize="16"
+                                   TextColor="#666"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+
+                <!-- Статистика -->
+                <Grid ColumnDefinitions="*,*" 
+                      Margin="0,20,0,0"
+                      Padding="10"
+                      BackgroundColor="#E8F5E9"
+                      HeightRequest="40">
+                    <Label x:Name="TotalCountLabel"
+                           Grid.Column="0" 
+                           Text="Всего: 0"
+                           FontSize="14"
+                           FontAttributes="Bold"/>
+                    <Label x:Name="NextTimeLabel"
+                           Grid.Column="1" 
+                           Text="Следующее: --:--"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           HorizontalOptions="End"/>
+                </Grid>
+
+            </VerticalStackLayout>
+
+        </Grid>
+    </ScrollView>
+
 </ContentPage>
