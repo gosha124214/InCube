@@ -237,8 +237,7 @@
               "RelativeToolTip": "AppInCube\\Services\\MyNotificationService.cs",
               "ViewState": "AgIAADMAAAAAAAAAAAAswEMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T21:38:49.125Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-26T21:38:49.125Z"
             },
             {
               "$type": "Document",
@@ -250,8 +249,7 @@
               "RelativeToolTip": "AppInCube\\Services\\IMyNotificationService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T21:37:53.31Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-26T21:37:53.31Z"
             },
             {
               "$type": "Document",
@@ -263,8 +261,7 @@
               "RelativeToolTip": "AppInCube\\Platforms\\Android\\BootCompleteReceiver.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAC8AAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T21:20:41.324Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-26T21:20:41.324Z"
             },
             {
               "$type": "Document",
@@ -276,8 +273,7 @@
               "RelativeToolTip": "AppInCube\\Platforms\\Android\\AndroidManifest.xml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
-              "WhenOpened": "2026-01-26T21:10:48.986Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-26T21:10:48.986Z"
             },
             {
               "$type": "Document",
@@ -289,8 +285,7 @@
               "RelativeToolTip": "AppInCube\\Services\\MessageModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T20:50:08.07Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-26T20:50:08.07Z"
             },
             {
               "$type": "Document",
@@ -302,8 +297,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Buy\\BuyPage.xaml",
               "ViewState": "AgIAAMYAAAAAAAAAAAAwwPcAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-01-26T20:36:42.793Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-26T20:36:42.793Z"
             },
             {
               "$type": "Document",
@@ -394,8 +388,7 @@
               "RelativeToolTip": "AppInCube\\MauiProgram.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-29T15:18:46.586Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-29T15:18:46.586Z"
             },
             {
               "$type": "Document",
@@ -407,8 +400,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLBD\\ApiService.cs",
               "ViewState": "AgIAAGsAAAAAAAAAAAAjwJ8AAABSAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T13:05:05.906Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T13:05:05.906Z"
             },
             {
               "$type": "Document",
@@ -420,8 +412,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\DownloadedProgramms\\DownloadedProgrammsPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-21T12:16:18.381Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T12:16:18.381Z"
             },
             {
               "$type": "Document",
@@ -433,8 +424,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\DownloadedProgramms\\DownloadedProgrammsPage.xaml.cs",
               "ViewState": "AgIAADEAAAAAAAAAAIBJwGEAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T11:59:01.885Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T11:59:01.885Z"
             },
             {
               "$type": "Document",
@@ -446,8 +436,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Programs\\UnderPages\\ProgramDetailPage.xaml.cs",
               "ViewState": "AgIAACkAAAAAAAAAAAAQwFUAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:47:22.393Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:47:22.393Z"
             },
             {
               "$type": "Document",
@@ -459,8 +448,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Programs\\UnderPages\\ProgramDetailPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-21T10:47:04.295Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:47:04.295Z"
             },
             {
               "$type": "Document",
@@ -472,8 +460,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Programs\\ProgramsPage.xaml.cs",
               "ViewState": "AgIAADoAAAAAAAAAAAAcwEwAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:46:57.257Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:46:57.257Z"
             },
             {
               "$type": "Document",
@@ -485,8 +472,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Programs\\ProgramsPage.xaml",
               "ViewState": "AgIAABIAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-21T10:46:56.041Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:46:56.041Z"
             },
             {
               "$type": "Document",
@@ -498,8 +484,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Downloaded\\SQLliteTableBaseInfo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:43:38.799Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:43:38.799Z"
             },
             {
               "$type": "Document",
@@ -511,8 +496,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Downloaded\\MenegerSQLlite.cs",
               "ViewState": "AgIAAHMAAAAAAAAAAAAUwIgAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:43:38.066Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:43:38.066Z"
             },
             {
               "$type": "Document",
@@ -524,8 +508,7 @@
               "RelativeToolTip": "AppInCube\\AppShell.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-21T10:37:33.195Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:37:33.195Z"
             },
             {
               "$type": "Document",
@@ -537,8 +520,7 @@
               "RelativeToolTip": "AppInCube\\App.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-21T10:37:32.256Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:37:32.256Z"
             },
             {
               "$type": "Document",
@@ -550,8 +532,7 @@
               "RelativeToolTip": "AppInCube\\MyPlaneWorks.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:37:24.591Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:37:24.591Z"
             },
             {
               "$type": "Document",
@@ -563,8 +544,7 @@
               "RelativeToolTip": "AppInCube\\App.xaml.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAqwA0AAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:37:22.29Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:37:22.29Z"
             },
             {
               "$type": "Document",
@@ -576,8 +556,7 @@
               "RelativeToolTip": "AppInCube\\AppShell.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:37:20.117Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:37:20.117Z"
             },
             {
               "$type": "Document",
@@ -589,8 +568,7 @@
               "RelativeToolTip": "AppInCube\\MainPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:37:19.166Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:37:19.166Z"
             },
             {
               "$type": "Document",
@@ -602,8 +580,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\StringMessages.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:26:40.061Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:26:40.061Z"
             },
             {
               "$type": "Document",
@@ -615,8 +592,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\MetodsGet.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:26:39.579Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:26:39.579Z"
             },
             {
               "$type": "Document",
@@ -628,8 +604,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\MetodMetodsGet.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:26:39.04Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:26:39.04Z"
             },
             {
               "$type": "Document",
@@ -641,8 +616,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Partyes\\SQLliteTableParty.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwBcAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:26:26.392Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:26:26.392Z"
             },
             {
               "$type": "Document",
@@ -654,8 +628,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Partyes\\SQLliteTableDopInfoParty.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAqwBgAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:26:21.283Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:26:21.283Z"
             },
             {
               "$type": "Document",
@@ -667,8 +640,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Partyes\\MenegerSQLliteParty.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAkwBsAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-21T10:26:18.532Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-21T10:26:18.532Z"
             },
             {
               "$type": "Document",
@@ -680,8 +652,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\ProgrammsInProcess\\UnderPagesInProcess\\UnderPagesInProcess.xaml",
               "ViewState": "AgIAADwAAAAAAAAAAAAcwFcAAABqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-11T20:35:42.376Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-11T20:35:42.376Z"
             },
             {
               "$type": "Document",
@@ -693,8 +664,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\ProgrammsInProcess\\UnderPagesInProcess\\UnderPagesInProcess.xaml.cs",
               "ViewState": "AgIAAG4AAAAAAAAAAAAawIIAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T20:35:41.216Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-11T20:35:41.216Z"
             },
             {
               "$type": "Document",
@@ -706,8 +676,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\ProgrammsInProcess\\ProgrammsInProcess.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-11T20:32:09.393Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-11T20:32:09.393Z"
             },
             {
               "$type": "Document",
@@ -719,8 +688,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\ProgrammsInProcess\\ProgrammsInProcess.xaml.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAUwDAAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-11T20:32:02.85Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-11T20:32:02.85Z"
             },
             {
               "$type": "Document",
@@ -732,8 +700,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\MakeProgramm\\UnderPagesInMakeProgramm\\ProgramDetailPageMake.xaml",
               "ViewState": "AgIAACkAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-11T20:30:14.823Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-11T20:30:14.823Z"
             },
             {
               "$type": "Document",
@@ -745,8 +712,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\MakeProgramm\\MakeProgramm.xaml.cs",
               "ViewState": "AgIAADoAAAAAAAAAAAAkwF0AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T01:34:55.981Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-10T01:34:55.981Z"
             },
             {
               "$type": "Document",
@@ -758,8 +724,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Downloaded\\SQLliteTableDopInfo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T10:40:50.133Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-10T10:40:50.133Z"
             },
             {
               "$type": "Document",
@@ -769,8 +734,7 @@
               "ToolTip": "C:\\Users\\\u0413\u0430\u0448\u0438\u043A\\AppData\\Local\\Temp\\.vsdbgsrc\\15d302917d650a0c54bd3ac7182ba90d4adddd9a\\View_Pages_Favorites_MakeProgramm_UnderPagesInMakeProgramm_ProgramDetailPageMake.xaml.sg.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T10:36:26.641Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-10T10:36:26.641Z"
             },
             {
               "$type": "Document",
@@ -782,8 +746,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLBD\\TableProgram.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T01:39:11.788Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-10T01:39:11.788Z"
             },
             {
               "$type": "Document",
@@ -795,8 +758,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLBD\\TableBird.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-10T01:39:08.695Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-10T01:39:08.695Z"
             },
             {
               "$type": "Document",
@@ -808,8 +770,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\MakeProgramm\\MakeProgramm.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-02T11:10:44.305Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T11:10:44.305Z"
             },
             {
               "$type": "Document",
@@ -821,8 +782,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Maked\\SQLliteTableDopInfoMake.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T03:31:58.422Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T03:31:58.422Z"
             },
             {
               "$type": "Document",
@@ -834,8 +794,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Maked\\SQLliteTableBaseInfoMake.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwA8AAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T03:31:55.263Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T03:31:55.263Z"
             },
             {
               "$type": "Document",
@@ -847,8 +806,7 @@
               "RelativeToolTip": "AppInCube\\Classes\\SQLite\\Maked\\MenegerSQLliteMake.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAUwEoAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T03:31:54.265Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T03:31:54.265Z"
             },
             {
               "$type": "Document",
@@ -860,8 +818,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\MakeProgramm\\UnderPagesInMakeProgramm\\UnderPagesMakeProgramm.xaml",
               "ViewState": "AgIAAEsAAAAAAAAAAIBJwHsAAAB4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-02T02:52:40.753Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T02:52:40.753Z"
             },
             {
               "$type": "Document",
@@ -873,8 +830,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\MakeProgramm\\UnderPagesInMakeProgramm\\UnderPagesMakeProgramm.xaml.cs",
               "ViewState": "AgIAAIgBAAAAAAAAAADwv50BAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T02:52:08.69Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T02:52:08.69Z"
             },
             {
               "$type": "Document",
@@ -886,8 +842,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\MakeProgramm\\UnderPagesInMakeProgramm\\ProgramDetailPageMake.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T02:52:07.699Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T02:52:07.699Z"
             },
             {
               "$type": "Document",
@@ -899,8 +854,7 @@
               "RelativeToolTip": "AppInCube\\View\\Pages\\Favorites\\DownloadedProgramms\\UnderPagesInFavorites\\ProgramDetailPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T02:52:01.605Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T02:52:01.605Z"
             }
           ]
         }
