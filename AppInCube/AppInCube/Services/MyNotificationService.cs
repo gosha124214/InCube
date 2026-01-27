@@ -1,138 +1,44 @@
-﻿using Plugin.LocalNotification;
-using System.Text.Json;
+﻿// Services/MyNotificationService.cs
+#if ANDROID
+using AppInCube.Platforms.Android.AndroidMyTools.LocalMessage;
+#elif WINDOWS
+using AppInCube.Platforms.Windows.WinMyTools.LocalMessage;
+#endif
 
 namespace AppInCube.Services
 {
     public class MyNotificationService : IMyNotificationService
     {
-        private int _counter = 1000;
-        private const string SAVED_NOTIFICATIONS_KEY = "saved_notifications";
+        private readonly IMyNotificationService _platformService;
 
-        public async Task<bool> ScheduleExactNotificationAsync(string title, string message, DateTime scheduleTime)
+        public MyNotificationService()
         {
-            try
-            {
-                var request = new NotificationRequest
-                {
-                    NotificationId = ++_counter,
-                    Title = title,
-                    Description = message,
-                    Schedule = new NotificationRequestSchedule
-                    {
-                        NotifyTime = scheduleTime
-                    }
-                };
-
-                await LocalNotificationCenter.Current.Show(request);
-
-                // Сохраняем для отображения в списке
-                await SaveNotificationAsync(_counter, title, message, scheduleTime);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Ошибка: {ex.Message}");
-                return false;
-            }
+            // Выбираем платформенную реализацию
+#if ANDROID
+            _platformService = new AndroidNotificationService();
+#elif WINDOWS
+            _platformService = new WindowsNotificationService();
+#else
+            throw new PlatformNotSupportedException("Текущая платформа не поддерживается");
+#endif
         }
 
-        public async Task ShowNotificationNowAsync(string title, string message)
-        {
-            var request = new NotificationRequest
-            {
-                NotificationId = ++_counter,
-                Title = title,
-                Description = message,
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = DateTime.Now
-                }
-            };
+        public Task<bool> ScheduleExactNotificationAsync(string title, string message, DateTime scheduleTime)
+            => _platformService.ScheduleExactNotificationAsync(title, message, scheduleTime);
 
-            await LocalNotificationCenter.Current.Show(request);
-        }
+        public Task ShowNotificationNowAsync(string title, string message)
+            => _platformService.ShowNotificationNowAsync(title, message);
 
-        public async Task<bool> CheckAndRequestPermissionsAsync()
-        {
-            try
-            {
-                // Просто проверяем, включены ли уведомления
-                return await LocalNotificationCenter.Current.AreNotificationsEnabled();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Ошибка: {ex.Message}");
-                return false;
-            }
-        }
-
+        public Task<bool> CheckAndRequestPermissionsAsync()
+            => _platformService.CheckAndRequestPermissionsAsync();
 
         public Task CancelAllNotificationsAsync()
-        {
-            LocalNotificationCenter.Current.CancelAll();
-            Preferences.Remove(SAVED_NOTIFICATIONS_KEY);
-            return Task.CompletedTask;
-        }
+            => _platformService.CancelAllNotificationsAsync();
 
-        public async Task<List<MessageModel>> GetScheduledNotificationsAsync()
-        {
-            try
-            {
-                var json = Preferences.Get(SAVED_NOTIFICATIONS_KEY, "[]");
-                return JsonSerializer.Deserialize<List<MessageModel>>(json) ?? new List<MessageModel>();
-            }
-            catch
-            {
-                return new List<MessageModel>();
-            }
-        }
+        public Task<List<MessageModel>> GetScheduledNotificationsAsync()
+            => _platformService.GetScheduledNotificationsAsync();
 
         public Task CancelNotificationAsync(int notificationId)
-        {
-            LocalNotificationCenter.Current.Cancel(notificationId);
-            RemoveNotificationFromStorage(notificationId);
-            return Task.CompletedTask;
-        }
-
-        private async Task SaveNotificationAsync(int id, string title, string message, DateTime scheduleTime)
-        {
-            try
-            {
-                var notifications = await GetScheduledNotificationsAsync();
-
-                notifications.Add(new MessageModel
-                {
-                    Id = id,
-                    Title = title,
-                    Message = message,
-                    ScheduleTime = scheduleTime,
-                    CreatedAt = DateTime.Now
-                });
-
-                var json = JsonSerializer.Serialize(notifications);
-                Preferences.Set(SAVED_NOTIFICATIONS_KEY, json);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Ошибка сохранения: {ex.Message}");
-            }
-        }
-
-        private async void RemoveNotificationFromStorage(int notificationId)
-        {
-            try
-            {
-                var notifications = await GetScheduledNotificationsAsync();
-                notifications.RemoveAll(n => n.Id == notificationId);
-
-                var json = JsonSerializer.Serialize(notifications);
-                Preferences.Set(SAVED_NOTIFICATIONS_KEY, json);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Ошибка удаления: {ex.Message}");
-            }
-        }
+            => _platformService.CancelNotificationAsync(notificationId);
     }
 }

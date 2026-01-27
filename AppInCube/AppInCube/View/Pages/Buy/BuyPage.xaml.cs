@@ -1,8 +1,10 @@
-﻿using AppInCube.Services;
+﻿#if WINDOWS 
+using AppInCube.Platforms.Windows.WinMyTools.LocalMessage;
+#endif
+
+using AppInCube.Services;
 using Plugin.LocalNotification;
 using System.Collections.ObjectModel;
-
-
 
 namespace AppInCube.View.Pages.Buy
 {
@@ -28,7 +30,50 @@ namespace AppInCube.View.Pages.Buy
             CheckPermissionsOnStart();
             LoadExistingNotificationsAsync();
         }
+        // Обновите метод OnManualCheckClicked:
+        private async void OnManualCheckClicked(object sender, EventArgs e)
+        {
+#if WINDOWS
+            try
+            {
+                // Получаем WindowsNotificationService
+                if (_notificationService is WindowsNotificationService windowsService)
+                {
+                    await windowsService.ManualCheckNotifications();
+                    await LoadExistingNotificationsAsync();
+                }
+                else
+                {
+                    await DisplayAlert("Информация", "Функция доступна только на Windows", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось проверить уведомления: {ex.Message}", "OK");
+            }
+#endif
+        }
 
+        // ИЛИ более простой вариант (без проверки типа):
+        private async void OnManualCheckClickedSimple(object sender, EventArgs e)
+        {
+#if WINDOWS
+            try
+            {
+                // Просто вызываем перезагрузку списка
+                await LoadExistingNotificationsAsync();
+                
+                await DisplayAlert("Проверка", 
+                    "Список уведомлений обновлен.\n" +
+                    "Уведомления проверяются автоматически каждые 30 секунд.", 
+                    "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось проверить уведомления: {ex.Message}", "OK");
+            }
+#endif
+        }
         private async void CheckPermissionsOnStart()
         {
             try
@@ -317,5 +362,6 @@ namespace AppInCube.View.Pages.Buy
                 }
             }
         }
+       
     }
 }

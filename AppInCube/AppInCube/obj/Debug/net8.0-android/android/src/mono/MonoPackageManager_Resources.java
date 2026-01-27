@@ -37,6 +37,7 @@ public class MonoPackageManager_Resources {
 		"Microsoft.Maui.dll",
 		"Microsoft.Maui.Essentials.dll",
 		"Microsoft.Maui.Graphics.dll",
+		"Microsoft.Toolkit.Uwp.Notifications.dll",
 		"MySql.Data.dll",
 		"MySqlConnector.dll",
 		"Newtonsoft.Json.dll",

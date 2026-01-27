@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Plugin.LocalNotification;
 using AppInCube.Services;
 using AppInCube.View.Pages.Buy;
+using Plugin.LocalNotification;
 
 namespace AppInCube
 {
@@ -12,12 +12,16 @@ namespace AppInCube
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseLocalNotification()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            // ✅ Используем LocalNotification только для Android/iOS
+#if ANDROID
+            builder.UseLocalNotification();
+#endif
 
             // ✅ Регистрируем IMyNotificationService
             builder.Services.AddSingleton<IMyNotificationService, MyNotificationService>();

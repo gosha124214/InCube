@@ -13,7 +13,6 @@ namespace AppInCube.Services
         // Разрешения
         Task<bool> CheckAndRequestPermissionsAsync();
 
-
         // Управление
         Task CancelAllNotificationsAsync();
 

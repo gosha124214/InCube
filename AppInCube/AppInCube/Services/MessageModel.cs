@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace AppInCube.Services
 {
     public class MessageModel
@@ -15,7 +14,6 @@ namespace AppInCube.Services
         public DateTime ScheduleTime { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // Добавьте это свойство для TimeLeft
         public string TimeLeft
         {
             get

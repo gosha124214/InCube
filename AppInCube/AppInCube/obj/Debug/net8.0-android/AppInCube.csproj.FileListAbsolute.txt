@@ -7951,7 +7951,6 @@ D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\androi
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Extensions.Primitives.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.Controls.Compatibility.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.Controls.dll
-D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.Controls.HotReload.Forms.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.Controls.pdb
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.Controls.Xaml.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.Controls.Xaml.pdb
@@ -7963,8 +7962,6 @@ D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\androi
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.pdb
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.VisualBasic.Core.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.VisualBasic.dll
-D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
-D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.VisualStudio.DesignTools.TapContract.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Win32.Primitives.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Win32.Registry.dll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Mono.Android.dll
@@ -8835,10 +8832,6 @@ D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\stamp\
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\stamp\_GenerateJavaStubs.stamp
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\stamp\_GeneratePackageManagerJava.stamp
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\stamp\_ResolveLibraryProjectImports.stamp
-D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-android\Microsoft.Maui.Controls.HotReload.Forms.dll
-D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-android\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
-D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-android\Microsoft.VisualStudio.DesignTools.TapContract.dll
-D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\AppInCube.csproj.Up2Date
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\typemaps.arm64-v8a.ll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\environment.arm64-v8a.ll
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\compressed_assemblies.arm64-v8a.ll
@@ -8907,3 +8900,12 @@ D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\androi
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\src\plugin\LocalNotification\NotificationActionReceiver.java
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\src\plugin\LocalNotification\ScheduledAlarmReceiver.java
 D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\src\crc64482557b0a67ae705\BootCompleteReceiver.java
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-android\Microsoft.Maui.Controls.HotReload.Forms.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-android\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\bin\Debug\net8.0-android\Microsoft.VisualStudio.DesignTools.TapContract.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\AppInCube.csproj.Up2Date
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Maui.Controls.HotReload.Forms.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.VisualStudio.DesignTools.MobileTapContracts.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.VisualStudio.DesignTools.TapContract.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Toolkit.Uwp.Notifications.dll
+D:\Diplom InCub\GitHubInCube\AppInCube\AppInCube\obj\Debug\net8.0-android\android\assets\Microsoft.Toolkit.Uwp.Notifications.pdb

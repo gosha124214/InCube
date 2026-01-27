@@ -81,7 +81,7 @@
 
             <!-- Кнопки управления -->
             <Grid Grid.Row="5" 
-                  ColumnDefinitions="*,*,*,*"  
+                  ColumnDefinitions="*,*,*,*,*"  
                 ColumnSpacing="10">
 
                 <Button x:Name="AddButton"
@@ -120,6 +120,16 @@
                         CornerRadius="10"
                         HeightRequest="50"
                         Clicked="OnCheckPermissionsClicked"/>
+                <!-- Добавьте в XAML кнопку для тестирования -->
+                <Button Grid.Column="4"
+                        Grid.Row="5" 
+                        Text="🔄 Проверить сейчас" 
+                        BackgroundColor="#9C27B0"
+                        TextColor="White"
+                        FontSize="12"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        Clicked="OnManualCheckClicked"/>
 
             </Grid>
 
