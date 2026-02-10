@@ -1,10 +1,12 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using AppInCube.Classes.SQLite.Maked;
 using AppInCube.View.Pages.Favorites.MakeProgramm.UnderPagesInMakeProgramm;
 using AppInCube.Classes.SQLite.Partyes;
+using AppInCube.Services;
+
 namespace AppInCube.View.Pages.Favorites.MakeProgramm
 {
     public partial class MakeProgramm : ContentPage
@@ -16,18 +18,18 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadCreatedPrograms(); // Загружаем созданные программы при появлении страницы
+            await LoadCreatedPrograms(); // Р—Р°РіСЂСѓР¶Р°РµРј СЃРѕР·РґР°РЅРЅС‹Рµ РїСЂРѕРіСЂР°РјРјС‹ РїСЂРё РїРѕСЏРІР»РµРЅРёРё СЃС‚СЂР°РЅРёС†С‹
         }
         private async Task LoadCreatedPrograms()
         {
             try 
             {
-                var createdPrograms = await App.DatabaseMakePrograms.GetProgramsAsync(); // Получаем все созданные программы
-                ProgramsListView.ItemsSource = createdPrograms; // Привязка данных к CollectionView
+                var createdPrograms = await App.DatabaseMakePrograms.GetProgramsAsync(); // РџРѕР»СѓС‡Р°РµРј РІСЃРµ СЃРѕР·РґР°РЅРЅС‹Рµ РїСЂРѕРіСЂР°РјРјС‹
+                ProgramsListView.ItemsSource = createdPrograms; // РџСЂРёРІСЏР·РєР° РґР°РЅРЅС‹С… Рє CollectionView
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Ошибка", $"Ошибка при загрузке данных: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("РћС€РёР±РєР°", $"РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ РґР°РЅРЅС‹С…: {ex.Message}", "OK");
             }
         }
         private async void OnProgramSelected(object sender, SelectionChangedEventArgs e)
@@ -37,10 +39,10 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
                 var selectedProgram = e.CurrentSelection[0] as SQLliteTableBaseInfoMake;
                 if (selectedProgram != null)
                 {
-                    // Переход на страницу с деталями программы
+                    // РџРµСЂРµС…РѕРґ РЅР° СЃС‚СЂР°РЅРёС†Сѓ СЃ РґРµС‚Р°Р»СЏРјРё РїСЂРѕРіСЂР°РјРјС‹
                     await Navigation.PushAsync(new ProgramDetailPageMake(selectedProgram));
                 }
-                // Сброс выбора
+                // РЎР±СЂРѕСЃ РІС‹Р±РѕСЂР°
                 ProgramsListView.SelectedItem = null;
             }
 
@@ -48,30 +50,30 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
         }
         private async void OnProgramTapped(object sender, EventArgs e)
         {
-            // Получаем объект программы, на которую нажали
+            // РџРѕР»СѓС‡Р°РµРј РѕР±СЉРµРєС‚ РїСЂРѕРіСЂР°РјРјС‹, РЅР° РєРѕС‚РѕСЂСѓСЋ РЅР°Р¶Р°Р»Рё
             var tappedItem = (sender as StackLayout).BindingContext as SQLliteTableBaseInfoMake;
             if (tappedItem != null)
             {
-                // Переход на страницу с деталями программы
+                // РџРµСЂРµС…РѕРґ РЅР° СЃС‚СЂР°РЅРёС†Сѓ СЃ РґРµС‚Р°Р»СЏРјРё РїСЂРѕРіСЂР°РјРјС‹
                 await Navigation.PushAsync(new ProgramDetailPageMake(tappedItem));
             }
         }
 
         private async void OnCreateProgramButtonClicked(object sender, EventArgs e)
         {
-            // Переход на страницу UnderPagesMakeProgramm
+            // РџРµСЂРµС…РѕРґ РЅР° СЃС‚СЂР°РЅРёС†Сѓ UnderPagesMakeProgramm
             await Navigation.PushAsync(new UnderPagesMakeProgramm());
         }
 
         private async void OnStartButtonClicked(object sender, EventArgs e)
         {
-            // Получаем объект программы, которую нужно запустить
+            // РџРѕР»СѓС‡Р°РµРј РѕР±СЉРµРєС‚ РїСЂРѕРіСЂР°РјРјС‹, РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ Р·Р°РїСѓСЃС‚РёС‚СЊ
             var button = sender as Button;
             var program = button?.CommandParameter as SQLliteTableBaseInfoMake;
 
             if (program != null)
             {
-                // Логика запуска программы
+                // Р›РѕРіРёРєР° Р·Р°РїСѓСЃРєР° РїСЂРѕРіСЂР°РјРјС‹
                 await StartProgram(program);
             }
         }
@@ -79,26 +81,26 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
 
         private async Task StartProgram(SQLliteTableBaseInfoMake program)
         {
-            // Создаем новую запись в базе данных для запущенной программы
+            // РЎРѕР·РґР°РµРј РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С… РґР»СЏ Р·Р°РїСѓС‰РµРЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјС‹
             var newParty = new SQLliteTableParty
             {
                 IdProgramInMySQL = program.IdProgramInMySQL,
                 IdBirdInMySQL = program.IdBirdInMySQL,
                 IdMake = program.IdMakeProgram,
-                DateTimeValue = DateTime.Now, // Устанавливаем текущее время
+                DateTimeValue = DateTime.Now,
                 ImageBirdFile = program.ImageBirdFile,
-                DopInfoParty = new List<SQLliteTableDopInfoParty>() // Инициализируем список
+                DopInfoParty = new List<SQLliteTableDopInfoParty>()
             };
 
             try
             {
-                // Получаем информацию о доп. данных программы по ID
+                // РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РґРѕРї. РґР°РЅРЅС‹С… РїСЂРѕРіСЂР°РјРјС‹ РїРѕ ID
                 List<SQLliteTableDopInfoMake> existingDopInfo = await App.DatabaseMakePrograms.GetDopInfoByProgramIdAsync(program.IdMakeProgram);
 
-                // Создаем временный список для хранения информации о днях
+                // РЎРѕР·РґР°РµРј РІСЂРµРјРµРЅРЅС‹Р№ СЃРїРёСЃРѕРє РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РґРЅСЏС…
                 var dopInfoPartyList = new List<SQLliteTableDopInfoParty>();
 
-                // Добавляем информацию о днях в временный список
+                // Р”РѕР±Р°РІР»СЏРµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РґРЅСЏС… РІ РІСЂРµРјРµРЅРЅС‹Р№ СЃРїРёСЃРѕРє
                 foreach (var dopInfo in existingDopInfo)
                 {
                     dopInfoPartyList.Add(new SQLliteTableDopInfoParty
@@ -109,29 +111,145 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
                         MaxTemperature = dopInfo.MaxTemperature,
                         MinHumidity = dopInfo.MinHumidity,
                         MaxHumidity = dopInfo.MaxHumidity,
-                        MinАmountTurn = dopInfo.MinАmountTurn,
-                        MaxАmountTurn = dopInfo.MaxАmountTurn,
-                        АmountCooling = dopInfo.АmountCooling,
+                        MinРђmountTurn = dopInfo.MinРђmountTurn,
+                        MaxРђmountTurn = dopInfo.MaxРђmountTurn,
+                        РђmountCooling = dopInfo.РђmountCooling,
                         MinTimeCooling = dopInfo.MinTimeCooling,
                         MaxTimeCooling = dopInfo.MaxTimeCooling
                     });
                 }
 
-                // Присваиваем временный список в свойство DopInfoParty
+                // РџСЂРёСЃРІР°РёРІР°РµРј РІСЂРµРјРµРЅРЅС‹Р№ СЃРїРёСЃРѕРє РІ СЃРІРѕР№СЃС‚РІРѕ DopInfoParty
                 newParty.DopInfoParty = dopInfoPartyList;
 
-                // Сохраняем новую запись в базе данных
+                // РЎРѕС…СЂР°РЅСЏРµРј РЅРѕРІСѓСЋ Р·Р°РїРёСЃСЊ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…
                 await App.DatabaseParty.SavePartyAsync(newParty);
+
+                // РџРѕР»СѓС‡Р°РµРј СЃРѕС…СЂР°РЅРµРЅРЅСѓСЋ РїР°СЂС‚РёСЋ СЃ СЂРµР°Р»СЊРЅС‹Рј ID
+                var savedParty = await App.DatabaseParty.GetPartyByIdAsync(newParty.IdParty);
+
+                if (savedParty != null)
+                {
+                    // РџР»Р°РЅРёСЂСѓРµРј СѓРІРµРґРѕРјР»РµРЅРёСЏ СЃ СѓРєР°Р·Р°РЅРёРµРј ID РїР°СЂС‚РёРё
+                    await SchedulePartyNotifications(savedParty);
+
+                    await Application.Current.MainPage.DisplayAlert("РЈСЃРїРµС…",
+                        $"РџСЂРѕРіСЂР°РјРјР° '{program.NameBird}' СѓСЃРїРµС€РЅРѕ Р·Р°РїСѓС‰РµРЅР°!\n" +
+                        $"ID РїР°СЂС‚РёРё: {savedParty.IdParty}\n" +
+                        $"РЎРѕР·РґР°РЅРѕ {GetNumberOfScheduledNotifications(dopInfoPartyList)} СѓРІРµРґРѕРјР»РµРЅРёР№.",
+                        "OK");
+                }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Ошибка", $"Ошибка при запуске программы: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("РћС€РёР±РєР°", $"РћС€РёР±РєР° РїСЂРё Р·Р°РїСѓСЃРєРµ РїСЂРѕРіСЂР°РјРјС‹: {ex.Message}", "OK");
             }
+        }
+
+        // РњРµС‚РѕРґ РґР»СЏ РїР»Р°РЅРёСЂРѕРІР°РЅРёСЏ СѓРІРµРґРѕРјР»РµРЅРёР№ СЃ ID РїР°СЂС‚РёРё
+        private async Task SchedulePartyNotifications(SQLliteTableParty party)
+        {
+            try
+            {
+                var notificationService = ServiceProviderHelper.GetService<IMyNotificationService>();
+                if (notificationService == null)
+                {
+                    Console.WriteLine("РЎРµСЂРІРёСЃ СѓРІРµРґРѕРјР»РµРЅРёР№ РЅРµ РЅР°Р№РґРµРЅ");
+                    return;
+                }
+
+                var dopInfoList = party.DopInfoParty;
+                var startTime = party.DateTimeValue;
+                var sortedDays = dopInfoList.OrderBy(d => d.Day).ToList();
+
+                // РЈРЅРёРєР°Р»СЊРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёР№ СЌС‚РѕР№ РїР°СЂС‚РёРё
+                string partyIdentifier = $"PID{party.IdParty}"; // PID = Party ID
+
+                // 1. РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ РЅР°С‡Р°Р»Рµ РїСЂРѕРіСЂР°РјРјС‹
+                await notificationService.ScheduleExactNotificationAsync(
+                    $"рџљЂ РРЅРєСѓР±Р°С†РёСЏ РЅР°С‡Р°Р»Р°СЃСЊ [{partyIdentifier}]",
+                    $"РџСЂРѕРіСЂР°РјРјР° #{party.IdParty}\n" +
+                    $"РќР°С‡Р°Р»Рѕ: {startTime:dd.MM.yyyy HH:mm}\n" +
+                    $"РџРµСЂРІС‹Р№ РґРµРЅСЊ: {sortedDays[0].MinTemperature}В°C - {sortedDays[0].MaxTemperature}В°C",
+                    startTime);
+
+                Console.WriteLine($"вњ… РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ РЅР°С‡Р°Р»Рµ РґР»СЏ РїР°СЂС‚РёРё {party.IdParty}");
+
+                // 2. РЈРІРµРґРѕРјР»РµРЅРёСЏ Рѕ СЃРјРµРЅРµ РїР°СЂР°РјРµС‚СЂРѕРІ
+                for (int i = 1; i < sortedDays.Count; i++)
+                {
+                    if (ParametersDiffer(sortedDays[i - 1], sortedDays[i]))
+                    {
+                        var notificationTime = startTime.AddDays(sortedDays[i].Day);
+
+                        await notificationService.ScheduleExactNotificationAsync(
+                            $"рџ”„ РЎРјРµРЅР° РїР°СЂР°РјРµС‚СЂРѕРІ [{partyIdentifier}]",
+                            $"РџСЂРѕРіСЂР°РјРјР° #{party.IdParty}, Р”РµРЅСЊ {sortedDays[i].Day}\n" +
+                            $"РўРµРјРїРµСЂР°С‚СѓСЂР°: {sortedDays[i].MinTemperature}В°C - {sortedDays[i].MaxTemperature}В°C\n" +
+                            $"Р’Р»Р°Р¶РЅРѕСЃС‚СЊ: {sortedDays[i].MinHumidity}% - {sortedDays[i].MaxHumidity}%",
+                            notificationTime);
+
+                        Console.WriteLine($"вњ… РЈРІРµРґРѕРјР»РµРЅРёРµ РЅР° РґРµРЅСЊ {sortedDays[i].Day} РґР»СЏ РїР°СЂС‚РёРё {party.IdParty}");
+                    }
+                }
+
+                // 3. РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ Р·Р°РІРµСЂС€РµРЅРёРё РїР°СЂС‚РёРё
+                var endTime = startTime.AddDays(sortedDays.Last().Day);
+                await notificationService.ScheduleExactNotificationAsync(
+                    $"рџЏЃ РРЅРєСѓР±Р°С†РёСЏ Р·Р°РІРµСЂС€РµРЅР° [{partyIdentifier}]",
+                    $"РџСЂРѕРіСЂР°РјРјР° #{party.IdParty} Р·Р°РІРµСЂС€РµРЅР°!\n" +
+                    $"РќР°С‡Р°Р»Рѕ: {startTime:dd.MM.yyyy HH:mm}\n" +
+                    $"Р—Р°РІРµСЂС€РµРЅРёРµ: {endTime:dd.MM.yyyy HH:mm}",
+                    endTime);
+
+                Console.WriteLine($"вњ… РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ Р·Р°РІРµСЂС€РµРЅРёРё РґР»СЏ РїР°СЂС‚РёРё {party.IdParty}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"вќЊ РћС€РёР±РєР° РїСЂРё РїР»Р°РЅРёСЂРѕРІР°РЅРёРё СѓРІРµРґРѕРјР»РµРЅРёР№ РґР»СЏ РїР°СЂС‚РёРё: {ex.Message}");
+            }
+        }
+
+   
+
+
+        // РњРµС‚РѕРґ РґР»СЏ РїСЂРѕРІРµСЂРєРё СЂР°Р·Р»РёС‡РёР№ РїР°СЂР°РјРµС‚СЂРѕРІ (С‚Р°РєРѕР№ Р¶Рµ РєР°Рє РІ UnderPagesInProcess)
+        private bool ParametersDiffer(SQLliteTableDopInfoParty currentDay, SQLliteTableDopInfoParty nextDay)
+        {
+            return currentDay.MinTemperature != nextDay.MinTemperature ||
+                   currentDay.MaxTemperature != nextDay.MaxTemperature ||
+                   currentDay.MinHumidity != nextDay.MinHumidity ||
+                   currentDay.MaxHumidity != nextDay.MaxHumidity ||
+                   currentDay.MinРђmountTurn != nextDay.MinРђmountTurn ||
+                   currentDay.MaxРђmountTurn != nextDay.MaxРђmountTurn ||
+                   currentDay.РђmountCooling != nextDay.РђmountCooling ||
+                   currentDay.MinTimeCooling != nextDay.MinTimeCooling ||
+                   currentDay.MaxTimeCooling != nextDay.MaxTimeCooling;
+        }
+
+        // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕРґСЃС‡РµС‚Р° РєРѕР»РёС‡РµСЃС‚РІР° Р·Р°РїР»Р°РЅРёСЂРѕРІР°РЅРЅС‹С… СѓРІРµРґРѕРјР»РµРЅРёР№
+        private int GetNumberOfScheduledNotifications(List<SQLliteTableDopInfoParty> dopInfoList)
+        {
+            if (dopInfoList == null || dopInfoList.Count < 2)
+                return 1; // РўРѕР»СЊРєРѕ СѓРІРµРґРѕРјР»РµРЅРёРµ Рѕ РЅР°С‡Р°Р»Рµ
+
+            var sortedDays = dopInfoList.OrderBy(d => d.Day).ToList();
+            int count = 1; // РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ РЅР°С‡Р°Р»Рµ
+
+            for (int i = 1; i < sortedDays.Count; i++)
+            {
+                if (ParametersDiffer(sortedDays[i - 1], sortedDays[i]))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         private async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
-            // Получаем объект программы, который нужно удалить
+            // РџРѕР»СѓС‡Р°РµРј РѕР±СЉРµРєС‚ РїСЂРѕРіСЂР°РјРјС‹, РєРѕС‚РѕСЂС‹Р№ РЅСѓР¶РЅРѕ СѓРґР°Р»РёС‚СЊ
             var button = sender as Button;
             var program = button?.CommandParameter as SQLliteTableBaseInfoMake;
 
@@ -143,27 +261,27 @@ namespace AppInCube.View.Pages.Favorites.MakeProgramm
 
         private async Task DeleteProgram(SQLliteTableBaseInfoMake program)
         {
-            // Подтверждение удаления
-            bool confirm = await DisplayAlert("Подтверждение", "Вы уверены, что хотите удалить эту программу?", "Да", "Нет");
+            // РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ СѓРґР°Р»РµРЅРёСЏ
+            bool confirm = await DisplayAlert("РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ", "Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ СЌС‚Сѓ РїСЂРѕРіСЂР°РјРјСѓ?", "Р”Р°", "РќРµС‚");
             if (confirm)
             {
                 try
                 {
-                    // Удаляем программу из базы данных по ID
-                    int result = await App.DatabaseMakePrograms.DeleteProgramAsync(program.IdMakeBird); // Используем IdBirdInMySQL
+                    // РЈРґР°Р»СЏРµРј РїСЂРѕРіСЂР°РјРјСѓ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С… РїРѕ ID
+                    int result = await App.DatabaseMakePrograms.DeleteProgramAsync(program.IdMakeBird); // РСЃРїРѕР»СЊР·СѓРµРј IdBirdInMySQL
 
                     if (result > 0)
                     {
-                        await LoadCreatedPrograms(); // Обновляем список
+                        await LoadCreatedPrograms(); // РћР±РЅРѕРІР»СЏРµРј СЃРїРёСЃРѕРє
                     }
                     else
                     {
-                        await DisplayAlert("Ошибка", "Программа не найдена для удаления.", "OK");
+                        await DisplayAlert("РћС€РёР±РєР°", "РџСЂРѕРіСЂР°РјРјР° РЅРµ РЅР°Р№РґРµРЅР° РґР»СЏ СѓРґР°Р»РµРЅРёСЏ.", "OK");
                     }
                 }
                 catch (Exception ex)
                 {
-                    await DisplayAlert("Ошибка", $"Ошибка при удалении программы: {ex.Message}", "OK");
+                    await DisplayAlert("РћС€РёР±РєР°", $"РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё РїСЂРѕРіСЂР°РјРјС‹: {ex.Message}", "OK");
                 }
             }
         }

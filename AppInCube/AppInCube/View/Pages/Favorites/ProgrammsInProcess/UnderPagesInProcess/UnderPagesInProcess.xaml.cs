@@ -1,9 +1,10 @@
-using System;
+п»їusing System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using AppInCube.Classes.SQLite.Partyes;
+using AppInCube.Services;
 using SQLite;
 
 namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
@@ -15,38 +16,314 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
         private DateTime partyEndTime;
         private ObservableCollection<SQLliteTableDopInfoParty> dopInfoList;
         private SQLliteTableDopInfoParty selectedDayForRecording;
+        private SQLliteTableParty currentParty;
+        private bool isCheckingNotifications = false;
 
         public UnderPagesInProcess(SQLliteTableParty party)
         {
             InitializeComponent();
 
             BindingContext = party;
+            currentParty = party;
 
-
-            // Инициализация времени
+            // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІСЂРµРјРµРЅРё
             partyStartTime = party.DateTimeValue;
             totalDuration = TimeSpan.FromDays(party.DopInfoParty.Count);
             partyEndTime = partyStartTime.Add(totalDuration);
 
-            // Инициализация ObservableCollection
+            // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ ObservableCollection
             dopInfoList = new ObservableCollection<SQLliteTableDopInfoParty>(party.DopInfoParty);
 
-            // ОБНОВЛЯЕМ СТАТУСЫ ПРИ ЗАПУСКЕ
+            // РћР‘РќРћР’Р›РЇР•Рњ РЎРўРђРўРЈРЎР« РџР Р Р—РђРџРЈРЎРљР•
             UpdateAllStatuses();
 
-            // Запуск таймеров
+            // Р—Р°РїСѓСЃРє С‚Р°Р№РјРµСЂРѕРІ
             if (partyEndTime >= DateTime.Now)
             {
                 StartTimers();
             }
             else
             {
-                TimeStartProgramm.Text = "Партия завершена!";
+                TimeStartProgramm.Text = "РџР°СЂС‚РёСЏ Р·Р°РІРµСЂС€РµРЅР°!";
+            }
+
+            // Р—Р°РіСЂСѓР¶Р°РµРј СЃС‚Р°С‚СѓСЃ СѓРІРµРґРѕРјР»РµРЅРёР№ РїСЂРё Р·Р°РіСЂСѓР·РєРµ СЃС‚СЂР°РЅРёС†С‹
+            LoadNotificationsStatus();
+        }
+
+        // РњРµС‚РѕРґ РґР»СЏ Р·Р°РіСЂСѓР·РєРё СЃС‚Р°С‚СѓСЃР° СѓРІРµРґРѕРјР»РµРЅРёР№
+        private async void LoadNotificationsStatus()
+        {
+            try
+            {
+                // Р‘Р»РѕРєРёСЂСѓРµРј Switch РІРѕ РІСЂРµРјСЏ РїСЂРѕРІРµСЂРєРё
+                NotificationsSwitch.IsEnabled = false;
+                NotificationsStatusLabel.Text = "РџСЂРѕРІРµСЂРєР° СѓРІРµРґРѕРјР»РµРЅРёР№...";
+
+                var notificationService = ServiceProviderHelper.GetService<IMyNotificationService>();
+                if (notificationService != null)
+                {
+                    // РџРѕР»СѓС‡Р°РµРј РІСЃРµ СѓРІРµРґРѕРјР»РµРЅРёСЏ
+                    var allNotifications = await notificationService.GetScheduledNotificationsAsync();
+
+                    // Р¤РёР»СЊС‚СЂСѓРµРј СѓРІРµРґРѕРјР»РµРЅРёСЏ РґР»СЏ СЌС‚РѕР№ РїР°СЂС‚РёРё
+                    var partyNotifications = allNotifications
+                        .Where(n => n.Title.Contains($"PID{currentParty.IdParty}") ||
+                                   n.Message.Contains($"РџСЂРѕРіСЂР°РјРјР° #{currentParty.IdParty}"))
+                        .ToList();
+
+                    // Р•СЃР»Рё РµСЃС‚СЊ С…РѕС‚СЏ Р±С‹ РѕРґРЅРѕ СѓРІРµРґРѕРјР»РµРЅРёРµ - РІРєР»СЋС‡Р°РµРј Switch
+                    bool hasNotifications = partyNotifications.Any();
+                    NotificationsSwitch.IsToggled = hasNotifications;
+
+                    // РћР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ
+                    if (hasNotifications)
+                    {
+                        int notificationCount = partyNotifications.Count;
+                        var nextNotification = partyNotifications
+                            .OrderBy(n => n.ScheduleTime)
+                            .FirstOrDefault();
+
+                        string statusText = $"Р’РєР»СЋС‡РµРЅРѕ ({notificationCount} СѓРІРµРґРѕРјР»РµРЅРёР№)";
+                        if (nextNotification != null)
+                        {
+                            statusText += $"\nРЎР»РµРґСѓСЋС‰РµРµ: {nextNotification.ScheduleTime:HH:mm}";
+                        }
+
+                        NotificationsStatusLabel.Text = statusText;
+                    }
+                    else
+                    {
+                        NotificationsStatusLabel.Text = "Р’С‹РєР»СЋС‡РµРЅРѕ";
+                    }
+                }
+                else
+                {
+                    NotificationsStatusLabel.Text = "РЎРµСЂРІРёСЃ СѓРІРµРґРѕРјР»РµРЅРёР№ РЅРµРґРѕСЃС‚СѓРїРµРЅ";
+                    NotificationsSwitch.IsEnabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ СЃС‚Р°С‚СѓСЃР° СѓРІРµРґРѕРјР»РµРЅРёР№: {ex.Message}");
+                NotificationsStatusLabel.Text = "РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё";
+            }
+            finally
+            {
+                NotificationsSwitch.IsEnabled = true;
             }
         }
 
+        // РћР±СЂР°Р±РѕС‚С‡РёРє РёР·РјРµРЅРµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ Switch
+        private async void OnNotificationsSwitchToggled(object sender, ToggledEventArgs e)
+        {
+            if (isCheckingNotifications)
+                return;
 
-        // ОБНОВЛЕННЫЙ МЕТОД ДЛЯ КНОПКИ
+            try
+            {
+                isCheckingNotifications = true;
+                NotificationsSwitch.IsEnabled = false;
+
+                var notificationService = ServiceProviderHelper.GetService<IMyNotificationService>();
+                if (notificationService == null)
+                {
+                    await DisplayAlert("РћС€РёР±РєР°", "РЎРµСЂРІРёСЃ СѓРІРµРґРѕРјР»РµРЅРёР№ РЅРµРґРѕСЃС‚СѓРїРµРЅ", "OK");
+                    NotificationsSwitch.IsToggled = !e.Value; // Р’РѕР·РІСЂР°С‰Р°РµРј РїСЂРµРґС‹РґСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
+                    return;
+                }
+
+                if (e.Value) // Р•СЃР»Рё Switch РІРєР»СЋС‡РёР»Рё
+                {
+                    // Р—Р°РїСЂР°С€РёРІР°РµРј СЂР°Р·СЂРµС€РµРЅРёСЏ РµСЃР»Рё РЅСѓР¶РЅРѕ
+                    var hasPermission = await notificationService.CheckAndRequestPermissionsAsync();
+                    if (!hasPermission)
+                    {
+                        await DisplayAlert("Р’РЅРёРјР°РЅРёРµ",
+                            "Р”Р»СЏ СЂР°Р±РѕС‚С‹ СѓРІРµРґРѕРјР»РµРЅРёР№ РЅСѓР¶РЅС‹ СЂР°Р·СЂРµС€РµРЅРёСЏ. " +
+                            "Р’РєР»СЋС‡РёС‚Рµ СѓРІРµРґРѕРјР»РµРЅРёСЏ РІ РЅР°СЃС‚СЂРѕР№РєР°С… СѓСЃС‚СЂРѕР№СЃС‚РІР°.",
+                            "OK");
+                        NotificationsSwitch.IsToggled = false;
+                        return;
+                    }
+
+                    // РЎРѕР·РґР°РµРј СѓРІРµРґРѕРјР»РµРЅРёСЏ РґР»СЏ РїР°СЂС‚РёРё
+                    bool success = await CreatePartyNotifications();
+
+                    if (success)
+                    {
+                        NotificationsStatusLabel.Text = "РЈРІРµРґРѕРјР»РµРЅРёСЏ РІРєР»СЋС‡РµРЅС‹";
+                        ShowMessage("вњ… РЈРІРµРґРѕРјР»РµРЅРёСЏ РІРєР»СЋС‡РµРЅС‹", true);
+                    }
+                    else
+                    {
+                        NotificationsSwitch.IsToggled = false;
+                        NotificationsStatusLabel.Text = "РћС€РёР±РєР° СЃРѕР·РґР°РЅРёСЏ";
+                        ShowMessage("вќЊ РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ СѓРІРµРґРѕРјР»РµРЅРёСЏ", false);
+                    }
+                }
+                else // Р•СЃР»Рё Switch РІС‹РєР»СЋС‡РёР»Рё
+                {
+                    // РЈРґР°Р»СЏРµРј РІСЃРµ СѓРІРµРґРѕРјР»РµРЅРёСЏ РїР°СЂС‚РёРё
+                    await CancelPartyNotifications();
+                    NotificationsStatusLabel.Text = "РЈРІРµРґРѕРјР»РµРЅРёСЏ РІС‹РєР»СЋС‡РµРЅС‹";
+                    ShowMessage("рџ”• РЈРІРµРґРѕРјР»РµРЅРёСЏ РІС‹РєР»СЋС‡РµРЅС‹", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"РћС€РёР±РєР° РїСЂРё РїРµСЂРµРєР»СЋС‡РµРЅРёРё СѓРІРµРґРѕРјР»РµРЅРёР№: {ex.Message}");
+                NotificationsSwitch.IsToggled = !e.Value; // Р’РѕР·РІСЂР°С‰Р°РµРј РїСЂРµРґС‹РґСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
+                NotificationsStatusLabel.Text = "РћС€РёР±РєР°";
+                ShowMessage($"вќЊ РћС€РёР±РєР°: {ex.Message}", false);
+            }
+            finally
+            {
+                NotificationsSwitch.IsEnabled = true;
+                isCheckingNotifications = false;
+            }
+        }
+
+        // РњРµС‚РѕРґ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ СѓРІРµРґРѕРјР»РµРЅРёР№ РїР°СЂС‚РёРё
+        private async Task<bool> CreatePartyNotifications()
+        {
+            try
+            {
+                var notificationService = ServiceProviderHelper.GetService<IMyNotificationService>();
+                if (notificationService == null)
+                    return false;
+
+                var dopInfoList = currentParty.DopInfoParty;
+                var startTime = currentParty.DateTimeValue;
+                var sortedDays = dopInfoList.OrderBy(d => d.Day).ToList();
+
+                // РЈРЅРёРєР°Р»СЊРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РґР»СЏ СѓРІРµРґРѕРјР»РµРЅРёР№ СЌС‚РѕР№ РїР°СЂС‚РёРё
+                string partyIdentifier = $"PID{currentParty.IdParty}";
+
+                bool allSuccess = true;
+                int createdCount = 0;
+
+                // 1. РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ РЅР°С‡Р°Р»Рµ РїСЂРѕРіСЂР°РјРјС‹ (РµСЃР»Рё РµС‰Рµ РЅРµ РЅР°С‡Р°Р»Р°СЃСЊ)
+                if (DateTime.Now < startTime)
+                {
+                    var success = await notificationService.ScheduleExactNotificationAsync(
+                        $"рџљЂ РРЅРєСѓР±Р°С†РёСЏ РЅР°С‡Р°Р»Р°СЃСЊ [{partyIdentifier}]",
+                        $"РџСЂРѕРіСЂР°РјРјР° #{currentParty.IdParty}\n" +
+                        $"РќР°С‡Р°Р»Рѕ: {startTime:dd.MM.yyyy HH:mm}",
+                        startTime);
+
+                    if (success) createdCount++;
+                    else allSuccess = false;
+                }
+
+                // 2. РЈРІРµРґРѕРјР»РµРЅРёСЏ Рѕ СЃРјРµРЅРµ РїР°СЂР°РјРµС‚СЂРѕРІ
+                for (int i = 1; i < sortedDays.Count; i++)
+                {
+                    if (ParametersDiffer(sortedDays[i - 1], sortedDays[i]))
+                    {
+                        var notificationTime = startTime.AddDays(sortedDays[i].Day);
+
+                        // РџСЂРѕРІРµСЂСЏРµРј, РЅРµ РїСЂРѕС€Р»Рѕ Р»Рё СѓР¶Рµ РІСЂРµРјСЏ
+                        if (notificationTime > DateTime.Now)
+                        {
+                            var success = await notificationService.ScheduleExactNotificationAsync(
+                                $"рџ”„ РЎРјРµРЅР° РїР°СЂР°РјРµС‚СЂРѕРІ [{partyIdentifier}]",
+                                $"РџСЂРѕРіСЂР°РјРјР° #{currentParty.IdParty}, Р”РµРЅСЊ {sortedDays[i].Day}",
+                                notificationTime);
+
+                            if (success) createdCount++;
+                            else allSuccess = false;
+                        }
+                    }
+                }
+
+                // 3. РЈРІРµРґРѕРјР»РµРЅРёРµ Рѕ Р·Р°РІРµСЂС€РµРЅРёРё РїР°СЂС‚РёРё
+                var endTime = startTime.AddDays(sortedDays.Last().Day);
+                if (endTime > DateTime.Now)
+                {
+                    var success = await notificationService.ScheduleExactNotificationAsync(
+                        $"рџЏЃ РРЅРєСѓР±Р°С†РёСЏ Р·Р°РІРµСЂС€РµРЅР° [{partyIdentifier}]",
+                        $"РџСЂРѕРіСЂР°РјРјР° #{currentParty.IdParty} Р·Р°РІРµСЂС€РµРЅР°!",
+                        endTime);
+
+                    if (success) createdCount++;
+                    else allSuccess = false;
+                }
+
+                // РћР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ
+                NotificationsStatusLabel.Text = $"Р’РєР»СЋС‡РµРЅРѕ ({createdCount} СѓРІРµРґРѕРјР»РµРЅРёР№)";
+                Console.WriteLine($"вњ… РЎРѕР·РґР°РЅРѕ {createdCount} СѓРІРµРґРѕРјР»РµРЅРёР№ РґР»СЏ РїР°СЂС‚РёРё {currentParty.IdParty}");
+
+                return allSuccess;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"вќЊ РћС€РёР±РєР° РїСЂРё СЃРѕР·РґР°РЅРёРё СѓРІРµРґРѕРјР»РµРЅРёР№: {ex.Message}");
+                return false;
+            }
+        }
+
+        // РњРµС‚РѕРґ РґР»СЏ РѕС‚РјРµРЅС‹ СѓРІРµРґРѕРјР»РµРЅРёР№ РїР°СЂС‚РёРё
+        private async Task CancelPartyNotifications()
+        {
+            try
+            {
+                var notificationService = ServiceProviderHelper.GetService<IMyNotificationService>();
+                if (notificationService != null)
+                {
+                    string partyIdentifier = $"PID{currentParty.IdParty}";
+                    var allNotifications = await notificationService.GetScheduledNotificationsAsync();
+
+                    // РќР°С…РѕРґРёРј СѓРІРµРґРѕРјР»РµРЅРёСЏ СЃ СѓРєР°Р·Р°РЅРЅС‹Рј ID РїР°СЂС‚РёРё
+                    var partyNotifications = allNotifications
+                        .Where(n => n.Title.Contains(partyIdentifier) ||
+                                   n.Message.Contains($"РџСЂРѕРіСЂР°РјРјР° #{currentParty.IdParty}"))
+                        .ToList();
+
+                    foreach (var notification in partyNotifications)
+                    {
+                        await notificationService.CancelNotificationAsync(notification.Id);
+                    }
+
+                    Console.WriteLine($"вњ… РЈРґР°Р»РµРЅРѕ {partyNotifications.Count} СѓРІРµРґРѕРјР»РµРЅРёР№ РґР»СЏ РїР°СЂС‚РёРё {currentParty.IdParty}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"вќЊ РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё СѓРІРµРґРѕРјР»РµРЅРёР№: {ex.Message}");
+            }
+        }
+
+        // РњРµС‚РѕРґ РґР»СЏ РїРѕРєР°Р·Р° СЃРѕРѕР±С‰РµРЅРёСЏ
+        private void ShowMessage(string message, bool isSuccess)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                MessageLabel.Text = message;
+                MessageFrame.BackgroundColor = isSuccess ? Color.FromHex("#4CAF50") : Color.FromHex("#F44336");
+                MessageFrame.IsVisible = true;
+
+                // РЎРєСЂС‹РІР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ С‡РµСЂРµР· 3 СЃРµРєСѓРЅРґС‹
+                Device.StartTimer(TimeSpan.FromSeconds(3), () =>
+                {
+                    MessageFrame.IsVisible = false;
+                    return false;
+                });
+            });
+        }
+
+        // РћР±РЅРѕРІР»СЏРµРј РјРµС‚РѕРґ OnAppearing РґР»СЏ РїСЂРѕРІРµСЂРєРё СЃС‚Р°С‚СѓСЃР° СѓРІРµРґРѕРјР»РµРЅРёР№ РїСЂРё РІРѕР·РІСЂР°С‰РµРЅРёРё РЅР° СЃС‚СЂР°РЅРёС†Сѓ
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            // РћР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚СѓСЃ СѓРІРµРґРѕРјР»РµРЅРёР№ РїСЂРё РєР°Р¶РґРѕРј РїРѕСЏРІР»РµРЅРёРё СЃС‚СЂР°РЅРёС†С‹
+            await Task.Delay(500); // РќРµР±РѕР»СЊС€Р°СЏ Р·Р°РґРµСЂР¶РєР° РґР»СЏ СЃС‚Р°Р±РёР»СЊРЅРѕСЃС‚Рё
+            LoadNotificationsStatus();
+        }
+
+        // РћСЃС‚Р°Р»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ РѕСЃС‚Р°СЋС‚СЃСЏ Р±РµР· РёР·РјРµРЅРµРЅРёР№ (СЃРѕС…СЂР°РЅСЏРµРј РІСЃСЋ СЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ Р»РѕРіРёРєСѓ)
+
+        // РћР‘РќРћР’Р›Р•РќРќР«Р™ РњР•РўРћР” Р”Р›РЇ РљРќРћРџРљР
         private async void OnCompletedButtonClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -54,10 +331,10 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
             if (dopInfo != null)
             {
-                // Проверяем доступность кнопки через статус
+                // РџСЂРѕРІРµСЂСЏРµРј РґРѕСЃС‚СѓРїРЅРѕСЃС‚СЊ РєРЅРѕРїРєРё С‡РµСЂРµР· СЃС‚Р°С‚СѓСЃ
                 if (DateTime.Now < partyStartTime.AddDays(dopInfo.Day))
                 {
-                    await DisplayAlert("Ошибка", "День еще не наступил!", "OK");
+                    await DisplayAlert("РћС€РёР±РєР°", "Р”РµРЅСЊ РµС‰Рµ РЅРµ РЅР°СЃС‚СѓРїРёР»!", "OK");
                     return;
                 }
 
@@ -65,8 +342,8 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 ShowRecordForm(dopInfo);
             }
         }
-        
-        // МЕТОД ДЛЯ ОБНОВЛЕНИЯ 
+
+        // РњР•РўРћР” Р”Р›РЇ РћР‘РќРћР’Р›Р•РќРРЇ 
         private void UpdateAllStatuses()
         {
             bool hasChanges = false;
@@ -81,34 +358,33 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                     item.Status = DayStatus.NotRecorded;
                 }
 
-                // Проверяем, изменился ли статус
+                // РџСЂРѕРІРµСЂСЏРµРј, РёР·РјРµРЅРёР»СЃСЏ Р»Рё СЃС‚Р°С‚СѓСЃ
                 if (oldStatus != item.Status)
                 {
                     hasChanges = true;
                 }
             }
 
-            // Если были изменения, обновляем UI
+            // Р•СЃР»Рё Р±С‹Р»Рё РёР·РјРµРЅРµРЅРёСЏ, РѕР±РЅРѕРІР»СЏРµРј UI
             if (hasChanges)
             {
                 RefreshCollectionView();
             }
         }
 
-        // МЕТОД ДЛЯ ПРИНУДИТЕЛЬНОГО ОБНОВЛЕНИЯ COLLECTIONVIEW
+        // РњР•РўРћР” Р”Р›РЇ РџР РРќРЈР”РРўР•Р›Р¬РќРћР“Рћ РћР‘РќРћР’Р›Р•РќРРЇ COLLECTIONVIEW
         private void RefreshCollectionView()
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                // Просто обновляем ItemsSource
+                // РџСЂРѕСЃС‚Рѕ РѕР±РЅРѕРІР»СЏРµРј ItemsSource
                 DopInfoPartyCollectionView.ItemsSource = null;
                 DopInfoPartyCollectionView.ItemsSource = dopInfoList;
             });
         }
 
-        // Добавьте это свойство для привязки
+        // Р”РѕР±Р°РІСЊС‚Рµ СЌС‚Рѕ СЃРІРѕР№СЃС‚РІРѕ РґР»СЏ РїСЂРёРІСЏР·РєРё
         public ObservableCollection<SQLliteTableDopInfoParty> DopInfoParty => dopInfoList;
-
 
         private void StartTimers()
         {
@@ -118,9 +394,6 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                 UpdateTimers();
                 UpdateEndOfDayTimer();
                 UpdateNextPhaseTimer();
-
-
-
                 return true;
             });
         }
@@ -133,302 +406,302 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
             try
             {
-                // ВАЛИДАЦИЯ ДАННЫХ ПЕРЕД СОХРАНЕНИЕМ
+                // Р’РђР›РР”РђР¦РРЇ Р”РђРќРќР«РҐ РџР•Р Р•Р” РЎРћРҐР РђРќР•РќРР•Рњ
                 if (!ValidateInputData())
                 {
-                    return; // Если валидация не пройдена, выходим из метода
+                    return; // Р•СЃР»Рё РІР°Р»РёРґР°С†РёСЏ РЅРµ РїСЂРѕР№РґРµРЅР°, РІС‹С…РѕРґРёРј РёР· РјРµС‚РѕРґР°
                 }
 
-                // Находим индекс выбранного дня
+                // РќР°С…РѕРґРёРј РёРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РґРЅСЏ
                 var dayIndex = dopInfoList.ToList().FindIndex(d => d.Day == selectedDayForRecording.Day);
                 if (dayIndex == -1)
                 {
-                    await DisplayAlert("Ошибка", "Не удалось найти выбранный день в списке", "OK");
+                    await DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ РЅР°Р№С‚Рё РІС‹Р±СЂР°РЅРЅС‹Р№ РґРµРЅСЊ РІ СЃРїРёСЃРєРµ", "OK");
                     return;
                 }
 
-                // Получаем новые данные из формы
+                // РџРѕР»СѓС‡Р°РµРј РЅРѕРІС‹Рµ РґР°РЅРЅС‹Рµ РёР· С„РѕСЂРјС‹
                 var dayToUpdate = dopInfoList[dayIndex];
                 dayToUpdate.MinTemperature = ParseFloat(MinTempEntry.Text);
                 dayToUpdate.MaxTemperature = ParseFloat(MaxTempEntry.Text);
                 dayToUpdate.MinHumidity = ParseInt(MinHumidityEntry.Text);
                 dayToUpdate.MaxHumidity = ParseInt(MaxHumidityEntry.Text);
-                dayToUpdate.MinАmountTurn = ParseNullableByte(MinTurnEntry.Text);
-                dayToUpdate.MaxАmountTurn = ParseNullableByte(MaxTurnEntry.Text);
-                dayToUpdate.АmountCooling = ParseNullableByte(CoolingAmountEntry.Text);
+                dayToUpdate.MinРђmountTurn = ParseNullableByte(MinTurnEntry.Text);
+                dayToUpdate.MaxРђmountTurn = ParseNullableByte(MaxTurnEntry.Text);
+                dayToUpdate.РђmountCooling = ParseNullableByte(CoolingAmountEntry.Text);
                 dayToUpdate.MinTimeCooling = ParseTimeSpan(MinCoolingTimeEntry.Text);
                 dayToUpdate.MaxTimeCooling = ParseTimeSpan(MaxCoolingTimeEntry.Text);
 
-                // СРАВНИВАЕМ данные с программой (скачанной или созданной) - с учетом диапазонов
+                // РЎР РђР’РќРР’РђР•Рњ РґР°РЅРЅС‹Рµ СЃ РїСЂРѕРіСЂР°РјРјРѕР№ (СЃРєР°С‡Р°РЅРЅРѕР№ РёР»Рё СЃРѕР·РґР°РЅРЅРѕР№) - СЃ СѓС‡РµС‚РѕРј РґРёР°РїР°Р·РѕРЅРѕРІ
                 bool dataMatches = await CompareWithProgramData(dayToUpdate);
 
-                // Обновляем состояние
+                // РћР±РЅРѕРІР»СЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ
                 dayToUpdate.IsCompleted = true;
                 dayToUpdate.IsNotCompleted = false;
 
-                // Устанавливаем статус в зависимости от соответствия программе
+                // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЃС‚Р°С‚СѓСЃ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ РїСЂРѕРіСЂР°РјРјРµ
                 if (dataMatches)
                 {
-                    dayToUpdate.Status = DayStatus.Completed; // "Выполнено" - данные соответствуют программе
+                    dayToUpdate.Status = DayStatus.Completed; // "Р’С‹РїРѕР»РЅРµРЅРѕ" - РґР°РЅРЅС‹Рµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‚ РїСЂРѕРіСЂР°РјРјРµ
                 }
                 else
                 {
-                    dayToUpdate.Status = DayStatus.Available; // "Не выполнено" - данные отклоняются от программы
+                    dayToUpdate.Status = DayStatus.Available; // "РќРµ РІС‹РїРѕР»РЅРµРЅРѕ" - РґР°РЅРЅС‹Рµ РѕС‚РєР»РѕРЅСЏСЋС‚СЃСЏ РѕС‚ РїСЂРѕРіСЂР°РјРјС‹
                 }
 
-                // Обновляем UI
+                // РћР±РЅРѕРІР»СЏРµРј UI
                 RefreshCollectionView();
 
-                // Сохраняем в базу данных
+                // РЎРѕС…СЂР°РЅСЏРµРј РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…
                 await UpdatePartyInDatabase();
 
-                // Скрываем форму
+                // РЎРєСЂС‹РІР°РµРј С„РѕСЂРјСѓ
                 AddRecordFrame.IsVisible = false;
 
-                // Показываем сообщение об успехе
+                // РџРѕРєР°Р·С‹РІР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± СѓСЃРїРµС…Рµ
                 string message = dataMatches
-                    ? $"Данные для дня {selectedDayForRecording.Day} сохранены (соответствуют программе)!"
-                    : $"Данные для дня {selectedDayForRecording.Day} сохранены (с отклонениями от программы)!";
+                    ? $"Р”Р°РЅРЅС‹Рµ РґР»СЏ РґРЅСЏ {selectedDayForRecording.Day} СЃРѕС…СЂР°РЅРµРЅС‹ (СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‚ РїСЂРѕРіСЂР°РјРјРµ)!"
+                    : $"Р”Р°РЅРЅС‹Рµ РґР»СЏ РґРЅСЏ {selectedDayForRecording.Day} СЃРѕС…СЂР°РЅРµРЅС‹ (СЃ РѕС‚РєР»РѕРЅРµРЅРёСЏРјРё РѕС‚ РїСЂРѕРіСЂР°РјРјС‹)!";
 
-                await DisplayAlert("Успех", message, "OK");
+                await DisplayAlert("РЈСЃРїРµС…", message, "OK");
 
                 selectedDayForRecording = null;
 
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Ошибка", $"Не удалось обновить данные: {ex.Message}", "OK");
+                await DisplayAlert("РћС€РёР±РєР°", $"РќРµ СѓРґР°Р»РѕСЃСЊ РѕР±РЅРѕРІРёС‚СЊ РґР°РЅРЅС‹Рµ: {ex.Message}", "OK");
             }
         }
 
-        // МЕТОД ВАЛИДАЦИИ ВВОДНЫХ ДАННЫХ
+        // РњР•РўРћР” Р’РђР›РР”РђР¦РР Р’Р’РћР”РќР«РҐ Р”РђРќРќР«РҐ
         private bool ValidateInputData()
         {
-            // Проверка температур
+            // РџСЂРѕРІРµСЂРєР° С‚РµРјРїРµСЂР°С‚СѓСЂ
             float minTemp = ParseFloat(MinTempEntry.Text);
             float maxTemp = ParseFloat(MaxTempEntry.Text);
 
             if (minTemp > maxTemp)
             {
-                DisplayAlert("Ошибка", "Минимальная температура не может быть выше максимальной", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "РњРёРЅРёРјР°Р»СЊРЅР°СЏ С‚РµРјРїРµСЂР°С‚СѓСЂР° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹С€Рµ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№", "OK");
                 return false;
             }
 
             if (minTemp < 0 || maxTemp < 0)
             {
-                DisplayAlert("Ошибка", "Температура должна быть положительной", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "РўРµРјРїРµСЂР°С‚СѓСЂР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕР№", "OK");
                 return false;
             }
 
-            // Проверка влажности
+            // РџСЂРѕРІРµСЂРєР° РІР»Р°Р¶РЅРѕСЃС‚Рё
             int minHumidity = ParseInt(MinHumidityEntry.Text);
             int maxHumidity = ParseInt(MaxHumidityEntry.Text);
 
             if (minHumidity > maxHumidity)
             {
-                DisplayAlert("Ошибка", "Минимальная влажность не может быть выше максимальной", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "РњРёРЅРёРјР°Р»СЊРЅР°СЏ РІР»Р°Р¶РЅРѕСЃС‚СЊ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹С€Рµ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№", "OK");
                 return false;
             }
 
             if (minHumidity < 0 || maxHumidity < 0 || minHumidity > 100 || maxHumidity > 100)
             {
-                DisplayAlert("Ошибка", "Влажность должна быть в диапазоне от 0 до 100%", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "Р’Р»Р°Р¶РЅРѕСЃС‚СЊ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ 0 РґРѕ 100%", "OK");
                 return false;
             }
 
-            // Проверка поворотов
+            // РџСЂРѕРІРµСЂРєР° РїРѕРІРѕСЂРѕС‚РѕРІ
             byte? minTurn = ParseNullableByte(MinTurnEntry.Text);
             byte? maxTurn = ParseNullableByte(MaxTurnEntry.Text);
 
             if (minTurn.HasValue && maxTurn.HasValue && minTurn > maxTurn)
             {
-                DisplayAlert("Ошибка", "Минимальное количество поворотов не может быть больше максимального", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "РњРёРЅРёРјР°Р»СЊРЅРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕРІРѕСЂРѕС‚РѕРІ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ", "OK");
                 return false;
             }
 
-            // Проверка времени охлаждения
+            // РџСЂРѕРІРµСЂРєР° РІСЂРµРјРµРЅРё РѕС…Р»Р°Р¶РґРµРЅРёСЏ
             TimeSpan? minCoolingTime = ParseTimeSpan(MinCoolingTimeEntry.Text);
             TimeSpan? maxCoolingTime = ParseTimeSpan(MaxCoolingTimeEntry.Text);
 
             if (minCoolingTime.HasValue && maxCoolingTime.HasValue && minCoolingTime > maxCoolingTime)
             {
-                DisplayAlert("Ошибка", "Минимальное время охлаждения не может быть больше максимального", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "РњРёРЅРёРјР°Р»СЊРЅРѕРµ РІСЂРµРјСЏ РѕС…Р»Р°Р¶РґРµРЅРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ", "OK");
                 return false;
             }
 
-            // Проверка на отрицательное время
+            // РџСЂРѕРІРµСЂРєР° РЅР° РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ РІСЂРµРјСЏ
             if (minCoolingTime.HasValue && minCoolingTime.Value.TotalMinutes < 0)
             {
-                DisplayAlert("Ошибка", "Время охлаждения не может быть отрицательным", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "Р’СЂРµРјСЏ РѕС…Р»Р°Р¶РґРµРЅРёСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј", "OK");
                 return false;
             }
 
             return true;
         }
 
-        // ОБНОВЛЕННЫЙ МЕТОД ДЛЯ СРАВНЕНИЯ ДАННЫХ С ПРОГРАММОЙ С УЧЕТОМ ДИАПАЗОНОВ
+        // РћР‘РќРћР’Р›Р•РќРќР«Р™ РњР•РўРћР” Р”Р›РЇ РЎР РђР’РќР•РќРРЇ Р”РђРќРќР«РҐ РЎ РџР РћР“Р РђРњРњРћР™ РЎ РЈР§Р•РўРћРњ Р”РРђРџРђР—РћРќРћР’
         private async Task<bool> CompareWithProgramData(SQLliteTableDopInfoParty dayData)
         {
             var party = BindingContext as SQLliteTableParty;
             if (party == null)
                 return false;
 
-            // Определяем тип программы по заполненным ID
+            // РћРїСЂРµРґРµР»СЏРµРј С‚РёРї РїСЂРѕРіСЂР°РјРјС‹ РїРѕ Р·Р°РїРѕР»РЅРµРЅРЅС‹Рј ID
             if (party.IdMake.HasValue)
             {
-                // Программа создана - используем IdMake
+                // РџСЂРѕРіСЂР°РјРјР° СЃРѕР·РґР°РЅР° - РёСЃРїРѕР»СЊР·СѓРµРј IdMake
                 return await CompareWithMakedProgram(party.IdMake.Value, dayData);
             }
             else if (party.IdProgramInMySQL.HasValue)
             {
-                // Программа скачана - используем IdProgramInMySQL
+                // РџСЂРѕРіСЂР°РјРјР° СЃРєР°С‡Р°РЅР° - РёСЃРїРѕР»СЊР·СѓРµРј IdProgramInMySQL
                 return await CompareWithDownloadedProgram(party.IdProgramInMySQL.Value, dayData);
             }
 
-            // Если ни одно ID не заполнено - не можем сравнить
-            Console.WriteLine("Не удалось определить тип программы: IdMake и IdProgramInMySQL не заполнены");
+            // Р•СЃР»Рё РЅРё РѕРґРЅРѕ ID РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ - РЅРµ РјРѕР¶РµРј СЃСЂР°РІРЅРёС‚СЊ
+            Console.WriteLine("РќРµ СѓРґР°Р»РѕСЃСЊ РѕРїСЂРµРґРµР»РёС‚СЊ С‚РёРї РїСЂРѕРіСЂР°РјРјС‹: IdMake Рё IdProgramInMySQL РЅРµ Р·Р°РїРѕР»РЅРµРЅС‹");
             return false;
         }
 
-        // СУПЕР-ОПТИМИЗИРОВАННОЕ СРАВНЕНИЕ С СОЗДАННОЙ ПРОГРАММОЙ
+        // РЎРЈРџР•Р -РћРџРўРРњРР—РР РћР’РђРќРќРћР• РЎР РђР’РќР•РќРР• РЎ РЎРћР—Р”РђРќРќРћР™ РџР РћР“Р РђРњРњРћР™
         private async Task<bool> CompareWithMakedProgram(uint idMake, SQLliteTableDopInfoParty dayData)
         {
             try
             {
-                // Используем оптимизированный метод для получения одного дня
+                // РСЃРїРѕР»СЊР·СѓРµРј РѕРїС‚РёРјРёР·РёСЂРѕРІР°РЅРЅС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕРґРЅРѕРіРѕ РґРЅСЏ
                 var specificDay = await App.DatabaseMakePrograms.GetDopInfoByProgramIdAndDayAsync(idMake, dayData.Day);
 
                 if (specificDay == null)
                 {
-                    Console.WriteLine($"Не найден день {dayData.Day} в созданной программе с IdMakeProgram = {idMake}");
+                    Console.WriteLine($"РќРµ РЅР°Р№РґРµРЅ РґРµРЅСЊ {dayData.Day} РІ СЃРѕР·РґР°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјРµ СЃ IdMakeProgram = {idMake}");
                     return false;
                 }
 
-                // Сравниваем с учетом допустимых диапазонов
+                // РЎСЂР°РІРЅРёРІР°РµРј СЃ СѓС‡РµС‚РѕРј РґРѕРїСѓСЃС‚РёРјС‹С… РґРёР°РїР°Р·РѕРЅРѕРІ
                 bool temperatureMatches = IsInTemperatureRange(specificDay, dayData);
                 bool humidityMatches = IsInHumidityRange(specificDay, dayData);
                 bool turnsMatch = IsInTurnsRange(specificDay, dayData);
-                bool coolingMatches = (specificDay.АmountCooling ?? 0) == dayData.АmountCooling || specificDay.АmountCooling == dayData.АmountCooling;
+                bool coolingMatches = (specificDay.РђmountCooling ?? 0) == dayData.РђmountCooling || specificDay.РђmountCooling == dayData.РђmountCooling;
                 bool timeMatches = IsInTimeRange(specificDay, dayData);
 
                 bool allMatches = temperatureMatches && humidityMatches && turnsMatch && coolingMatches && timeMatches;
 
-                Console.WriteLine($"Сравнение с созданной программой (День {dayData.Day}): {allMatches}");
+                Console.WriteLine($"РЎСЂР°РІРЅРµРЅРёРµ СЃ СЃРѕР·РґР°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјРѕР№ (Р”РµРЅСЊ {dayData.Day}): {allMatches}");
 
                 return allMatches;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка при сравнении с созданной программой: {ex.Message}");
+                Console.WriteLine($"РћС€РёР±РєР° РїСЂРё СЃСЂР°РІРЅРµРЅРёРё СЃ СЃРѕР·РґР°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјРѕР№: {ex.Message}");
                 return false;
             }
         }
 
-        // СУПЕР-ОПТИМИЗИРОВАННОЕ СРАВНЕНИЕ СО СКАЧАННОЙ ПРОГРАММОЙ
+        // РЎРЈРџР•Р -РћРџРўРРњРР—РР РћР’РђРќРќРћР• РЎР РђР’РќР•РќРР• РЎРћ РЎРљРђР§РђРќРќРћР™ РџР РћР“Р РђРњРњРћР™
         private async Task<bool> CompareWithDownloadedProgram(uint idProgram, SQLliteTableDopInfoParty dayData)
         {
             try
             {
-                // Используем оптимизированный метод для получения одного дня
+                // РСЃРїРѕР»СЊР·СѓРµРј РѕРїС‚РёРјРёР·РёСЂРѕРІР°РЅРЅС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕРґРЅРѕРіРѕ РґРЅСЏ
                 var specificDay = await App.DatabaseProgram.GetDopInfoByProgramIdAndDayAsync(idProgram, dayData.Day);
 
                 if (specificDay == null)
                 {
-                    Console.WriteLine($"Не найден день {dayData.Day} в скачанной программе с IdProgram = {idProgram}");
+                    Console.WriteLine($"РќРµ РЅР°Р№РґРµРЅ РґРµРЅСЊ {dayData.Day} РІ СЃРєР°С‡Р°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјРµ СЃ IdProgram = {idProgram}");
                     return false;
                 }
 
-                // Сравниваем с учетом допустимых диапазонов
+                // РЎСЂР°РІРЅРёРІР°РµРј СЃ СѓС‡РµС‚РѕРј РґРѕРїСѓСЃС‚РёРјС‹С… РґРёР°РїР°Р·РѕРЅРѕРІ
                 bool temperatureMatches = IsInTemperatureRange(specificDay, dayData);
                 bool humidityMatches = IsInHumidityRange(specificDay, dayData);
                 bool turnsMatch = IsInTurnsRange(specificDay, dayData);
-                bool coolingMatches = (specificDay.АmountCooling ?? 0) == dayData.АmountCooling|| specificDay.АmountCooling == dayData.АmountCooling;
+                bool coolingMatches = (specificDay.РђmountCooling ?? 0) == dayData.РђmountCooling|| specificDay.РђmountCooling == dayData.РђmountCooling;
                 bool timeMatches = IsInTimeRange(specificDay, dayData);
 
                 bool allMatches = temperatureMatches && humidityMatches && turnsMatch && coolingMatches && timeMatches;
 
-                Console.WriteLine($"Сравнение со скачанной программой (День {dayData.Day}): {allMatches}");
+                Console.WriteLine($"РЎСЂР°РІРЅРµРЅРёРµ СЃРѕ СЃРєР°С‡Р°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјРѕР№ (Р”РµРЅСЊ {dayData.Day}): {allMatches}");
 
                 return allMatches;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка при сравнении со скачанной программой: {ex.Message}");
+                Console.WriteLine($"РћС€РёР±РєР° РїСЂРё СЃСЂР°РІРЅРµРЅРёРё СЃРѕ СЃРєР°С‡Р°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјРѕР№: {ex.Message}");
                 return false;
             }
         }
 
-        // МЕТОДЫ ДЛЯ ПРОВЕРКИ ДИАПАЗОНОВ
+        // РњР•РўРћР”Р« Р”Р›РЇ РџР РћР’Р•Р РљР Р”РРђРџРђР—РћРќРћР’
 
-        // Проверка температуры: факт должен быть в диапазоне мин-макс программы
+        // РџСЂРѕРІРµСЂРєР° С‚РµРјРїРµСЂР°С‚СѓСЂС‹: С„Р°РєС‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РјРёРЅ-РјР°РєСЃ РїСЂРѕРіСЂР°РјРјС‹
         private bool IsInTemperatureRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
         {
             return actualDay.MinTemperature >= programDay.MinTemperature &&
                    actualDay.MaxTemperature <= programDay.MaxTemperature;
         }
 
-        // Проверка влажности: факт должен быть в диапазоне мин-макс программы
+        // РџСЂРѕРІРµСЂРєР° РІР»Р°Р¶РЅРѕСЃС‚Рё: С„Р°РєС‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РјРёРЅ-РјР°РєСЃ РїСЂРѕРіСЂР°РјРјС‹
         private bool IsInHumidityRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
         {
             return actualDay.MinHumidity >= programDay.MinHumidity &&
                    actualDay.MaxHumidity <= programDay.MaxHumidity;
         }
 
-        // Проверка поворотов: факт должен быть в диапазоне мин-макс программы
+        // РџСЂРѕРІРµСЂРєР° РїРѕРІРѕСЂРѕС‚РѕРІ: С„Р°РєС‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РјРёРЅ-РјР°РєСЃ РїСЂРѕРіСЂР°РјРјС‹
         private bool IsInTurnsRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
         {
-            // Получаем значения как nullable
-            byte? programMinTurn = programDay.MinАmountTurn;
-            byte? programMaxTurn = programDay.MaxАmountTurn;
+            // РџРѕР»СѓС‡Р°РµРј Р·РЅР°С‡РµРЅРёСЏ РєР°Рє nullable
+            byte? programMinTurn = programDay.MinРђmountTurn;
+            byte? programMaxTurn = programDay.MaxРђmountTurn;
 
-            // Если в программе не указаны повороты
+            // Р•СЃР»Рё РІ РїСЂРѕРіСЂР°РјРјРµ РЅРµ СѓРєР°Р·Р°РЅС‹ РїРѕРІРѕСЂРѕС‚С‹
             if (!programMinTurn.HasValue && !programMaxTurn.HasValue)
-                return (actualDay.MinАmountTurn ?? 0) == 0 && (actualDay.MaxАmountTurn ?? 0) == 0;
+                return (actualDay.MinРђmountTurn ?? 0) == 0 && (actualDay.MaxРђmountTurn ?? 0) == 0;
 
-            // Если указан только минимальный поворот
+            // Р•СЃР»Рё СѓРєР°Р·Р°РЅ С‚РѕР»СЊРєРѕ РјРёРЅРёРјР°Р»СЊРЅС‹Р№ РїРѕРІРѕСЂРѕС‚
             if (programMinTurn.HasValue && !programMaxTurn.HasValue)
-                return (actualDay.MinАmountTurn ?? 0) >= programMinTurn.Value &&
-                       (actualDay.MaxАmountTurn ?? 0) >= programMinTurn.Value;
+                return (actualDay.MinРђmountTurn ?? 0) >= programMinTurn.Value &&
+                       (actualDay.MaxРђmountTurn ?? 0) >= programMinTurn.Value;
 
-            // Если указан только максимальный поворот
+            // Р•СЃР»Рё СѓРєР°Р·Р°РЅ С‚РѕР»СЊРєРѕ РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РїРѕРІРѕСЂРѕС‚
             if (!programMinTurn.HasValue && programMaxTurn.HasValue)
-                return (actualDay.MinАmountTurn ?? 0) <= programMaxTurn.Value &&
-                       (actualDay.MaxАmountTurn ?? 0) <= programMaxTurn.Value;
+                return (actualDay.MinРђmountTurn ?? 0) <= programMaxTurn.Value &&
+                       (actualDay.MaxРђmountTurn ?? 0) <= programMaxTurn.Value;
 
-            // Если указаны оба предела
-            return (actualDay.MinАmountTurn ?? 0) >= programMinTurn.Value &&
-                   (actualDay.MaxАmountTurn ?? 0) <= programMaxTurn.Value;
+            // Р•СЃР»Рё СѓРєР°Р·Р°РЅС‹ РѕР±Р° РїСЂРµРґРµР»Р°
+            return (actualDay.MinРђmountTurn ?? 0) >= programMinTurn.Value &&
+                   (actualDay.MaxРђmountTurn ?? 0) <= programMaxTurn.Value;
         }
 
-        // Проверка времени охлаждения: факт должен быть в диапазоне мин-макс программы
+        // РџСЂРѕРІРµСЂРєР° РІСЂРµРјРµРЅРё РѕС…Р»Р°Р¶РґРµРЅРёСЏ: С„Р°РєС‚ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РјРёРЅ-РјР°РєСЃ РїСЂРѕРіСЂР°РјРјС‹
         private bool IsInTimeRange(dynamic programDay, SQLliteTableDopInfoParty actualDay)
         {
-            // Получаем значения как nullable
+            // РџРѕР»СѓС‡Р°РµРј Р·РЅР°С‡РµРЅРёСЏ РєР°Рє nullable
             TimeSpan? programMinTime = programDay.MinTimeCooling;
             TimeSpan? programMaxTime = programDay.MaxTimeCooling;
 
-            // Если в программе не указано время охлаждения, считаем что любые значения подходят
+            // Р•СЃР»Рё РІ РїСЂРѕРіСЂР°РјРјРµ РЅРµ СѓРєР°Р·Р°РЅРѕ РІСЂРµРјСЏ РѕС…Р»Р°Р¶РґРµРЅРёСЏ, СЃС‡РёС‚Р°РµРј С‡С‚Рѕ Р»СЋР±С‹Рµ Р·РЅР°С‡РµРЅРёСЏ РїРѕРґС…РѕРґСЏС‚
             if (!programMinTime.HasValue && !programMaxTime.HasValue)
                 return (actualDay.MinTimeCooling ?? TimeSpan.Zero) == TimeSpan.Zero &&
                        (actualDay.MaxTimeCooling ?? TimeSpan.Zero) == TimeSpan.Zero;
 
-            // Если указано только минимальное время
+            // Р•СЃР»Рё СѓРєР°Р·Р°РЅРѕ С‚РѕР»СЊРєРѕ РјРёРЅРёРјР°Р»СЊРЅРѕРµ РІСЂРµРјСЏ
             if (programMinTime.HasValue && !programMaxTime.HasValue)
                 return (actualDay.MinTimeCooling ?? TimeSpan.Zero) >= programMinTime.Value &&
                        (actualDay.MaxTimeCooling ?? TimeSpan.Zero) >= programMinTime.Value;
 
-            // Если указано только максимальное время
+            // Р•СЃР»Рё СѓРєР°Р·Р°РЅРѕ С‚РѕР»СЊРєРѕ РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РІСЂРµРјСЏ
             if (!programMinTime.HasValue && programMaxTime.HasValue)
                 return (actualDay.MinTimeCooling ?? TimeSpan.Zero) <= programMaxTime.Value &&
                        (actualDay.MaxTimeCooling ?? TimeSpan.Zero) <= programMaxTime.Value;
 
-            // Если указаны оба предела
+            // Р•СЃР»Рё СѓРєР°Р·Р°РЅС‹ РѕР±Р° РїСЂРµРґРµР»Р°
             return (actualDay.MinTimeCooling ?? TimeSpan.Zero) >= programMinTime.Value &&
                    (actualDay.MaxTimeCooling ?? TimeSpan.Zero) <= programMaxTime.Value;
         }
 
 
-        // Вспомогательный метод для сравнения float с допуском (оставлен для других случаев)
+        // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ РјРµС‚РѕРґ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ float СЃ РґРѕРїСѓСЃРєРѕРј (РѕСЃС‚Р°РІР»РµРЅ РґР»СЏ РґСЂСѓРіРёС… СЃР»СѓС‡Р°РµРІ)
         private bool CompareFloatsWithTolerance(float expected, float actual, float tolerance = 0.01f)
         {
             return Math.Abs(expected - actual) <= tolerance;
@@ -446,47 +719,47 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
                     if (result > 0)
                     {
-                        Console.WriteLine($"Партия {party.IdParty} успешно обновлена в базе данных");
+                        Console.WriteLine($"РџР°СЂС‚РёСЏ {party.IdParty} СѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІР»РµРЅР° РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка при обновлении в базе данных: {ex.Message}");
+                Console.WriteLine($"РћС€РёР±РєР° РїСЂРё РѕР±РЅРѕРІР»РµРЅРёРё РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…: {ex.Message}");
                 throw;
             }
         }
 
         private void UpdateStartTimers()
         {
-            // Обновляем оставшееся время до завершения партии
+            // РћР±РЅРѕРІР»СЏРµРј РѕСЃС‚Р°РІС€РµРµСЃСЏ РІСЂРµРјСЏ РґРѕ Р·Р°РІРµСЂС€РµРЅРёСЏ РїР°СЂС‚РёРё
             var timeRemaining = DateTime.Now - partyStartTime;
 
             if (timeRemaining.TotalSeconds > 0)
             {
-                TimeStartProgramm.Text = $"Партия длится: {timeRemaining.Days} дн. {timeRemaining.Hours} ч. {timeRemaining.Minutes} мин. {timeRemaining.Seconds} сек.";
+                TimeStartProgramm.Text = $"РџР°СЂС‚РёСЏ РґР»РёС‚СЃСЏ: {timeRemaining.Days} РґРЅ. {timeRemaining.Hours} С‡. {timeRemaining.Minutes} РјРёРЅ. {timeRemaining.Seconds} СЃРµРє.";
             }
             else
             {
                 TimeStartProgramm.Text = "";
-                return; // Выходим из метода, так как партия завершена
+                return; // Р’С‹С…РѕРґРёРј РёР· РјРµС‚РѕРґР°, С‚Р°Рє РєР°Рє РїР°СЂС‚РёСЏ Р·Р°РІРµСЂС€РµРЅР°
             }
 
 
         }
         private void UpdateTimers()
         {
-            // Обновляем оставшееся время до завершения партии
+            // РћР±РЅРѕРІР»СЏРµРј РѕСЃС‚Р°РІС€РµРµСЃСЏ РІСЂРµРјСЏ РґРѕ Р·Р°РІРµСЂС€РµРЅРёСЏ РїР°СЂС‚РёРё
             var timeRemaining = partyEndTime - DateTime.Now;
 
             if (timeRemaining.TotalSeconds > 0)
             {
-                TotalTimeRemainingLabel.Text = $"Осталось до завершения партии: {timeRemaining.Days} дн. {timeRemaining.Hours} ч. {timeRemaining.Minutes} мин. {timeRemaining.Seconds} сек.";
+                TotalTimeRemainingLabel.Text = $"РћСЃС‚Р°Р»РѕСЃСЊ РґРѕ Р·Р°РІРµСЂС€РµРЅРёСЏ РїР°СЂС‚РёРё: {timeRemaining.Days} РґРЅ. {timeRemaining.Hours} С‡. {timeRemaining.Minutes} РјРёРЅ. {timeRemaining.Seconds} СЃРµРє.";
             }
             else
             {
                 TotalTimeRemainingLabel.Text = " ";
-                return; // Выходим из метода, так как партия завершена
+                return; // Р’С‹С…РѕРґРёРј РёР· РјРµС‚РѕРґР°, С‚Р°Рє РєР°Рє РїР°СЂС‚РёСЏ Р·Р°РІРµСЂС€РµРЅР°
             }
 
 
@@ -494,61 +767,61 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
         private void UpdateEndOfDayTimer()
         {
-            // Вычисляем оставшееся время до конца текущего дня
+            // Р’С‹С‡РёСЃР»СЏРµРј РѕСЃС‚Р°РІС€РµРµСЃСЏ РІСЂРµРјСЏ РґРѕ РєРѕРЅС†Р° С‚РµРєСѓС‰РµРіРѕ РґРЅСЏ
             var endOfDay = partyStartTime.AddDays(GetCurrentDayIndex() + 1);
             var timeToEndOfDay = endOfDay - DateTime.Now;
 
             if (timeToEndOfDay.TotalSeconds > 0)
             {
-                NextDayTimeRemainingLabel.Text = $"Осталось до конца дня: {timeToEndOfDay.Hours} ч. {timeToEndOfDay.Minutes} мин. {timeToEndOfDay.Seconds} сек.";
+                NextDayTimeRemainingLabel.Text = $"РћСЃС‚Р°Р»РѕСЃСЊ РґРѕ РєРѕРЅС†Р° РґРЅСЏ: {timeToEndOfDay.Hours} С‡. {timeToEndOfDay.Minutes} РјРёРЅ. {timeToEndOfDay.Seconds} СЃРµРє.";
             }
             else
             {
                 NextDayTimeRemainingLabel.Text = " ";
-                partyStartTime = endOfDay; // Устанавливаем новое время начала на следующий день
-                UpdateEndOfDayTimer(); // Обновляем таймер
+                partyStartTime = endOfDay; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РЅРѕРІРѕРµ РІСЂРµРјСЏ РЅР°С‡Р°Р»Р° РЅР° СЃР»РµРґСѓСЋС‰РёР№ РґРµРЅСЊ
+                UpdateEndOfDayTimer(); // РћР±РЅРѕРІР»СЏРµРј С‚Р°Р№РјРµСЂ
                 UpdateAllStatuses();
             }
         }
 
         private void UpdateNextPhaseTimer()
         {
-            // Находим текущий день
+            // РќР°С…РѕРґРёРј С‚РµРєСѓС‰РёР№ РґРµРЅСЊ
             int currentDayIndex = GetCurrentDayIndex();
 
-            // Сравниваем текущий день с последующими
+            // РЎСЂР°РІРЅРёРІР°РµРј С‚РµРєСѓС‰РёР№ РґРµРЅСЊ СЃ РїРѕСЃР»РµРґСѓСЋС‰РёРјРё
             for (int i = currentDayIndex; i < dopInfoList.Count - 1; i++)
             {
                 if (ParametersDiffer(dopInfoList[i], dopInfoList[i + 1]))
                 {
-                    // Проверяем, наступил ли день
+                    // РџСЂРѕРІРµСЂСЏРµРј, РЅР°СЃС‚СѓРїРёР» Р»Рё РґРµРЅСЊ
                     bool isDayPassed = DateTime.Now >= partyStartTime.AddDays(i + 1);
-                    dopInfoList[i].IsNotCompleted = !isDayPassed; // Если день не наступил, кнопка будет неактивна
+                    dopInfoList[i].IsNotCompleted = !isDayPassed; // Р•СЃР»Рё РґРµРЅСЊ РЅРµ РЅР°СЃС‚СѓРїРёР», РєРЅРѕРїРєР° Р±СѓРґРµС‚ РЅРµР°РєС‚РёРІРЅР°
 
-                    // Вычисляем оставшееся время до следующего отличительного дня
+                    // Р’С‹С‡РёСЃР»СЏРµРј РѕСЃС‚Р°РІС€РµРµСЃСЏ РІСЂРµРјСЏ РґРѕ СЃР»РµРґСѓСЋС‰РµРіРѕ РѕС‚Р»РёС‡РёС‚РµР»СЊРЅРѕРіРѕ РґРЅСЏ
                     var nextPhaseTimeRemaining = partyStartTime.AddDays(i + 1) - DateTime.Now;
 
                     if (nextPhaseTimeRemaining.TotalSeconds > 0)
                     {
-                        NextPhaseTimeRemainingLabel.Text = $"Осталось до следующей фазы: {nextPhaseTimeRemaining.Days} дн. {nextPhaseTimeRemaining.Hours} ч. {nextPhaseTimeRemaining.Minutes} мин. {nextPhaseTimeRemaining.Seconds} сек.";
+                        NextPhaseTimeRemainingLabel.Text = $"РћСЃС‚Р°Р»РѕСЃСЊ РґРѕ СЃР»РµРґСѓСЋС‰РµР№ С„Р°Р·С‹: {nextPhaseTimeRemaining.Days} РґРЅ. {nextPhaseTimeRemaining.Hours} С‡. {nextPhaseTimeRemaining.Minutes} РјРёРЅ. {nextPhaseTimeRemaining.Seconds} СЃРµРє.";
                     }
                     else
                     {
-                        NextPhaseTimeRemainingLabel.Text = "Следующая фаза началась!";
-                        partyStartTime = partyStartTime.AddDays(1); // Устанавливаем новое время начала на следующий день
-                        UpdateNextPhaseTimer(); // Обновляем таймер
+                        NextPhaseTimeRemainingLabel.Text = "РЎР»РµРґСѓСЋС‰Р°СЏ С„Р°Р·Р° РЅР°С‡Р°Р»Р°СЃСЊ!";
+                        partyStartTime = partyStartTime.AddDays(1); // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РЅРѕРІРѕРµ РІСЂРµРјСЏ РЅР°С‡Р°Р»Р° РЅР° СЃР»РµРґСѓСЋС‰РёР№ РґРµРЅСЊ
+                        UpdateNextPhaseTimer(); // РћР±РЅРѕРІР»СЏРµРј С‚Р°Р№РјРµСЂ
                     }
-                    return; // Выходим из метода, так как нашли первое различие
+                    return; // Р’С‹С…РѕРґРёРј РёР· РјРµС‚РѕРґР°, С‚Р°Рє РєР°Рє РЅР°С€Р»Рё РїРµСЂРІРѕРµ СЂР°Р·Р»РёС‡РёРµ
                 }
             }
 
-            // Если различий не найдено
-            NextPhaseTimeRemainingLabel.Text = "Все параметры одинаковы, следующая фаза не начнется.";
+            // Р•СЃР»Рё СЂР°Р·Р»РёС‡РёР№ РЅРµ РЅР°Р№РґРµРЅРѕ
+            NextPhaseTimeRemainingLabel.Text = "Р’СЃРµ РїР°СЂР°РјРµС‚СЂС‹ РѕРґРёРЅР°РєРѕРІС‹, СЃР»РµРґСѓСЋС‰Р°СЏ С„Р°Р·Р° РЅРµ РЅР°С‡РЅРµС‚СЃСЏ.";
         }
 
         private int GetCurrentDayIndex()
         {
-            // Определяем текущий день на основе времени
+            // РћРїСЂРµРґРµР»СЏРµРј С‚РµРєСѓС‰РёР№ РґРµРЅСЊ РЅР° РѕСЃРЅРѕРІРµ РІСЂРµРјРµРЅРё
             for (int i = 0; i < dopInfoList.Count; i++)
             {
                 if (DateTime.Now < partyStartTime.AddDays(i + 1))
@@ -556,19 +829,18 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
                     return i;
                 }
             }
-            return dopInfoList.Count - 1; // Если все дни прошли, возвращаем последний индекс
+            return dopInfoList.Count - 1; // Р•СЃР»Рё РІСЃРµ РґРЅРё РїСЂРѕС€Р»Рё, РІРѕР·РІСЂР°С‰Р°РµРј РїРѕСЃР»РµРґРЅРёР№ РёРЅРґРµРєСЃ
         }
 
         private bool ParametersDiffer(SQLliteTableDopInfoParty currentDay, SQLliteTableDopInfoParty nextDay)
         {
-            // Сравниваем параметры текущего и следующего дня
             return currentDay.MinTemperature != nextDay.MinTemperature ||
                    currentDay.MaxTemperature != nextDay.MaxTemperature ||
                    currentDay.MinHumidity != nextDay.MinHumidity ||
                    currentDay.MaxHumidity != nextDay.MaxHumidity ||
-                   currentDay.MinАmountTurn != nextDay.MinАmountTurn ||
-                   currentDay.MaxАmountTurn != nextDay.MaxАmountTurn ||
-                   currentDay.АmountCooling != nextDay.АmountCooling ||
+                   currentDay.MinРђmountTurn != nextDay.MinРђmountTurn ||
+                   currentDay.MaxРђmountTurn != nextDay.MaxРђmountTurn ||
+                   currentDay.РђmountCooling != nextDay.РђmountCooling ||
                    currentDay.MinTimeCooling != nextDay.MinTimeCooling ||
                    currentDay.MaxTimeCooling != nextDay.MaxTimeCooling;
         }
@@ -577,23 +849,23 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
         private void ShowRecordForm(SQLliteTableDopInfoParty dopInfo)
         {
-            // Устанавливаем выбранный день
+            // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІС‹Р±СЂР°РЅРЅС‹Р№ РґРµРЅСЊ
             SelectedDayLabel.Text = dopInfo.Day.ToString();
 
-            // Заполняем поля значениями по умолчанию
+            // Р—Р°РїРѕР»РЅСЏРµРј РїРѕР»СЏ Р·РЅР°С‡РµРЅРёСЏРјРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
             MinTempEntry.Text = dopInfo.MinTemperature.ToString();
             MaxTempEntry.Text = dopInfo.MaxTemperature.ToString();
             MinHumidityEntry.Text = dopInfo.MinHumidity.ToString();
             MaxHumidityEntry.Text = dopInfo.MaxHumidity.ToString();
-            MinTurnEntry.Text = dopInfo.MinАmountTurn?.ToString() ?? "";
-            MaxTurnEntry.Text = dopInfo.MaxАmountTurn?.ToString() ?? "";
-            CoolingAmountEntry.Text = dopInfo.АmountCooling?.ToString() ?? "";
+            MinTurnEntry.Text = dopInfo.MinРђmountTurn?.ToString() ?? "";
+            MaxTurnEntry.Text = dopInfo.MaxРђmountTurn?.ToString() ?? "";
+            CoolingAmountEntry.Text = dopInfo.РђmountCooling?.ToString() ?? "";
 
-            // Для TimeSpan преобразуем в минуты для удобства ввода
+            // Р”Р»СЏ TimeSpan РїСЂРµРѕР±СЂР°Р·СѓРµРј РІ РјРёРЅСѓС‚С‹ РґР»СЏ СѓРґРѕР±СЃС‚РІР° РІРІРѕРґР°
             MinCoolingTimeEntry.Text = dopInfo.MinTimeCooling?.TotalMinutes.ToString("F0") ?? "";
             MaxCoolingTimeEntry.Text = dopInfo.MaxTimeCooling?.TotalMinutes.ToString("F0") ?? "";
 
-            // Показываем форму
+            // РџРѕРєР°Р·С‹РІР°РµРј С„РѕСЂРјСѓ
             AddRecordFrame.IsVisible = true;
         }
         
@@ -602,15 +874,15 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
 
         
         {
-            // Скрываем форму без сохранения
+            // РЎРєСЂС‹РІР°РµРј С„РѕСЂРјСѓ Р±РµР· СЃРѕС…СЂР°РЅРµРЅРёСЏ
             AddRecordFrame.IsVisible = false;
             selectedDayForRecording = null;
     
-            // Опционально: очищаем поля формы
+            // РћРїС†РёРѕРЅР°Р»СЊРЅРѕ: РѕС‡РёС‰Р°РµРј РїРѕР»СЏ С„РѕСЂРјС‹
             ClearFormFields();
         }
 
-    // Опциональный метод для очистки полей формы
+    // РћРїС†РёРѕРЅР°Р»СЊРЅС‹Р№ РјРµС‚РѕРґ РґР»СЏ РѕС‡РёСЃС‚РєРё РїРѕР»РµР№ С„РѕСЂРјС‹
         private void ClearFormFields()
         {
             MinTempEntry.Text = "";
@@ -624,7 +896,7 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
             MaxCoolingTimeEntry.Text = "";
             SelectedDayLabel.Text = "";
         }
-        // Вспомогательные методы для парсинга разных типов данных
+        // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ РґР»СЏ РїР°СЂСЃРёРЅРіР° СЂР°Р·РЅС‹С… С‚РёРїРѕРІ РґР°РЅРЅС‹С…
         private float ParseFloat(string text)
         {
             if (float.TryParse(text, out float result))
@@ -643,24 +915,24 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess.UnderPagesInProcess
         {
             if (byte.TryParse(text, out byte result))
                 return result;
-            return null; // Возвращаем null если не удалось распарсить
+            return null; // Р’РѕР·РІСЂР°С‰Р°РµРј null РµСЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїР°СЂСЃРёС‚СЊ
         }
 
         private TimeSpan? ParseTimeSpan(string text)
         {
-            // Предполагаем, что время вводится в минутах
+            // РџСЂРµРґРїРѕР»Р°РіР°РµРј, С‡С‚Рѕ РІСЂРµРјСЏ РІРІРѕРґРёС‚СЃСЏ РІ РјРёРЅСѓС‚Р°С…
             if (int.TryParse(text, out int minutes))
             {
                 return TimeSpan.FromMinutes(minutes);
             }
 
-            // Или пытаемся распарсить в формате "hh:mm"
+            // РР»Рё РїС‹С‚Р°РµРјСЃСЏ СЂР°СЃРїР°СЂСЃРёС‚СЊ РІ С„РѕСЂРјР°С‚Рµ "hh:mm"
             if (TimeSpan.TryParse(text, out TimeSpan timeSpan))
             {
                 return timeSpan;
             }
 
-            return null; // Возвращаем null если не удалось распарсить
+            return null; // Р’РѕР·РІСЂР°С‰Р°РµРј null РµСЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїР°СЂСЃРёС‚СЊ
         }
     }
 }

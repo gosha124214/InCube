@@ -1,9 +1,10 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using AppInCube.Classes.SQLite.Partyes;
+using AppInCube.Services;
 
 namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess
 {
@@ -24,53 +25,125 @@ namespace AppInCube.View.Pages.Favorites.ProgrammsInProcess
         {
             try
             {
-                var runningPrograms = await App.DatabaseParty.GetPartiesAsync(); // Получаем все партии
-                RunningProgramsListView.ItemsSource = runningPrograms; // Привязываем запущенные программы
+                var runningPrograms = await App.DatabaseParty.GetPartiesAsync();
+                RunningProgramsListView.ItemsSource = runningPrograms;
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Ошибка", $"Ошибка при загрузке данных: {ex.Message}", "OK");
+                await DisplayAlert("РћС€РёР±РєР°", $"РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ РґР°РЅРЅС‹С…: {ex.Message}", "OK");
             }
         }
+
         private async void OnProgramTapped(object sender, EventArgs e)
         {
-            // Блокируем взаимодействие с текущей страницей
             this.IsEnabled = false;
-
             var tappedItem = (sender as StackLayout).BindingContext as SQLliteTableParty;
-
 
             if (tappedItem != null)
             {
                 await Navigation.PushAsync(new UnderPagesInProcess.UnderPagesInProcess(tappedItem));
             }
-
-            this.IsEnabled = true; // Разблокируем взаимодействие с текущей страницей
+            this.IsEnabled = true;
         }
+
         private async void OnCancelPartyButtonClicked(object sender, EventArgs e)
         {
-            // Получаем объект партии, которую нужно отменить
             var button = sender as Button;
             var party = button?.CommandParameter as SQLliteTableParty;
 
             if (party != null)
             {
-                // Подтверждение отмены
-                bool confirm = await DisplayAlert("Подтверждение", "Вы уверены, что хотите отменить эту партию?", "Да", "Нет");
+                bool confirm = await DisplayAlert("РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ",
+                    $"РћС‚РјРµРЅРёС‚СЊ РїР°СЂС‚РёСЋ #{party.IdParty}?\n" +
+                    $"РЈРґР°Р»СЏС‚СЃСЏ РІСЃРµ СЃРІСЏР·Р°РЅРЅС‹Рµ СѓРІРµРґРѕРјР»РµРЅРёСЏ.",
+                    "Р”Р°", "РќРµС‚");
+
                 if (confirm)
                 {
+                    button.IsEnabled = false;
+                    button.Text = "РћС‚РјРµРЅР°...";
+
                     try
                     {
-                        // Удаляем партию из базы данных
+                        // РћС‚РјРµРЅСЏРµРј РІСЃРµ СѓРІРµРґРѕРјР»РµРЅРёСЏ РґР»СЏ СЌС‚РѕР№ РїР°СЂС‚РёРё
+                        await CancelPartyNotificationsById(party.IdParty);
+
+                        // РЈРґР°Р»СЏРµРј РїР°СЂС‚РёСЋ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…
                         await App.DatabaseParty.DeletePartyAsync(party.IdParty);
-                        await LoadRunningPrograms(); // Обновляем список
+                        await LoadRunningPrograms();
+
+                        await DisplayAlert("РЈСЃРїРµС…",
+                            $"РџР°СЂС‚РёСЏ #{party.IdParty} РѕС‚РјРµРЅРµРЅР°.",
+                            "OK");
                     }
                     catch (Exception ex)
                     {
-                        await DisplayAlert("Ошибка", $"Ошибка при отмене партии: {ex.Message}", "OK");
+                        await DisplayAlert("РћС€РёР±РєР°",
+                            $"РћС€РёР±РєР° РїСЂРё РѕС‚РјРµРЅРµ РїР°СЂС‚РёРё: {ex.Message}",
+                            "OK");
+                    }
+                    finally
+                    {
+                        button.IsEnabled = true;
+                        button.Text = "РћС‚РјРµРЅРёС‚СЊ РїР°СЂС‚РёСЋ";
                     }
                 }
             }
+        }
+
+        // РњРµС‚РѕРґ РґР»СЏ РѕС‚РјРµРЅС‹ СѓРІРµРґРѕРјР»РµРЅРёР№ РїРѕ ID РїР°СЂС‚РёРё
+        private async Task CancelPartyNotificationsById(uint partyId)
+        {
+            try
+            {
+                var notificationService = ServiceProviderHelper.GetService<IMyNotificationService>();
+                if (notificationService != null)
+                {
+                    string partyIdentifier = $"PID{partyId}";
+                    var allNotifications = await notificationService.GetScheduledNotificationsAsync();
+
+                    // РќР°С…РѕРґРёРј СѓРІРµРґРѕРјР»РµРЅРёСЏ СЃ СѓРєР°Р·Р°РЅРЅС‹Рј ID РїР°СЂС‚РёРё
+                    var partyNotifications = allNotifications
+                        .Where(n => n.Title.Contains(partyIdentifier) ||
+                                   n.Message.Contains($"РџСЂРѕРіСЂР°РјРјР° #{partyId}"))
+                        .ToList();
+
+                    int canceledCount = 0;
+                    foreach (var notification in partyNotifications)
+                    {
+                        await notificationService.CancelNotificationAsync(notification.Id);
+                        canceledCount++;
+                        Console.WriteLine($"РћС‚РјРµРЅРµРЅРѕ СѓРІРµРґРѕРјР»РµРЅРёРµ #{notification.Id} РґР»СЏ РїР°СЂС‚РёРё {partyId}");
+                    }
+
+                    if (canceledCount > 0)
+                    {
+                        Console.WriteLine($"вњ… РћС‚РјРµРЅРµРЅРѕ {canceledCount} СѓРІРµРґРѕРјР»РµРЅРёР№ РґР»СЏ РїР°СЂС‚РёРё {partyId}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"вљ пёЏ РќРµ РЅР°Р№РґРµРЅРѕ СѓРІРµРґРѕРјР»РµРЅРёР№ РґР»СЏ РїР°СЂС‚РёРё {partyId}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"вќЊ РћС€РёР±РєР° РїСЂРё РѕС‚РјРµРЅРµ СѓРІРµРґРѕРјР»РµРЅРёР№ РґР»СЏ РїР°СЂС‚РёРё {partyId}: {ex.Message}");
+            }
+        }
+
+        // РњРµС‚РѕРґ РґР»СЏ РїСЂРѕРІРµСЂРєРё СЂР°Р·Р»РёС‡РёР№ РїР°СЂР°РјРµС‚СЂРѕРІ
+        private bool ParametersDiffer(SQLliteTableDopInfoParty currentDay, SQLliteTableDopInfoParty nextDay)
+        {
+            return currentDay.MinTemperature != nextDay.MinTemperature ||
+                   currentDay.MaxTemperature != nextDay.MaxTemperature ||
+                   currentDay.MinHumidity != nextDay.MinHumidity ||
+                   currentDay.MaxHumidity != nextDay.MaxHumidity ||
+                   currentDay.MinРђmountTurn != nextDay.MinРђmountTurn ||
+                   currentDay.MaxРђmountTurn != nextDay.MaxРђmountTurn ||
+                   currentDay.РђmountCooling != nextDay.РђmountCooling ||
+                   currentDay.MinTimeCooling != nextDay.MinTimeCooling ||
+                   currentDay.MaxTimeCooling != nextDay.MaxTimeCooling;
         }
     }
 }
